@@ -812,14 +812,44 @@ function updateNav() {
   document.getElementById('nav-sentquotes').classList.toggle('hidden', !isWorkshop);
 }
 
-function routeByRole() {
+async function routeByRole() {
   if (!currentProfile) return;
   if (currentProfile.role === 'workshop') {
     showPage('workshop');
     showWorkshopRequests();
   } else {
     showPage('customer');
-    showCustomerForm();
+    // Auto-load the most recent open request and its quotes
+    var res = await sb.from('requests')
+      .select('*')
+      .eq('user_id', currentUser.id)
+      .eq('status', 'open')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single();
+
+    if (res.data) {
+      // Has an open request — show quotes view immediately
+      activeRequestId = res.data.id;
+      document.getElementById('request-form-panel').style.display = 'none';
+      document.getElementById('quotes-section').style.display = 'block';
+      document.getElementById('request-summary').textContent =
+        res.data.car_brand + ' ' + res.data.car_model +
+        ' — "' + res.data.issue.substring(0, 60) + (res.data.issue.length > 60 ? '...' : '') + '"';
+      var qRes = await sb.from('quotes').select('*').eq('request_id', res.data.id).order('price');
+      renderQuotes(qRes.data || []);
+      subscribeToQuotes(res.data.id);
+      setActiveNavLink('nav-myquotes');
+      // Update badge
+      var badge = document.getElementById('nav-quote-badge');
+      if (qRes.data && qRes.data.length) {
+        badge.textContent = qRes.data.length;
+        badge.style.display = '';
+      }
+    } else {
+      // No open request — show submit form
+      showCustomerForm();
+    }
     loadMyRequests();
   }
 }
@@ -849,11 +879,29 @@ function showCustomerForm() {
   setActiveNavLink('nav-submit');
 }
 
-function showMyQuotes() {
+async function showMyQuotes() {
   showPage('customer');
-  document.getElementById('request-form-panel').style.display = 'none';
-  document.getElementById('quotes-section').style.display = activeRequestId ? 'block' : 'none';
   setActiveNavLink('nav-myquotes');
+  if (activeRequestId) {
+    document.getElementById('request-form-panel').style.display = 'none';
+    document.getElementById('quotes-section').style.display = 'block';
+    var qr = await sb.from('quotes').select('*').eq('request_id', activeRequestId).order('price');
+    renderQuotes(qr.data || []);
+  } else {
+    var lr = await sb.from('requests').select('*').eq('user_id', currentUser.id).eq('status','open').order('created_at',{ascending:false}).limit(1).single();
+    if (lr.data) {
+      activeRequestId = lr.data.id;
+      document.getElementById('request-form-panel').style.display = 'none';
+      document.getElementById('quotes-section').style.display = 'block';
+      document.getElementById('request-summary').textContent = lr.data.car_brand + ' ' + lr.data.car_model + ' -- "' + lr.data.issue.substring(0,60) + (lr.data.issue.length>60?'...':'') + '"';
+      var qr2 = await sb.from('quotes').select('*').eq('request_id', lr.data.id).order('price');
+      renderQuotes(qr2.data || []);
+      subscribeToQuotes(lr.data.id);
+    } else {
+      document.getElementById('request-form-panel').style.display = 'block';
+      document.getElementById('quotes-section').style.display = 'none';
+    }
+  }
   loadMyRequests();
 }
 
