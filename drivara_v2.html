@@ -225,6 +225,22 @@ textarea { resize: vertical; min-height: 100px; }
 @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
 .anim { animation: fadeUp 0.35s ease both; }
 
+/* ── CONTACT CARD ── */
+.contact-card {
+  background: #1e2a3a; border-radius: 14px; padding: 20px 24px;
+  margin-top: 16px; display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+}
+.contact-card .contact-info { display: flex; flex-direction: column; gap: 4px; }
+.contact-card .contact-label { font-size: 11px; font-weight: 700; color: #5ecb8e; text-transform: uppercase; letter-spacing: 0.08em; }
+.contact-card .contact-name { font-size: 18px; font-weight: 800; color: white; }
+.contact-card .contact-phone { font-size: 14px; color: #a0b0c0; font-weight: 500; }
+.contact-card .contact-actions { display: flex; gap: 10px; }
+.btn-whatsapp { background: #25D366; color: white; font-weight: 700; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-family: "Plus Jakarta Sans", sans-serif; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; }
+.btn-whatsapp:hover { background: #1ebe5d; transform: translateY(-1px); }
+.btn-call { background: rgba(255,255,255,0.1); color: white; font-weight: 600; border: 1px solid rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 10px; cursor: pointer; font-family: "Plus Jakarta Sans", sans-serif; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; text-decoration: none; }
+.btn-call:hover { background: rgba(255,255,255,0.2); }
+
 /* ── LANDING ── */
 .hero { padding: 80px 40px 60px; max-width: 860px; margin: 0 auto; text-align: center; }
 .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--mint-pale); border: 1px solid rgba(94,203,142,0.4); color: #2e9e63; padding: 6px 16px; border-radius: 100px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 28px; }
@@ -308,6 +324,10 @@ textarea { resize: vertical; min-height: 100px; }
       <div class="form-group" id="name-field" style="display:none">
         <label>Full Name / Workshop Name</label>
         <input type="text" id="auth-name" placeholder="Your name">
+      </div>
+      <div class="form-group" id="phone-field" style="display:none">
+        <label>Phone Number (WhatsApp)</label>
+        <input type="tel" id="auth-phone" placeholder="e.g. 0123456789">
       </div>
       <div class="form-group">
         <label>Email</label>
@@ -731,6 +751,7 @@ function switchAuthTab(tab) {
   document.getElementById('tab-register').classList.toggle('active', tab === 'register');
   document.getElementById('role-select-wrap').style.display = tab === 'register' ? 'block' : 'none';
   document.getElementById('name-field').style.display = tab === 'register' ? 'flex' : 'none';
+  document.getElementById('phone-field').style.display = tab === 'register' ? 'flex' : 'none';
   document.getElementById('auth-btn-text').textContent = tab === 'login' ? 'Sign In' : 'Create Account';
 }
 
@@ -766,7 +787,8 @@ async function handleAuth() {
       var res2 = await sb.auth.signUp({ email: email, password: password });
       if (res2.error) throw res2.error;
       currentUser = res2.data.user;
-      await sb.from('profiles').insert({ id: currentUser.id, name: name, role: selectedRole });
+      var phone = document.getElementById('auth-phone').value.trim();
+      await sb.from('profiles').insert({ id: currentUser.id, name: name, role: selectedRole, phone: phone });
       await loadProfile();
       updateNav();
       closeAuth();
@@ -1000,19 +1022,39 @@ function renderQuotes(quotes) {
   list.innerHTML = quotes.map(function(q, i) {
     var isAccepted = q.status === 'accepted';
     var isBest = i === 0 && !hasAccepted;
+    // Build contact card for accepted quote
+    var contactHtml = '';
+    if (isAccepted) {
+      var wPhone = q.profiles ? q.profiles.phone : null;
+      var wName = esc(q.workshop_name);
+      var waNum = wPhone ? wPhone.replace(/[^0-9]/g,'') : null;
+      var waLink = waNum ? 'https://wa.me/6' + waNum + '?text=' + encodeURIComponent('Hi, I accepted your quote on Drivara for RM' + q.price + '. When can we proceed?') : null;
+      contactHtml = '<div class="contact-card">' +
+        '<div class="contact-info">' +
+          '<div class="contact-label">&#x2713; Workshop Contact</div>' +
+          '<div class="contact-name">' + wName + '</div>' +
+          (wPhone ? '<div class="contact-phone">&#x1F4DE; ' + esc(wPhone) + '</div>' : '<div class="contact-phone" style="color:#5ecb8e">No phone number added</div>') +
+        '</div>' +
+        '<div class="contact-actions">' +
+          (waLink ? '<a href="' + waLink + '" target="_blank" class="btn-whatsapp">&#x1F4AC; WhatsApp</a>' : '') +
+          (wPhone ? '<a href="tel:' + esc(wPhone) + '" class="btn-call">&#x1F4DE; Call</a>' : '') +
+        '</div>' +
+      '</div>';
+    }
     return '<div class="quote-card ' + (isAccepted?'accepted':'') + ' anim" style="animation-delay:' + (i*0.05) + 's">' +
-      '<div>' +
-        '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">' +
-          '<div class="workshop-name">' + esc(q.workshop_name) + '</div>' +
-          (isBest ? '<span class="badge badge-best">Best Price</span>' : '') +
-          (isAccepted ? '<span class="badge badge-accepted">&#x2713; Accepted</span>' : '') +
+      '<div style="grid-column:1/-1">' +
+        '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:10px">' +
+          '<div style="display:flex;align-items:center;gap:10px">' +
+            '<div class="workshop-name">' + esc(q.workshop_name) + '</div>' +
+            (isBest ? '<span class="badge badge-best">Best Price</span>' : '') +
+            (isAccepted ? '<span class="badge badge-accepted">&#x2713; Accepted</span>' : '') +
+          '</div>' +
+          '<div class="price-tag" style="font-size:24px">RM ' + q.price + '<span>total</span></div>' +
         '</div>' +
         '<div class="quote-meta"><div class="meta-chip">&#x23F1; ' + q.duration + ' day' + (q.duration>1?'s':'') + '</div></div>' +
         (q.message ? '<div class="quote-msg">"' + esc(q.message) + '"</div>' : '') +
-      '</div>' +
-      '<div style="text-align:right">' +
-        '<div class="price-tag">RM ' + q.price + '<span>total estimate</span></div>' +
-        (!hasAccepted ? '<button class="btn btn-mint btn-sm" style="margin-top:14px" onclick="acceptQuote(\'' + q.id + '\',\'' + q.request_id + '\')">Accept &rarr;</button>' : '') +
+        (!hasAccepted ? '<button class="btn btn-mint btn-sm" style="margin-top:14px" onclick="acceptQuote(\'' + q.id + '\',\'' + q.request_id + '\')">Accept Quote &rarr;</button>' : '') +
+        contactHtml +
       '</div>' +
     '</div>';
   }).join('');
@@ -1022,7 +1064,8 @@ async function acceptQuote(quoteId, requestId) {
   await sb.from('quotes').update({ status: 'accepted' }).eq('id', quoteId);
   await sb.from('quotes').update({ status: 'rejected' }).eq('request_id', requestId).neq('id', quoteId);
   await sb.from('requests').update({ status: 'closed' }).eq('id', requestId);
-  var res = await sb.from('quotes').select('*').eq('request_id', requestId).order('price');
+  // Fetch accepted quote with workshop profile
+  var res = await sb.from('quotes').select('*, profiles(name, phone)').eq('request_id', requestId).order('price');
   renderQuotes(res.data || []);
   showToast('Quote accepted! The workshop has been notified.');
 }
@@ -1034,8 +1077,9 @@ async function loadMyRequests() {
   if (!res.data || !res.data.length) { list.innerHTML = ''; return; }
   list.innerHTML = res.data.map(function(r) {
     var mediaHtml = '';
-    if (r.media_urls && r.media_urls.length) {
-      mediaHtml = '<div class="req-media">' + r.media_urls.slice(0,4).map(function(url) {
+    var rMedia = Array.isArray(r.media_urls) ? r.media_urls : [];
+    if (rMedia.length) {
+      mediaHtml = '<div class="req-media">' + rMedia.slice(0,4).map(function(url) {
         var isVideo = url.includes('.mp4') || url.includes('.mov') || url.includes('.webm');
         return '<div class="req-media-thumb">' + (isVideo ? '<video src="' + url + '" muted></video>' : '<img src="' + url + '" alt="photo">') + '</div>';
       }).join('') + '</div>';
@@ -1103,8 +1147,9 @@ async function renderWorkshopRequests(requests) {
   list.innerHTML = requests.map(function(req, i) {
     var alreadyQuoted = quotedIds.has(req.id);
     var mediaHtml = '';
-    if (req.media_urls && req.media_urls.length) {
-      mediaHtml = '<div class="req-media">' + req.media_urls.slice(0,5).map(function(url) {
+    var reqMedia = Array.isArray(req.media_urls) ? req.media_urls : [];
+    if (reqMedia.length) {
+      mediaHtml = '<div class="req-media">' + reqMedia.slice(0,5).map(function(url) {
         var isVideo = url.includes('.mp4') || url.includes('.mov') || url.includes('.webm');
         return '<div class="req-media-thumb" onclick="window.open(\'' + url + '\',\'_blank\')">' +
           (isVideo ? '<video src="' + url + '" muted></video>' : '<img src="' + url + '" alt="photo">') + '</div>';
@@ -1165,20 +1210,39 @@ async function sendQuote(reqId) {
 
 async function loadMyQuotes() {
   if (!sb || !currentUser) return;
-  var res = await sb.from('quotes').select('*, requests(car_brand,car_model)').eq('workshop_id', currentUser.id).order('created_at',{ascending:false}).limit(20);
+  var res = await sb.from('quotes').select('*, requests(car_brand, car_model, user_id, customer_name, profiles!requests_user_id_fkey(name, phone))').eq('workshop_id', currentUser.id).order('created_at',{ascending:false}).limit(20);
   var list = document.getElementById('my-quotes-list');
   if (!res.data || !res.data.length) { list.innerHTML = '<div style="color:var(--muted);font-size:14px;padding:20px 0">No quotes sent yet.</div>'; return; }
   list.innerHTML = res.data.map(function(q) {
     var sc = q.status==='accepted'?'badge-accepted':q.status==='rejected'?'badge-rejected':'badge-pending';
+    var custContact = '';
+    if (q.status === 'accepted' && q.requests) {
+      var custName = q.requests.customer_name || (q.requests.profiles ? q.requests.profiles.name : 'Customer');
+      var custPhone = q.requests.profiles ? q.requests.profiles.phone : null;
+      var waNum2 = custPhone ? custPhone.replace(/[^0-9]/g,'') : null;
+      var waLink2 = waNum2 ? 'https://wa.me/6' + waNum2 + '?text=' + encodeURIComponent('Hi ' + custName + ', this is ' + currentProfile.name + ' from Drivara. Your quote has been accepted! When can you bring in your car?') : null;
+      custContact = '<div class="contact-card">' +
+        '<div class="contact-info">' +
+          '<div class="contact-label">&#x2713; Customer Contact</div>' +
+          '<div class="contact-name">' + esc(custName) + '</div>' +
+          (custPhone ? '<div class="contact-phone">&#x1F4DE; ' + esc(custPhone) + '</div>' : '<div class="contact-phone" style="color:#5ecb8e">No phone number</div>') +
+        '</div>' +
+        '<div class="contact-actions">' +
+          (waLink2 ? '<a href="' + waLink2 + '" target="_blank" class="btn-whatsapp">&#x1F4AC; WhatsApp</a>' : '') +
+          (custPhone ? '<a href="tel:' + esc(custPhone) + '" class="btn-call">&#x1F4DE; Call</a>' : '') +
+        '</div>' +
+      '</div>';
+    }
     return '<div class="quote-card">' +
-      '<div>' +
-        '<div class="workshop-name">' + (q.requests?esc(q.requests.car_brand)+' '+esc(q.requests.car_model):'') + '</div>' +
+      '<div style="grid-column:1/-1">' +
+        '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:10px">' +
+          '<div class="workshop-name">' + (q.requests?esc(q.requests.car_brand)+' '+esc(q.requests.car_model):'') + '</div>' +
+          '<div class="price-tag" style="font-size:22px">RM ' + q.price + '<span>quoted</span></div>' +
+        '</div>' +
         '<div class="quote-meta"><div class="meta-chip">&#x23F1; ' + q.duration + ' day'+(q.duration>1?'s':'')+'</div><div class="meta-chip">'+timeAgo(q.created_at)+'</div></div>' +
         (q.message?'<div class="quote-msg">"'+esc(q.message)+'"</div>':'') +
-      '</div>' +
-      '<div style="text-align:right">' +
-        '<div class="price-tag">RM ' + q.price + '<span>quoted</span></div>' +
         '<span class="badge ' + sc + '" style="margin-top:10px;display:inline-block">' + q.status + '</span>' +
+        custContact +
       '</div>' +
     '</div>';
   }).join('');
