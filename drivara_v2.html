@@ -6,6 +6,8 @@
 <title>Drivara — Get Real Car Repair Quotes</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
 <style>
 :root {
   --navy: #1e2a3a;
@@ -272,6 +274,121 @@ textarea { resize: vertical; min-height: 100px; }
 }
 
 
+
+
+
+
+/* ── SLIDE PANEL ── */
+.slide-panel-overlay { position:fixed; inset:0; background:rgba(30,42,58,0.4); z-index:300; opacity:0; pointer-events:none; transition:opacity 0.25s; backdrop-filter:blur(3px); }
+.slide-panel-overlay.open { opacity:1; pointer-events:all; }
+.slide-panel { position:fixed; top:0; right:-520px; width:min(520px,100vw); height:100vh; background:var(--surface); z-index:301; transition:right 0.3s cubic-bezier(0.4,0,0.2,1); overflow-y:auto; box-shadow:-8px 0 40px rgba(30,42,58,0.15); }
+.slide-panel.open { right:0; }
+.slide-panel-header { padding:24px 28px 0; position:sticky; top:0; background:var(--surface); z-index:10; border-bottom:1px solid var(--border); padding-bottom:16px; }
+.slide-panel-close { position:absolute; top:20px; right:20px; width:32px; height:32px; border-radius:50%; border:none; background:var(--surface2); cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; color:var(--muted); transition:all 0.15s; }
+.slide-panel-close:hover { background:var(--border); color:var(--navy); }
+.slide-panel-body { padding:24px 28px; }
+.ws-panel-name { font-size:22px; font-weight:800; color:var(--navy); margin-bottom:4px; padding-right:40px; }
+.ws-panel-addr { font-size:13px; color:var(--muted); margin-bottom:10px; }
+.ws-panel-meta { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
+.ws-panel-chip { font-size:13px; font-weight:700; padding:5px 12px; border-radius:8px; }
+.ws-panel-chip.rating { background:#fff8e1; color:#b07a00; }
+.ws-panel-chip.dist { background:var(--mint-pale); color:#085041; }
+.ws-panel-section { margin-bottom:24px; }
+.ws-panel-section-title { font-size:12px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid var(--border); }
+.service-row { display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid var(--border); gap:12px; }
+.service-row:last-child { border-bottom:none; }
+.service-name { font-weight:600; font-size:14px; color:var(--navy); }
+.service-note { font-size:12px; color:var(--muted); margin-top:2px; }
+.service-price { font-weight:800; font-size:16px; color:var(--navy); white-space:nowrap; }
+.service-price-range { font-size:12px; color:var(--muted); font-weight:400; }
+.panel-select-btn { width:100%; padding:14px; border-radius:12px; background:var(--navy); color:white; font-family:"Plus Jakarta Sans",sans-serif; font-weight:800; font-size:15px; border:none; cursor:pointer; transition:all 0.2s; margin-top:4px; }
+.panel-select-btn:hover { background:var(--navy-light); transform:translateY(-1px); }
+.panel-select-btn.selected { background:var(--mint); color:var(--navy); }
+.review-mini { padding:12px 0; border-bottom:1px solid var(--border); }
+.review-mini:last-child { border-bottom:none; }
+.review-mini-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; }
+.review-mini-name { font-weight:700; font-size:13px; color:var(--navy); }
+.review-mini-text { font-size:13px; color:var(--text-light); line-height:1.5; }
+
+/* ── SERVICES MANAGER (workshop profile) ── */
+.service-manager { margin-top:20px; }
+.service-item-row { display:flex; align-items:center; gap:10px; padding:10px 14px; background:var(--surface2); border-radius:10px; margin-bottom:8px; border:1px solid var(--border); }
+.service-item-row .svc-name { flex:1; font-weight:600; font-size:14px; color:var(--navy); }
+.service-item-row .svc-price-display { font-weight:800; color:var(--mint-dark); font-size:14px; white-space:nowrap; }
+.service-item-row .svc-note-display { font-size:12px; color:var(--muted); }
+.add-service-form { background:var(--surface2); border-radius:12px; padding:16px; border:1px dashed var(--border); margin-top:12px; }
+.add-service-grid { display:grid; grid-template-columns:1fr 120px; gap:10px; margin-bottom:10px; }
+.add-service-grid-3 { display:grid; grid-template-columns:1fr 100px 100px; gap:10px; margin-bottom:10px; }
+
+/* ── WORKSHOP BROWSER ── */
+.browser-layout { display: grid; grid-template-columns: 1fr 380px; gap: 20px; align-items: start; }
+.browser-map { height: 520px; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); position: sticky; top: 88px; }
+.browser-list { display: flex; flex-direction: column; gap: 10px; max-height: 520px; overflow-y: auto; padding-right: 4px; }
+.browser-list::-webkit-scrollbar { width: 4px; }
+.browser-list::-webkit-scrollbar-track { background: transparent; }
+.browser-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }
+.filter-btn { padding: 6px 14px; border-radius: 8px; border: 1.5px solid var(--border); background: var(--surface); color: var(--muted); font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; font-family: "Plus Jakarta Sans", sans-serif; }
+.filter-btn.active { border-color: var(--navy); color: var(--navy); background: white; }
+.filter-btn:hover { border-color: var(--navy); color: var(--navy); }
+.workshop-browser-card {
+  background: var(--surface); border: 2px solid var(--border); border-radius: 14px;
+  padding: 16px; cursor: pointer; transition: all 0.2s; position: relative;
+}
+.workshop-browser-card:hover { border-color: var(--mint); box-shadow: var(--shadow); }
+.workshop-browser-card.selected { border-color: var(--mint); background: var(--mint-pale); }
+.workshop-browser-card.highlighted { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(30,42,58,0.1); }
+.wb-check { position: absolute; top: 12px; right: 12px; width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border); background: white; display: flex; align-items: center; justify-content: center; font-size: 11px; transition: all 0.2s; }
+.workshop-browser-card.selected .wb-check { background: var(--mint); border-color: var(--mint); color: var(--navy); font-weight: 900; }
+.wb-name { font-weight: 800; font-size: 15px; color: var(--navy); margin-bottom: 4px; padding-right: 28px; }
+.wb-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+.wb-chip { font-size: 11px; color: var(--muted); background: var(--surface2); padding: 3px 8px; border-radius: 6px; font-weight: 600; }
+.wb-rating { color: #b07a00; background: #fff8e1; }
+.wb-dist { color: #085041; background: var(--mint-pale); }
+.selected-bar { background: var(--navy); border-radius: 14px; padding: 16px 20px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.selected-bar-text { color: white; font-size: 14px; font-weight: 600; }
+.selected-bar-text span { color: var(--mint); font-weight: 800; }
+.no-workshops { text-align: center; padding: 40px 20px; color: var(--muted); }
+.no-workshops .big { font-size: 36px; margin-bottom: 12px; }
+@media(max-width:900px) {
+  .browser-layout { grid-template-columns: 1fr; }
+  .browser-map { height: 300px; position: static; }
+  .browser-list { max-height: none; }
+}
+
+/* ── MAP ── */
+#workshop-map { height: 560px; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); z-index: 1; }
+.map-section { max-width: 1100px; margin: 0 auto; padding: 0 40px 60px; }
+.map-section-title { font-size: 22px; font-weight: 800; color: var(--navy); margin-bottom: 8px; }
+.map-section-sub { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
+.leaflet-popup-content-wrapper { border-radius: 12px !important; box-shadow: 0 4px 20px rgba(30,42,58,0.15) !important; border: 1px solid var(--border); }
+.leaflet-popup-content { margin: 14px 16px !important; font-family: "Plus Jakarta Sans", sans-serif !important; }
+.map-popup-name { font-weight: 800; font-size: 15px; color: #1e2a3a; margin-bottom: 4px; }
+.map-popup-addr { font-size: 12px; color: #7a8799; margin-bottom: 6px; }
+.map-popup-rating { font-size: 13px; color: #2e9e63; font-weight: 700; }
+.map-popup-dist { font-size: 12px; color: #7a8799; margin-top: 4px; }
+
+/* location picker */
+#location-map-picker { height: 300px; border-radius: 12px; overflow: hidden; border: 1.5px solid var(--border); margin-top: 10px; }
+.location-search-row { display:flex; gap:8px; margin-bottom:8px; }
+.location-search-row input { flex:1; }
+
+/* ── COMPLETE FLOW ── */
+.quote-card.completed { border-color: #5ecb8e; background: #f0fdf6; }
+.badge-completed { background: #eaf9f1; color: #085041; border: 1px solid #9FE1CB; }
+.complete-banner {
+  background: linear-gradient(135deg, #1e2a3a 0%, #2c3e54 100%);
+  border-radius: 14px; padding: 20px 24px; margin-top: 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+}
+.complete-banner .banner-text { color: white; }
+.complete-banner .banner-title { font-size: 15px; font-weight: 800; margin-bottom: 3px; }
+.complete-banner .banner-sub { font-size: 13px; color: #a0b0c0; }
+.btn-complete { background: #5ecb8e; color: #1e2a3a; font-weight: 800; border: none; padding: 11px 22px; border-radius: 10px; cursor: pointer; font-family: "Plus Jakarta Sans", sans-serif; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; white-space: nowrap; }
+.btn-complete:hover { background: #44b878; transform: translateY(-1px); }
+.completed-stamp { display:inline-flex; align-items:center; gap:8px; background:#eaf9f1; border:1.5px solid #9FE1CB; border-radius:10px; padding:10px 16px; font-size:14px; font-weight:700; color:#085041; margin-top:12px; }
+
 /* ── RATINGS ── */
 .star-rating { display:flex; gap:6px; margin:8px 0; }
 .star { font-size:28px; cursor:pointer; color:#dde1e7; transition:color 0.15s, transform 0.1s; line-height:1; }
@@ -461,7 +578,16 @@ textarea { resize: vertical; min-height: 100px; }
       <h3>Choose the best one</h3>
       <p>Compare and accept with one tap. The workshop is notified immediately.</p>
     </div>
+
   </div>
+
+  <!-- Workshop Map — outside steps div so it gets full page width -->
+  <div style="padding:0 40px 60px;box-sizing:border-box;">
+    <div class="map-section-title" style="font-size:22px;font-weight:800;color:#1e2a3a;margin-bottom:8px;">Workshops Near You</div>
+    <div style="color:#7a8799;font-size:14px;margin-bottom:20px;">Browse verified workshops across Malaysia. Click a pin to see details.</div>
+    <div id="workshop-map" style="height:460px;width:100%;border-radius:16px;overflow:hidden;border:1px solid #dde1e7;display:block;"></div>
+  </div>
+
 </div>
 
 <!-- ══ PAGE: CUSTOMER ══ -->
@@ -518,7 +644,8 @@ textarea { resize: vertical; min-height: 100px; }
         </div>
 
         <div style="display:flex;gap:12px;justify-content:flex-end">
-          <button class="btn btn-primary" id="submit-request-btn" onclick="submitRequest()">Submit Request &rarr;</button>
+          <button class="btn btn-outline btn-sm" onclick="submitToAll()">Send to All Workshops</button>
+          <button class="btn btn-primary" id="submit-request-btn" onclick="goToWorkshopBrowser()">Choose Workshops &rarr;</button>
         </div>
       </div>
     </div>
@@ -596,6 +723,66 @@ textarea { resize: vertical; min-height: 100px; }
 </div>
 
 
+
+<!-- ══ PAGE: WORKSHOP BROWSER ══ -->
+<div class="page" id="page-browser">
+  <div class="container" style="max-width:1100px">
+
+    <div style="margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+      <div>
+        <h2 style="font-size:22px;margin-bottom:4px">Choose Your Workshops</h2>
+        <p style="color:var(--muted);font-size:14px">Select one or more workshops to send your request to.</p>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="backToForm()" style="padding-left:0">&larr; Back to form</button>
+    </div>
+
+    <!-- Selected bar -->
+    <div class="selected-bar" id="selected-bar" style="display:none">
+      <div class="selected-bar-text"><span id="selected-count">0</span> workshop(s) selected</div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-ghost btn-sm" style="color:white;opacity:0.7" onclick="clearSelection()">Clear</button>
+        <button class="btn btn-mint btn-sm" onclick="proceedWithSelected()">Send Request to Selected &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="filter-bar">
+      <span style="font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.06em">Sort:</span>
+      <button class="filter-btn active" id="sort-nearest" onclick="sortWorkshops('nearest', this)">&#x1F4CD; Nearest</button>
+      <button class="filter-btn" id="sort-rating" onclick="sortWorkshops('rating', this)">&#x2B50; Top Rated</button>
+      <button class="filter-btn" id="sort-all" onclick="sortWorkshops('all', this)">All Workshops</button>
+    </div>
+
+    <!-- Map + List layout -->
+    <div class="browser-layout">
+
+      <!-- Map -->
+      <div id="browser-map" class="browser-map"></div>
+
+      <!-- Workshop list -->
+      <div>
+        <div id="browser-workshop-list" class="browser-list"></div>
+        <div id="browser-empty" class="no-workshops" style="display:none">
+          <div class="big">&#x1F527;</div>
+          <p>No workshops have set their location yet.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom send button -->
+    <div style="margin-top:20px;text-align:center;display:none" id="browser-bottom-btn">
+      <button class="btn btn-primary" onclick="proceedWithSelected()" style="padding:14px 40px">
+        Send Request to Selected Workshops &rarr;
+      </button>
+      <div style="margin-top:10px;font-size:13px;color:var(--muted)">
+        Or <a href="#" onclick="sendToAll();return false;" style="color:var(--mint-dark);font-weight:700">send to all workshops</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <!-- ══ PAGE: PROFILE ══ -->
 <div class="page" id="page-profile">
   <div class="container" style="max-width:640px">
@@ -645,10 +832,73 @@ textarea { resize: vertical; min-height: 100px; }
           <label>Phone Number (WhatsApp)</label>
           <input type="tel" id="profile-phone" placeholder="e.g. 0123456789">
         </div>
+        <div class="form-group" id="location-picker-section" style="display:none">
+          <label>Workshop Address</label>
+          <input type="text" id="profile-address" placeholder="e.g. No 12, Jalan Ampang, KL">
+          <label style="margin-top:12px">Pin Your Location on Map</label>
+          <div class="location-search-row">
+            <input type="text" id="location-search" placeholder="Search address or area..." style="font-size:13px;padding:9px 13px">
+            <button class="btn btn-outline btn-sm" onclick="searchLocation()">Search</button>
+            <button class="btn btn-outline btn-sm" onclick="detectLocation()">&#x1F4CD; My Location</button>
+          </div>
+          <div id="location-map-picker"></div>
+          <div id="location-coords-display" style="font-size:12px;color:var(--muted);margin-top:8px;display:none">
+            &#x1F4CD; Location set: <span id="coords-text"></span>
+          </div>
+        </div>
+        <div class="form-group" id="about-section" style="display:none;margin-top:4px">
+          <label>About Your Workshop</label>
+          <textarea id="profile-about" placeholder="Tell customers about your workshop — years of experience, specialisations, brands you service..." style="min-height:80px"></textarea>
+        </div>
       </div>
       <div id="profile-save-success" class="save-success">&#x2713; Profile updated successfully!</div>
       <div style="margin-top:20px;display:flex;justify-content:flex-end">
         <button class="btn btn-primary" onclick="saveProfile()">Save Changes</button>
+      </div>
+    </div>
+
+    <!-- Services Manager (workshop only) -->
+    <div class="panel" id="services-panel" style="display:none">
+      <div class="profile-section-title">Services &amp; Pricing</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Add the services your workshop offers with fixed or starting prices. Customers will see these before sending you a request.</p>
+
+      <div id="services-list" class="service-manager"></div>
+
+      <!-- Add service form -->
+      <div class="add-service-form">
+        <div style="font-size:12px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px">Add New Service</div>
+        <div class="add-service-grid">
+          <div class="form-group">
+            <label>Service Name</label>
+            <input type="text" id="new-svc-name" placeholder="e.g. Engine Oil Change">
+          </div>
+          <div class="form-group">
+            <label>Price (RM)</label>
+            <input type="number" id="new-svc-price" placeholder="e.g. 80" min="0">
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label>Note (optional)</label>
+          <input type="text" id="new-svc-note" placeholder="e.g. Includes filter replacement, prices from RM80">
+        </div>
+        <div style="display:flex;gap:8px">
+          <select id="new-svc-price-type" style="width:auto;flex-shrink:0;font-size:13px;padding:9px 12px">
+            <option value="fixed">Fixed price</option>
+            <option value="from">Starting from</option>
+            <option value="quote">By quotation</option>
+          </select>
+          <button class="btn btn-primary btn-sm" onclick="addService()" style="flex:1;justify-content:center">+ Add Service</button>
+        </div>
+      </div>
+
+      <!-- Common services quick-add -->
+      <div style="margin-top:16px">
+        <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px">Quick Add Common Services</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px" id="quick-add-services"></div>
+      </div>
+
+      <div style="margin-top:16px;display:flex;justify-content:flex-end">
+        <button class="btn btn-primary" onclick="saveServices()">Save Services</button>
       </div>
     </div>
 
@@ -676,6 +926,40 @@ textarea { resize: vertical; min-height: 100px; }
       <div class="profile-section-title" style="color:var(--red)">Account</div>
       <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Signed in as <strong style="color:var(--navy)" id="profile-email-display"></strong></p>
       <button class="btn btn-danger btn-sm" onclick="signOut()">Sign Out</button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══ WORKSHOP SLIDE PANEL ══ -->
+<div class="slide-panel-overlay" id="ws-panel-overlay" onclick="closeWorkshopPanel()"></div>
+<div class="slide-panel" id="ws-panel">
+  <div class="slide-panel-header">
+    <button class="slide-panel-close" onclick="closeWorkshopPanel()">&#x2715;</button>
+    <div class="ws-panel-name" id="wsp-name"></div>
+    <div class="ws-panel-addr" id="wsp-addr"></div>
+    <div class="ws-panel-meta" id="wsp-meta"></div>
+    <button class="panel-select-btn" id="wsp-select-btn" onclick="toggleFromPanel()"></button>
+  </div>
+  <div class="slide-panel-body">
+
+    <!-- About -->
+    <div class="ws-panel-section" id="wsp-about-section" style="display:none">
+      <div class="ws-panel-section-title">About</div>
+      <p id="wsp-about" style="font-size:14px;color:var(--text-light);line-height:1.7"></p>
+    </div>
+
+    <!-- Services -->
+    <div class="ws-panel-section">
+      <div class="ws-panel-section-title">Services &amp; Pricing</div>
+      <div id="wsp-services"></div>
+    </div>
+
+    <!-- Reviews -->
+    <div class="ws-panel-section">
+      <div class="ws-panel-section-title">Reviews</div>
+      <div id="wsp-reviews"></div>
     </div>
 
   </div>
@@ -731,24 +1015,41 @@ var NAV_LOGO = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4QCORXhpZgAAT
 
 // ══ INIT ══
 window.addEventListener('load', function() {
-  if (NAV_LOGO && NAV_LOGO !== 'LOGO_PLACEHOLDER') {
-    document.getElementById('nav-logo').src = NAV_LOGO;
-  }
-  buildBrandGrid();
-  buildYearDropdown();
+  // Set logo safely
+  try {
+    if (NAV_LOGO && NAV_LOGO !== 'LOGO_PLACEHOLDER') {
+      document.getElementById('nav-logo').src = NAV_LOGO;
+    }
+  } catch(e) {}
 
+  // Build car selector safely
+  try { buildBrandGrid(); } catch(e) {}
+  try { buildYearDropdown(); } catch(e) {}
+  try { setupDragDrop(); } catch(e) {}
+
+  // Auto-fill saved credentials
   var url = localStorage.getItem('sb_url');
   var key = localStorage.getItem('sb_key');
+
+  var urlEl = document.getElementById('sb-url');
+  var keyEl = document.getElementById('sb-key');
+  if (urlEl && url) urlEl.value = url;
+  if (keyEl && key) keyEl.value = key;
+
   if (url && key) {
-    document.getElementById('sb-url').value = url;
-    document.getElementById('sb-key').value = key;
     try {
       sb = window.supabase.createClient(url, key);
       showPage('landing');
       checkSession();
-    } catch(e) {}
+      setTimeout(function(){ try { initLandingMap(); } catch(e){} }, 300);
+    } catch(e) {
+      console.error('Supabase init failed:', e);
+      showPage('config');
+    }
+  } else {
+    // No saved credentials — stay on config page but pre-fill if partially saved
+    showPage('config');
   }
-  setupDragDrop();
 });
 
 // ══ CAR SELECTOR ══
@@ -881,15 +1182,22 @@ async function uploadAllMedia() {
 function initSupabase() {
   var url = document.getElementById('sb-url').value.trim();
   var key = document.getElementById('sb-key').value.trim();
-  if (!url || !key) { showToast('Please enter URL and key', 'warning'); return; }
+  if (!url || !key) { showToast('Please enter your Supabase URL and anon key', 'warning'); return; }
+  if (!url.includes('supabase.co')) { showToast('URL should end with .supabase.co', 'warning'); return; }
   try {
     sb = window.supabase.createClient(url, key);
     localStorage.setItem('sb_url', url);
     localStorage.setItem('sb_key', key);
-    showToast('Connected!');
+    showToast('Connected to Supabase!');
     showPage('landing');
     checkSession();
-  } catch(e) { showToast('Failed: ' + e.message, 'error'); }
+    setTimeout(function(){ try { initLandingMap(); } catch(e){} }, 300);
+    try { buildBrandGrid(); } catch(e) {}
+    try { buildYearDropdown(); } catch(e) {}
+  } catch(e) {
+    showToast('Connection failed: ' + e.message, 'error');
+    console.error(e);
+  }
 }
 
 async function checkSession() {
@@ -1003,6 +1311,7 @@ function updateNav() {
 
 async function routeByRole() {
   if (!currentProfile) return;
+  getCustomerLocation();
   if (currentProfile.role === 'workshop') {
     showPage('workshop');
     showWorkshopRequests();
@@ -1012,7 +1321,7 @@ async function routeByRole() {
     var res = await sb.from('requests')
       .select('*')
       .eq('user_id', currentUser.id)
-      .eq('status', 'open')
+      .in('status', ['open', 'closed'])
       .order('created_at', { ascending: false })
       .limit(1)
       .single();
@@ -1052,6 +1361,9 @@ function onGetQuotes() {
 function showPage(page) {
   document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
   document.getElementById('page-' + page).classList.add('active');
+  if (page === 'landing') {
+    setTimeout(initLandingMap, 100);
+  }
 }
 
 function setActiveNavLink(id) {
@@ -1094,23 +1406,17 @@ async function showMyQuotes() {
   loadMyRequests();
 }
 
-async function submitRequest() {
+async function submitRequest(targetWorkshopIds) {
   if (!currentUser) { openAuth(); return; }
-  if (!selectedBrand) { showToast('Please select a car brand', 'warning'); return; }
-  if (!selectedModel) { showToast('Please select a car model', 'warning'); return; }
   var issue = document.getElementById('issue-desc').value.trim();
   var year = document.getElementById('car-year').value;
-  if (!issue) { showToast('Please describe the issue', 'warning'); return; }
 
   var btn = document.getElementById('submit-request-btn');
-  btn.innerHTML = '<span class="spinner"></span> Uploading media...';
-  btn.disabled = true;
+  if (btn) { btn.innerHTML = '<span class="spinner"></span> Submitting...'; btn.disabled = true; }
 
   var mediaUrls = await uploadAllMedia();
 
-  btn.innerHTML = '<span class="spinner"></span> Submitting...';
-
-  var res = await sb.from('requests').insert({
+  var insertData = {
     user_id: currentUser.id,
     customer_name: currentProfile.name,
     car_brand: selectedBrand,
@@ -1118,27 +1424,42 @@ async function submitRequest() {
     issue: issue,
     media_urls: mediaUrls,
     status: 'open'
-  }).select().single();
+  };
 
-  btn.innerHTML = 'Submit Request &rarr;';
-  btn.disabled = false;
+  // Store targeted workshop IDs if user chose specific workshops
+  if (targetWorkshopIds && targetWorkshopIds.length) {
+    insertData.target_workshop_ids = targetWorkshopIds;
+  }
+
+  var res = await sb.from('requests').insert(insertData).select().single();
+
+  if (btn) { btn.innerHTML = 'Choose Workshops &rarr;'; btn.disabled = false; }
 
   if (res.error) { showToast('Failed: ' + res.error.message, 'error'); return; }
 
   activeRequestId = res.data.id;
+  showPage('customer');
   document.getElementById('request-form-panel').style.display = 'none';
   document.getElementById('quotes-section').style.display = 'block';
-  document.getElementById('request-summary').textContent = selectedBrand + ' ' + selectedModel + (year?' '+year:'') + ' — "' + issue.substring(0,60) + (issue.length>60?'...':'') + '"';
+
+  var targetLabel = (targetWorkshopIds && targetWorkshopIds.length)
+    ? ' (sent to ' + targetWorkshopIds.length + ' workshop' + (targetWorkshopIds.length>1?'s':'') + ')'
+    : ' (sent to all workshops)';
+  document.getElementById('request-summary').textContent = selectedBrand + ' ' + selectedModel + (year?' '+year:'') + ' — "' + issue.substring(0,60) + (issue.length>60?'...':'') + '"' + targetLabel;
 
   // Reset form
   selectedBrand = null; selectedModel = null; selectedFiles = [];
+  selectedWorkshops.clear();
   document.getElementById('media-previews').innerHTML = '';
   document.getElementById('issue-desc').value = '';
   document.querySelectorAll('.brand-card').forEach(function(c){c.classList.remove('selected');});
   document.getElementById('model-section').style.display = 'none';
   document.getElementById('issue-section').style.display = 'none';
 
-  showToast('Request submitted! Workshops will respond shortly.');
+  var msg = (targetWorkshopIds && targetWorkshopIds.length)
+    ? 'Request sent to ' + targetWorkshopIds.length + ' workshop(s)!'
+    : 'Request sent to all workshops!';
+  showToast(msg);
   subscribeToQuotes(res.data.id);
   renderQuotes([]);
   loadMyRequests();
@@ -1185,9 +1506,9 @@ function renderQuotes(quotes) {
   var empty = document.getElementById('quotes-empty');
   if (!quotes.length) { list.innerHTML = ''; empty.style.display = 'block'; return; }
   empty.style.display = 'none';
-  var hasAccepted = quotes.some(function(q) { return q.status === 'accepted'; });
+  var hasAccepted = quotes.some(function(q) { return q.status === 'accepted' || q.status === 'workshop_done'; });
   list.innerHTML = quotes.map(function(q, i) {
-    var isAccepted = q.status === 'accepted';
+    var isAccepted = q.status === 'accepted' || q.status === 'workshop_done';
     var isBest = i === 0 && !hasAccepted;
     // Build contact card for accepted quote
     var contactHtml = '';
@@ -1206,19 +1527,31 @@ function renderQuotes(quotes) {
           (waLink ? '<a href="' + waLink + '" target="_blank" class="btn-whatsapp">&#x1F4AC; WhatsApp</a>' : '') +
           (wPhone ? '<a href="tel:' + esc(wPhone) + '" class="btn-call">&#x1F4DE; Call</a>' : '') +
         '</div>' +
+      '</div>' +
+      '<div class="complete-banner">' +
+        '<div class="banner-text">' +
+          '<div class="banner-title">&#x1F527; Job in progress?</div>' +
+          '<div class="banner-sub">Once the workshop has finished, confirm the job is complete below.</div>' +
+        '</div>' +
+        '<button class="btn-complete" onclick="customerConfirmComplete(\'' + q.id + '\',\'' + q.request_id + '\',\'' + q.workshop_id + '\',\'' + esc(q.workshop_name) + '\')">&#x2713; Job Done</button>' +
       '</div>';
     }
-    return '<div class="quote-card ' + (isAccepted?'accepted':'') + ' anim" style="animation-delay:' + (i*0.05) + 's">' +
+    if (q.status === 'completed') {
+      contactHtml = '<div class="completed-stamp">&#x1F3C6; Job completed &mdash; Thank you for using Drivara!</div>';
+    }
+    var cardClass = isAccepted ? 'accepted' : (q.status==='completed' ? 'completed' : '');
+    return '<div class="quote-card ' + cardClass + ' anim" style="animation-delay:' + (i*0.05) + 's">' +
       '<div style="grid-column:1/-1">' +
         '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:10px">' +
           '<div style="display:flex;align-items:center;gap:10px">' +
             '<div class="workshop-name">' + esc(q.workshop_name) + '</div>' +
             (isBest ? '<span class="badge badge-best">Best Price</span>' : '') +
             (isAccepted ? '<span class="badge badge-accepted">&#x2713; Accepted</span>' : '') +
+            (q.status==='completed' ? '<span class="badge badge-completed">&#x1F3C6; Completed</span>' : '') +
           '</div>' +
           '<div class="price-tag" style="font-size:24px">RM ' + q.price + '<span>total</span></div>' +
         '</div>' +
-        '<div class="quote-meta"><div class="meta-chip">&#x23F1; ' + q.duration + ' day' + (q.duration>1?'s':'') + '</div></div>' +
+        '<div class="quote-meta"><div class="meta-chip">&#x23F1; ' + q.duration + ' day' + (q.duration>1?'s':'') + '</div>' + (q.workshop_distance ? '<div class="meta-chip">&#x1F4CD; ' + q.workshop_distance + '</div>' : '') + '</div>' +
         (q.message ? '<div class="quote-msg">"' + esc(q.message) + '"</div>' : '') +
         (!hasAccepted ? '<button class="btn btn-mint btn-sm" style="margin-top:14px" onclick="acceptQuote(\'' + q.id + '\',\'' + q.request_id + '\')">Accept Quote &rarr;</button>' : '') +
         contactHtml +
@@ -1261,7 +1594,7 @@ async function loadMyRequests() {
           '<div class="car-model">&#x1F697; ' + esc(r.car_brand) + ' ' + esc(r.car_model) + '</div>' +
           '<div class="issue-text">' + esc(r.issue.substring(0,100)) + (r.issue.length>100?'...':'') + '</div>' +
           mediaHtml +
-          '<span class="badge ' + (r.status==='open'?'badge-open':'badge-closed') + '">' + r.status + '</span>' +
+          '<span class="badge ' + (r.status==='open'?'badge-open':r.status==='completed'?'badge-completed':'badge-closed') + '">' + (r.status==='completed'?'&#x1F3C6; completed':r.status) + '</span>' +
         '</div>' +
         '<div style="font-size:12px;color:var(--muted);white-space:nowrap">' + timeAgo(r.created_at) + '</div>' +
       '</div>' +
@@ -1286,12 +1619,18 @@ function showSentQuotes() {
 }
 
 async function loadOpenRequests() {
-  if (!sb) return;
+  if (!sb || !currentUser) return;
   var res = await sb.from('requests').select('*').eq('status','open').order('created_at',{ascending:false});
-  await renderWorkshopRequests(res.data || []);
+  // Filter: show requests targeted at this workshop OR open to all (no target_workshop_ids)
+  var all = res.data || [];
+  var filtered = all.filter(function(r) {
+    if (!r.target_workshop_ids || !r.target_workshop_ids.length) return true;
+    return r.target_workshop_ids.includes(currentUser.id);
+  });
+  await renderWorkshopRequests(filtered);
   var badge = document.getElementById('nav-req-badge');
-  badge.textContent = (res.data||[]).length;
-  badge.style.display = (res.data||[]).length ? '' : 'none';
+  badge.textContent = filtered.length;
+  badge.style.display = filtered.length ? '' : 'none';
 
   // realtime
   realtimeSubs.forEach(function(s){if(sb)sb.removeChannel(s);});
@@ -1386,7 +1725,7 @@ async function loadMyQuotes() {
   var list = document.getElementById('my-quotes-list');
   if (!res.data || !res.data.length) { list.innerHTML = '<div style="color:var(--muted);font-size:14px;padding:20px 0">No quotes sent yet.</div>'; return; }
   list.innerHTML = res.data.map(function(q) {
-    var sc = q.status==='accepted'?'badge-accepted':q.status==='rejected'?'badge-rejected':'badge-pending';
+    var sc = q.status==='accepted'?'badge-accepted':q.status==='completed'?'badge-completed':q.status==='rejected'?'badge-rejected':'badge-pending';
     var custContact = '';
     if (q.status === 'accepted' && q.requests) {
       var custName = q.requests.customer_name || (q.requests.profiles ? q.requests.profiles.name : 'Customer');
@@ -1413,7 +1752,9 @@ async function loadMyQuotes() {
         '</div>' +
         '<div class="quote-meta"><div class="meta-chip">&#x23F1; ' + q.duration + ' day'+(q.duration>1?'s':'')+'</div><div class="meta-chip">'+timeAgo(q.created_at)+'</div></div>' +
         (q.message?'<div class="quote-msg">"'+esc(q.message)+'"</div>':'') +
-        '<span class="badge ' + sc + '" style="margin-top:10px;display:inline-block">' + q.status + '</span>' +
+        '<span class="badge ' + sc + '" style="margin-top:10px;display:inline-block">' + (q.status==='completed'?'&#x1F3C6; completed':q.status) + '</span>' +
+        (q.status==='accepted' ? '<div class="complete-banner" style="margin-top:14px"><div class="banner-text"><div class="banner-title">&#x2714; Quote accepted!</div><div class="banner-sub">Contact the customer and complete the job. Mark it done when finished.</div></div><button class="btn-complete" onclick="workshopMarkComplete(\'' + q.id + '\',\'' + q.request_id + '\')">&#x1F527; Mark as Complete</button></div>' : '') +
+        (q.status==='completed' ? '<div class="completed-stamp" style="margin-top:12px">&#x1F3C6; Job marked complete</div>' : '') +
         custContact +
       '</div>' +
     '</div>';
@@ -1421,6 +1762,619 @@ async function loadMyQuotes() {
 }
 
 
+
+
+
+
+
+// ══ WORKSHOP SLIDE PANEL ══
+var currentPanelWorkshopId = null;
+
+async function openWorkshopPanel(workshopId) {
+  currentPanelWorkshopId = workshopId;
+  var w = allWorkshops.find(function(x){ return x.id === workshopId; });
+  if (!w) return;
+
+  // Header
+  document.getElementById('wsp-name').textContent = w.name || 'Workshop';
+  document.getElementById('wsp-addr').textContent = w.address ? '📍 ' + w.address : '';
+
+  // Meta chips
+  var metaHtml = '';
+  if (w._rating) metaHtml += '<span class="ws-panel-chip rating">&#9733; ' + w._rating.toFixed(1) + ' (' + w._reviewCount + ' review' + (w._reviewCount>1?'s':'') + ')</span>';
+  if (w._distStr) metaHtml += '<span class="ws-panel-chip dist">📍 ' + w._distStr + ' away</span>';
+  document.getElementById('wsp-meta').innerHTML = metaHtml;
+
+  // Select button
+  var isSelected = selectedWorkshops.has(workshopId);
+  var btn = document.getElementById('wsp-select-btn');
+  btn.textContent = isSelected ? '✓ Selected — Click to Deselect' : '+ Select This Workshop';
+  btn.className = 'panel-select-btn' + (isSelected ? ' selected' : '');
+
+  // About
+  var aboutSection = document.getElementById('wsp-about-section');
+  if (w.about) {
+    aboutSection.style.display = 'block';
+    document.getElementById('wsp-about').textContent = w.about;
+  } else { aboutSection.style.display = 'none'; }
+
+  // Services
+  var svcEl = document.getElementById('wsp-services');
+  svcEl.innerHTML = '<div style="color:var(--muted);font-size:13px">Loading...</div>';
+
+  // Reviews
+  var revEl = document.getElementById('wsp-reviews');
+  revEl.innerHTML = '<div style="color:var(--muted);font-size:13px">Loading...</div>';
+
+  // Open panel
+  document.getElementById('ws-panel-overlay').classList.add('open');
+  document.getElementById('ws-panel').classList.add('open');
+
+  // Fetch services
+  var svcRes = await sb.from('workshop_services').select('*').eq('workshop_id', workshopId).order('created_at');
+  var services = svcRes.data || [];
+  if (!services.length) {
+    svcEl.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:8px 0">No services listed yet.</div>';
+  } else {
+    svcEl.innerHTML = services.map(function(s) {
+      var priceStr = s.price_type === 'quote' ? 'By quotation' : (s.price_type === 'from' ? 'From RM ' : 'RM ') + (s.price || '');
+      return '<div class="service-row">' +
+        '<div>' +
+          '<div class="service-name">' + esc(s.name) + '</div>' +
+          (s.note ? '<div class="service-note">' + esc(s.note) + '</div>' : '') +
+        '</div>' +
+        '<div style="text-align:right">' +
+          '<div class="service-price">' + esc(priceStr) + '</div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  // Fetch reviews
+  var revRes = await sb.from('reviews').select('*').eq('workshop_id', workshopId).order('created_at', {ascending:false}).limit(5);
+  var reviews = revRes.data || [];
+  if (!reviews.length) {
+    revEl.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:8px 0">No reviews yet.</div>';
+  } else {
+    revEl.innerHTML = reviews.map(function(r) {
+      return '<div class="review-mini">' +
+        '<div class="review-mini-top">' +
+          '<div class="review-mini-name">' + esc(r.customer_name) + '</div>' +
+          '<div style="font-size:12px;color:var(--muted)">' + timeAgo(r.created_at) + '</div>' +
+        '</div>' +
+        renderStars(r.rating, true) +
+        (r.comment ? '<div class="review-mini-text">' + esc(r.comment) + '</div>' : '') +
+      '</div>';
+    }).join('');
+  }
+}
+
+function closeWorkshopPanel() {
+  document.getElementById('ws-panel-overlay').classList.remove('open');
+  document.getElementById('ws-panel').classList.remove('open');
+  currentPanelWorkshopId = null;
+}
+
+function toggleFromPanel() {
+  if (!currentPanelWorkshopId) return;
+  toggleWorkshopSelect(currentPanelWorkshopId);
+  // Update panel button
+  var isSelected = selectedWorkshops.has(currentPanelWorkshopId);
+  var btn = document.getElementById('wsp-select-btn');
+  btn.textContent = isSelected ? '✓ Selected — Click to Deselect' : '+ Select This Workshop';
+  btn.className = 'panel-select-btn' + (isSelected ? ' selected' : '');
+}
+
+// ══ SERVICES MANAGER (workshop profile) ══
+var workshopServices = [];
+
+var QUICK_SERVICES = [
+  { name: 'Engine Oil Change', note: 'Includes oil filter', price: 80, price_type: 'from' },
+  { name: 'Tyre Replacement', note: 'Per tyre, excludes tyre cost', price: 15, price_type: 'from' },
+  { name: 'Tyre Balancing', note: 'Per tyre', price: 8, price_type: 'fixed' },
+  { name: 'Tyre Rotation', note: '4 tyres', price: 20, price_type: 'fixed' },
+  { name: 'Air-Cond Gas Top-Up', note: 'R134a gas', price: 80, price_type: 'from' },
+  { name: 'Air Filter Replacement', note: '', price: 30, price_type: 'from' },
+  { name: 'Brake Pad Replacement', note: 'Per axle', price: 120, price_type: 'from' },
+  { name: 'Brake Disc Replacement', note: 'Per axle', price: 200, price_type: 'from' },
+  { name: 'Battery Replacement', note: 'Includes battery check', price: 180, price_type: 'from' },
+  { name: 'Spark Plug Replacement', note: 'Per plug', price: 15, price_type: 'from' },
+  { name: 'Alignment', note: '4-wheel alignment', price: 60, price_type: 'fixed' },
+  { name: 'Radiator Flush', note: '', price: 80, price_type: 'from' },
+  { name: 'Transmission Service', note: '', price: 0, price_type: 'quote' },
+  { name: 'Engine Diagnostic', note: 'OBD scan included', price: 50, price_type: 'fixed' },
+  { name: 'Car Wash & Vacuum', note: '', price: 20, price_type: 'from' },
+];
+
+function buildQuickAddButtons() {
+  var container = document.getElementById('quick-add-services');
+  if (!container) return;
+  // Only show services not already added
+  var existing = workshopServices.map(function(s){ return s.name.toLowerCase(); });
+  var available = QUICK_SERVICES.filter(function(s){ return !existing.includes(s.name.toLowerCase()); });
+  container.innerHTML = available.map(function(s) {
+    return '<button class="filter-btn" onclick="quickAddService(\'' + s.name.replace(/'/g,"\\'") + '\',' + s.price + ',\'' + s.price_type + '\',\'' + (s.note||'').replace(/'/g,"\\'") + '\')" style="font-size:12px;padding:5px 12px">' + s.name + '</button>';
+  }).join('');
+}
+
+function quickAddService(name, price, priceType, note) {
+  workshopServices.push({ name: name, price: price, price_type: priceType, note: note, _new: true });
+  renderServicesList();
+  buildQuickAddButtons();
+  showToast(name + ' added!');
+}
+
+function addService() {
+  var name = document.getElementById('new-svc-name').value.trim();
+  var price = document.getElementById('new-svc-price').value;
+  var note = document.getElementById('new-svc-note').value.trim();
+  var priceType = document.getElementById('new-svc-price-type').value;
+  if (!name) { showToast('Please enter a service name', 'warning'); return; }
+  workshopServices.push({ name: name, price: parseFloat(price)||0, note: note, price_type: priceType, _new: true });
+  document.getElementById('new-svc-name').value = '';
+  document.getElementById('new-svc-price').value = '';
+  document.getElementById('new-svc-note').value = '';
+  renderServicesList();
+  buildQuickAddButtons();
+}
+
+function removeService(idx) {
+  workshopServices.splice(idx, 1);
+  renderServicesList();
+  buildQuickAddButtons();
+}
+
+function renderServicesList() {
+  var list = document.getElementById('services-list');
+  if (!list) return;
+  if (!workshopServices.length) {
+    list.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:8px 0">No services added yet. Use the form below or quick-add common services.</div>';
+    return;
+  }
+  list.innerHTML = workshopServices.map(function(s, i) {
+    var priceLabel = s.price_type === 'quote' ? 'By quotation' : (s.price_type === 'from' ? 'From RM ' : 'RM ') + (s.price || 0);
+    return '<div class="service-item-row">' +
+      '<div style="flex:1">' +
+        '<div class="svc-name">' + esc(s.name) + '</div>' +
+        (s.note ? '<div class="svc-note-display">' + esc(s.note) + '</div>' : '') +
+      '</div>' +
+      '<div class="svc-price-display">' + esc(priceLabel) + '</div>' +
+      '<button onclick="removeService(' + i + ')" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;padding:4px 6px" title="Remove">&#x2715;</button>' +
+    '</div>';
+  }).join('');
+}
+
+async function loadWorkshopServices() {
+  if (!sb || !currentUser) return;
+  var res = await sb.from('workshop_services').select('*').eq('workshop_id', currentUser.id).order('created_at');
+  workshopServices = res.data || [];
+  renderServicesList();
+  buildQuickAddButtons();
+}
+
+async function saveServices() {
+  if (!currentUser) return;
+  // Delete existing and re-insert
+  await sb.from('workshop_services').delete().eq('workshop_id', currentUser.id);
+  if (workshopServices.length) {
+    var inserts = workshopServices.map(function(s) {
+      return { workshop_id: currentUser.id, name: s.name, price: s.price||0, note: s.note||'', price_type: s.price_type||'fixed' };
+    });
+    var res = await sb.from('workshop_services').insert(inserts);
+    if (res.error) { showToast('Failed to save: ' + res.error.message, 'error'); return; }
+  }
+  showToast('Services saved!');
+}
+
+// ══ WORKSHOP BROWSER ══
+var browserMap = null;
+var browserMarkers = {};
+var selectedWorkshops = new Set();
+var allWorkshops = [];
+var pendingRequestData = null;
+
+function backToForm() {
+  showPage('customer');
+  document.getElementById('request-form-panel').style.display = 'block';
+  document.getElementById('quotes-section').style.display = 'none';
+}
+
+function validateForm() {
+  if (!currentUser) { openAuth(); return false; }
+  if (!selectedBrand) { showToast('Please select a car brand', 'warning'); return false; }
+  if (!selectedModel) { showToast('Please select a car model', 'warning'); return false; }
+  var issue = document.getElementById('issue-desc').value.trim();
+  if (!issue) { showToast('Please describe the issue', 'warning'); return false; }
+  return true;
+}
+
+async function goToWorkshopBrowser() {
+  if (!validateForm()) return;
+  showPage('browser');
+  selectedWorkshops.clear();
+  updateSelectedBar();
+  await initBrowserMap();
+  await loadBrowserWorkshops();
+}
+
+async function submitToAll() {
+  if (!validateForm()) return;
+  await submitRequest(null); // null = send to all
+}
+
+function sendToAll() {
+  submitToAll();
+}
+
+function proceedWithSelected() {
+  if (selectedWorkshops.size === 0) { showToast('Please select at least one workshop', 'warning'); return; }
+  submitRequest(Array.from(selectedWorkshops));
+}
+
+function clearSelection() {
+  selectedWorkshops.clear();
+  document.querySelectorAll('.workshop-browser-card').forEach(function(c) { c.classList.remove('selected'); });
+  updateSelectedBar();
+}
+
+function updateSelectedBar() {
+  var bar = document.getElementById('selected-bar');
+  var count = document.getElementById('selected-count');
+  var bottomBtn = document.getElementById('browser-bottom-btn');
+  count.textContent = selectedWorkshops.size;
+  bar.style.display = selectedWorkshops.size > 0 ? 'flex' : 'none';
+  if (bottomBtn) bottomBtn.style.display = allWorkshops.length > 0 ? 'block' : 'none';
+}
+
+function toggleWorkshopSelect(workshopId) {
+  var card = document.getElementById('wb-card-' + workshopId);
+  if (selectedWorkshops.has(workshopId)) {
+    selectedWorkshops.delete(workshopId);
+    if (card) card.classList.remove('selected');
+  } else {
+    selectedWorkshops.add(workshopId);
+    if (card) card.classList.add('selected');
+  }
+  updateSelectedBar();
+  // Flash marker
+  if (browserMarkers[workshopId]) {
+    browserMarkers[workshopId].openPopup();
+  }
+}
+
+function sortWorkshops(by, btn) {
+  document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  var sorted = [...allWorkshops];
+  if (by === 'nearest' && customerLat) {
+    sorted.sort(function(a,b) { return (a._dist||9999) - (b._dist||9999); });
+  } else if (by === 'rating') {
+    sorted.sort(function(a,b) { return (b._rating||0) - (a._rating||0); });
+  }
+  renderBrowserList(sorted);
+}
+
+async function initBrowserMap() {
+  if (browserMap) { browserMap.invalidateSize(); return; }
+  var center = customerLat ? [customerLat, customerLng] : [3.1390, 101.6869];
+  browserMap = L.map('browser-map').setView(center, 12);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; OpenStreetMap &copy; CARTO', subdomains: 'abcd', maxZoom: 19
+  }).addTo(browserMap);
+  // Customer marker
+  if (customerLat) {
+    L.circleMarker([customerLat, customerLng], {
+      radius: 10, fillColor: '#1e2a3a', color: '#5ecb8e', weight: 3, fillOpacity: 1
+    }).addTo(browserMap).bindPopup('<strong>You are here</strong>');
+  }
+}
+
+async function loadBrowserWorkshops() {
+  var list = document.getElementById('browser-workshop-list');
+  var empty = document.getElementById('browser-empty');
+  list.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px 0;text-align:center">Loading workshops...</div>';
+
+  var res = await sb.from('profiles').select('id, name, phone, lat, lng, address, about, role').eq('role', 'workshop');
+  var workshops = res.data || [];
+
+  // Get ratings
+  var wIds = workshops.map(function(w){ return w.id; });
+  var revRes = wIds.length ? await sb.from('reviews').select('workshop_id, rating').in('workshop_id', wIds) : { data: [] };
+  var reviews = revRes.data || [];
+
+  workshops.forEach(function(w) {
+    var wRevs = reviews.filter(function(r){ return r.workshop_id === w.id; });
+    w._rating = wRevs.length ? wRevs.reduce(function(s,r){return s+r.rating;},0)/wRevs.length : 0;
+    w._reviewCount = wRevs.length;
+    if (customerLat && w.lat && w.lng) {
+      w._dist = parseFloat(calcDistanceRaw(customerLat, customerLng, w.lat, w.lng));
+      w._distStr = w._dist < 1 ? (w._dist * 1000).toFixed(0) + ' m' : w._dist.toFixed(1) + ' km';
+    }
+  });
+
+  // Sort by nearest by default
+  if (customerLat) {
+    workshops.sort(function(a,b){ return (a._dist||9999) - (b._dist||9999); });
+  }
+
+  allWorkshops = workshops;
+
+  if (!workshops.length) {
+    list.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  // Add markers
+  var mintIcon = L.divIcon({
+    html: '<div style="width:34px;height:34px;background:#1e2a3a;border:3px solid #5ecb8e;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 3px 10px rgba(30,42,58,0.3);cursor:pointer">&#x1F527;</div>',
+    className: '', iconSize: [34,34], iconAnchor: [17,17], popupAnchor: [0,-20]
+  });
+
+  workshops.forEach(function(w) {
+    if (!w.lat || !w.lng) return;
+    var marker = L.marker([w.lat, w.lng], { icon: mintIcon }).addTo(browserMap);
+    var ratingHtml = w._rating ? '&#9733; ' + w._rating.toFixed(1) + ' (' + w._reviewCount + ' review' + (w._reviewCount>1?'s':'') + ')' : 'No reviews yet';
+    marker.bindPopup(
+      '<div style="font-family:Plus Jakarta Sans,sans-serif;min-width:160px">' +
+      '<div style="font-weight:800;font-size:15px;color:#1e2a3a;margin-bottom:4px">' + esc(w.name||'Workshop') + '</div>' +
+      (w.address ? '<div style="font-size:12px;color:#7a8799;margin-bottom:4px">&#x1F4CD; ' + esc(w.address) + '</div>' : '') +
+      '<div style="font-size:13px;color:#2e9e63;font-weight:700;margin-bottom:6px">' + ratingHtml + '</div>' +
+      (w._distStr ? '<div style="font-size:12px;color:#7a8799">&#x1F4CD; ' + w._distStr + ' away</div>' : '') +
+      '<button onclick="toggleWorkshopSelect(\'' + w.id + '\')" style="margin-top:10px;background:#1e2a3a;color:white;border:none;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;width:100%">Select Workshop</button>' +
+      '</div>'
+    );
+    marker.on('click', function() {
+      // Highlight card
+      document.querySelectorAll('.workshop-browser-card').forEach(function(c){ c.classList.remove('highlighted'); });
+      var card = document.getElementById('wb-card-' + w.id);
+      if (card) { card.classList.add('highlighted'); card.scrollIntoView({ behavior:'smooth', block:'nearest' }); }
+    });
+    browserMarkers[w.id] = marker;
+  });
+
+  // Fit map
+  var withLoc = workshops.filter(function(w){ return w.lat && w.lng; });
+  if (withLoc.length > 0 && browserMap) {
+    var group = L.featureGroup(withLoc.map(function(w){ return L.marker([w.lat, w.lng]); }));
+    browserMap.fitBounds(group.getBounds().pad(0.25));
+  }
+
+  renderBrowserList(workshops);
+  document.getElementById('browser-bottom-btn').style.display = 'block';
+}
+
+function renderBrowserList(workshops) {
+  var list = document.getElementById('browser-workshop-list');
+  list.innerHTML = workshops.map(function(w) {
+    var ratingChip = w._rating ? '<span class="wb-chip wb-rating">&#9733; ' + w._rating.toFixed(1) + ' (' + w._reviewCount + ')</span>' : '';
+    var distChip = w._distStr ? '<span class="wb-chip wb-dist">&#x1F4CD; ' + w._distStr + '</span>' : '';
+    var noLocChip = (!w.lat || !w.lng) ? '<span class="wb-chip">No location set</span>' : '';
+    var isSelected = selectedWorkshops.has(w.id);
+    var wid = w.id;
+    var selBtnClass = isSelected ? 'btn-mint' : 'btn-primary';
+    var selBtnText = isSelected ? '&#x2713; Selected' : '+ Select';
+    var card = '<div class="workshop-browser-card ' + (isSelected?'selected':'') + '" id="wb-card-' + wid + '">';
+    card += '<div class="wb-check" onclick="toggleWorkshopSelect(\'' + wid + '\')">' + (isSelected ? '&#x2713;' : '') + '</div>';
+    card += '<div onclick="openWorkshopPanel(\'' + wid + '\')" style="cursor:pointer">';
+    card += '<div class="wb-name">' + esc(w.name || 'Workshop') + '</div>';
+    if (w.address) card += '<div style="font-size:12px;color:var(--muted);margin-top:2px">&#x1F4CD; ' + esc(w.address) + '</div>';
+    card += '<div class="wb-meta" style="margin-top:6px">' + ratingChip + distChip + noLocChip + '</div>';
+    card += '</div>';
+    card += '<div style="display:flex;gap:8px;margin-top:12px">';
+    card += '<button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="openWorkshopPanel(\'' + wid + '\')">View Profile</button>';
+    card += '<button class="btn ' + selBtnClass + ' btn-sm" style="flex:1;justify-content:center" onclick="toggleWorkshopSelect(\'' + wid + '\')">' + selBtnText + '</button>';
+    card += '</div></div>';
+    return card;
+  }).join('');
+}
+
+function calcDistanceRaw(lat1, lng1, lat2, lng2) {
+  var R = 6371;
+  var dLat = (lat2-lat1)*Math.PI/180;
+  var dLng = (lng2-lng1)*Math.PI/180;
+  var a = Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+// ══ MAPS & LOCATION ══
+var landingMap = null;
+var pickerMap = null;
+var pickerMarker = null;
+var selectedLat = null;
+var selectedLng = null;
+
+// Malaysia center
+var MY_CENTER = [4.2105, 108.9758];
+var MY_ZOOM = 6;
+var KL_CENTER = [3.1390, 101.6869];
+
+function initLandingMap() {
+  if (landingMap) return;
+  var mapEl = document.getElementById('workshop-map');
+  if (!mapEl) return;
+  landingMap = L.map('workshop-map', { zoomControl: true }).setView(KL_CENTER, 11);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 19
+  }).addTo(landingMap);
+  loadWorkshopMarkers();
+}
+
+async function loadWorkshopMarkers() {
+  if (!sb || !landingMap) return;
+  var res = await sb.from('profiles')
+    .select('id, name, phone, lat, lng, address, role')
+    .eq('role', 'workshop')
+    .not('lat', 'is', null)
+    .not('lng', 'is', null);
+
+  var workshops = res.data || [];
+  if (!workshops.length) return;
+
+  // Custom mint marker
+  var mintIcon = L.divIcon({
+    html: '<div style="width:32px;height:32px;background:#1e2a3a;border:3px solid #5ecb8e;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 3px 10px rgba(30,42,58,0.3)">&#x1F527;</div>',
+    className: '',
+    iconSize: [32, 32],
+    iconAnchor: [16, 16],
+    popupAnchor: [0, -20]
+  });
+
+  // Get ratings for all workshops
+  var wIds = workshops.map(function(w){ return w.id; });
+  var revRes = await sb.from('reviews').select('workshop_id, rating').in('workshop_id', wIds);
+  var reviews = revRes.data || [];
+
+  workshops.forEach(function(w) {
+    var wRevs = reviews.filter(function(r){ return r.workshop_id === w.id; });
+    var avgRating = wRevs.length ? (wRevs.reduce(function(s,r){return s+r.rating;},0)/wRevs.length).toFixed(1) : null;
+    var ratingHtml = avgRating ? '<div class="map-popup-rating">&#9733; ' + avgRating + ' (' + wRevs.length + ' review' + (wRevs.length>1?'s':'') + ')</div>' : '<div class="map-popup-rating" style="color:var(--muted)">No reviews yet</div>';
+
+    var marker = L.marker([w.lat, w.lng], { icon: mintIcon }).addTo(landingMap);
+    marker.bindPopup(
+      '<div class="map-popup-name">' + (w.name || 'Workshop') + '</div>' +
+      (w.address ? '<div class="map-popup-addr">&#x1F4CD; ' + w.address + '</div>' : '') +
+      ratingHtml
+    );
+  });
+
+  // Fit map to markers if there are any
+  if (workshops.length === 1) {
+    landingMap.setView([workshops[0].lat, workshops[0].lng], 14);
+  } else if (workshops.length > 1) {
+    var group = L.featureGroup(workshops.map(function(w){ return L.marker([w.lat, w.lng]); }));
+    landingMap.fitBounds(group.getBounds().pad(0.2));
+  }
+}
+
+// ── Location picker map (workshop profile) ──
+function initPickerMap() {
+  if (pickerMap) { pickerMap.invalidateSize(); return; }
+  var lat = selectedLat || KL_CENTER[0];
+  var lng = selectedLng || KL_CENTER[1];
+  pickerMap = L.map('location-map-picker').setView([lat, lng], 13);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 19
+  }).addTo(pickerMap);
+
+  if (selectedLat && selectedLng) {
+    pickerMarker = L.marker([selectedLat, selectedLng], { draggable: true }).addTo(pickerMap);
+    pickerMarker.on('dragend', onMarkerDrag);
+  }
+
+  pickerMap.on('click', function(e) {
+    setPickerLocation(e.latlng.lat, e.latlng.lng);
+  });
+}
+
+function setPickerLocation(lat, lng) {
+  selectedLat = lat;
+  selectedLng = lng;
+  if (pickerMarker) {
+    pickerMarker.setLatLng([lat, lng]);
+  } else {
+    pickerMarker = L.marker([lat, lng], { draggable: true }).addTo(pickerMap);
+    pickerMarker.on('dragend', onMarkerDrag);
+  }
+  pickerMap.setView([lat, lng], 15);
+  document.getElementById('location-coords-display').style.display = 'block';
+  document.getElementById('coords-text').textContent = lat.toFixed(5) + ', ' + lng.toFixed(5);
+}
+
+function onMarkerDrag(e) {
+  var pos = e.target.getLatLng();
+  setPickerLocation(pos.lat, pos.lng);
+}
+
+async function searchLocation() {
+  var query = document.getElementById('location-search').value.trim();
+  if (!query) return;
+  // Nominatim geocoding (free, no key needed)
+  var url = 'https://nominatim.openstreetmap.org/search?q=' + encodeURIComponent(query + ', Malaysia') + '&format=json&limit=1';
+  try {
+    var res = await fetch(url, { headers: { 'Accept-Language': 'en' } });
+    var data = await res.json();
+    if (data && data.length) {
+      var lat = parseFloat(data[0].lat);
+      var lng = parseFloat(data[0].lon);
+      if (!pickerMap) initPickerMap();
+      setPickerLocation(lat, lng);
+      document.getElementById('profile-address').value = data[0].display_name.split(',').slice(0,3).join(',').trim();
+    } else {
+      showToast('Location not found. Try a different search.', 'warning');
+    }
+  } catch(e) {
+    showToast('Search failed. Please try again.', 'warning');
+  }
+}
+
+function detectLocation() {
+  if (!navigator.geolocation) { showToast('Geolocation not supported', 'warning'); return; }
+  navigator.geolocation.getCurrentPosition(function(pos) {
+    if (!pickerMap) initPickerMap();
+    setPickerLocation(pos.coords.latitude, pos.coords.longitude);
+    showToast('Location detected!');
+  }, function() {
+    showToast('Could not detect location. Please pin manually.', 'warning');
+  });
+}
+
+// ── Attach distance to quotes when customer is located ──
+var customerLat = null;
+var customerLng = null;
+
+function getCustomerLocation() {
+  if (!navigator.geolocation) return;
+  navigator.geolocation.getCurrentPosition(function(pos) {
+    customerLat = pos.coords.latitude;
+    customerLng = pos.coords.longitude;
+  });
+}
+
+function calcDistance(lat1, lng1, lat2, lng2) {
+  var R = 6371;
+  var dLat = (lat2-lat1) * Math.PI/180;
+  var dLng = (lng2-lng1) * Math.PI/180;
+  var a = Math.sin(dLat/2)*Math.sin(dLat/2) + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);
+  var c = 2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  var d = R * c;
+  return d < 1 ? (d * 1000).toFixed(0) + ' m' : d.toFixed(1) + ' km';
+}
+
+// ══ COMPLETE FLOW ══
+async function workshopMarkComplete(quoteId, requestId) {
+  var confirmed = window.confirm('Mark this job as complete? The customer will be notified to confirm.');
+  if (!confirmed) return;
+
+  // Update quote status to workshop_done (waiting for customer confirmation)
+  var res = await sb.from('quotes').update({ status: 'workshop_done' }).eq('id', quoteId);
+  if (res.error) { showToast('Failed: ' + res.error.message, 'error'); return; }
+
+  showToast('Job marked complete! Waiting for customer confirmation.');
+  loadMyQuotes();
+}
+
+async function customerConfirmComplete(quoteId, requestId, workshopId, workshopName) {
+  var confirmed = window.confirm('Confirm that ' + workshopName + ' has completed the job?');
+  if (!confirmed) return;
+
+  // Mark quote and request as completed
+  await sb.from('quotes').update({ status: 'completed' }).eq('id', quoteId);
+  await sb.from('requests').update({ status: 'completed' }).eq('id', requestId);
+
+  // Reload quotes
+  var res = await sb.from('quotes').select('*, profiles(name, phone)').eq('request_id', requestId).order('price');
+  renderQuotes(res.data || []);
+  showToast('Job confirmed complete! Please leave a review.');
+
+  // Trigger review modal
+  setTimeout(function() { openReviewModal(workshopId, workshopName, quoteId); }, 1000);
+}
 
 // ══ RATINGS & REVIEWS ══
 var reviewData = { workshopId: null, workshopName: '', quoteId: null, star: 0 };
@@ -1549,11 +2503,28 @@ async function loadProfilePage() {
   var initial = (currentProfile.name || 'U').charAt(0).toUpperCase();
   document.getElementById('profile-avatar-big').textContent = initial;
   document.getElementById('profile-display-name').textContent = currentProfile.name || '';
-  document.getElementById('profile-display-role').textContent = currentProfile.role === 'workshop' ? '&#x1F527; Workshop' : '&#x1F697; Car Owner';
+  document.getElementById('profile-display-role').innerHTML = currentProfile.role === 'workshop' ? '&#x1F527; Workshop' : '&#x1F697; Car Owner';
   document.getElementById('profile-display-email').textContent = currentUser.email || '';
   document.getElementById('profile-email-display').textContent = currentUser.email || '';
   document.getElementById('profile-name').value = currentProfile.name || '';
   document.getElementById('profile-phone').value = currentProfile.phone || '';
+  document.getElementById('profile-address').value = currentProfile.address || '';
+
+  // Show location picker only for workshops
+  if (currentProfile.role === 'workshop') {
+    document.getElementById('location-picker-section').style.display = 'block';
+    document.getElementById('about-section').style.display = 'block';
+    document.getElementById('services-panel').style.display = 'block';
+    document.getElementById('profile-about').value = currentProfile.about || '';
+    if (currentProfile.lat && currentProfile.lng) {
+      selectedLat = currentProfile.lat;
+      selectedLng = currentProfile.lng;
+      document.getElementById('location-coords-display').style.display = 'block';
+      document.getElementById('coords-text').textContent = parseFloat(currentProfile.lat).toFixed(5) + ', ' + parseFloat(currentProfile.lng).toFixed(5);
+    }
+    setTimeout(initPickerMap, 200);
+    loadWorkshopServices();
+  }
 
   // Load stats
   document.getElementById('profile-stats-section').style.display = 'block';
@@ -1578,7 +2549,7 @@ async function loadProfilePage() {
     var revs = revRes.data || [];
     if (revs.length) {
       var avg = (revs.reduce(function(s,r){return s+r.rating;},0)/revs.length).toFixed(1);
-      document.getElementById('stat-requests').textContent = avg + ' &#9733;';
+      document.getElementById('stat-requests').innerHTML = avg + ' &#9733;';
       document.getElementById('profile-stats-section').querySelectorAll('.profile-stat-label')[0].textContent = 'Avg Rating';
     } else {
       document.getElementById('stat-requests').textContent = '—';
@@ -1592,11 +2563,23 @@ async function saveProfile() {
   var phone = document.getElementById('profile-phone').value.trim();
   if (!name) { showToast('Name cannot be empty', 'warning'); return; }
 
-  var res = await sb.from('profiles').update({ name: name, phone: phone }).eq('id', currentUser.id);
+  var address = document.getElementById('profile-address').value.trim();
+  var about = currentProfile.role === 'workshop' ? (document.getElementById('profile-about').value.trim()) : '';
+  var updateData = { name: name, phone: phone };
+  if (currentProfile.role === 'workshop') {
+    if (address) updateData.address = address;
+    if (selectedLat) updateData.lat = selectedLat;
+    if (selectedLng) updateData.lng = selectedLng;
+    if (about) updateData.about = about;
+  }
+  var res = await sb.from('profiles').update(updateData).eq('id', currentUser.id);
   if (res.error) { showToast('Failed to save: ' + res.error.message, 'error'); return; }
 
   currentProfile.name = name;
   currentProfile.phone = phone;
+  if (address) currentProfile.address = address;
+  if (selectedLat) currentProfile.lat = selectedLat;
+  if (selectedLng) currentProfile.lng = selectedLng;
   updateNav();
   loadProfilePage();
 
