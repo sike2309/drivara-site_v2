@@ -82,6 +82,9 @@ nav {
 /* ── PAGES ── */
 .page { display: none; }
 .page.active { display: block; }
+.landing-map-section { display: none; }
+.page.active#page-landing ~ .landing-map-section,
+body.landing-active .landing-map-section { display: block; }
 
 /* ── FORMS ── */
 .container { max-width: 900px; margin: 0 auto; padding: 40px; }
@@ -357,7 +360,8 @@ textarea { resize: vertical; min-height: 100px; }
 }
 
 /* ── MAP ── */
-#workshop-map { height: 560px; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); z-index: 1; }
+#workshop-map { height: 460px; width: 100%; display: block; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); z-index: 1; }
+.landing-map-section { background: var(--bg); width: 100%; padding: 40px 0 0; }
 .map-section { max-width: 1100px; margin: 0 auto; padding: 0 40px 60px; }
 .map-section-title { font-size: 22px; font-weight: 800; color: var(--navy); margin-bottom: 8px; }
 .map-section-sub { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
@@ -432,10 +436,15 @@ textarea { resize: vertical; min-height: 100px; }
   <div class="logo"><img id="nav-logo" src="" alt="Drivara"></div>
 
   <div class="nav-center" id="nav-center">
-    <!-- Customer nav -->
-    <button class="nav-link hidden" id="nav-submit" onclick="showBrowserPage()">&#x1F527; Workshops</button>
+    <button class="nav-link hidden" id="nav-home" onclick="goHome()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
+    </button>
+    <button class="nav-link hidden" id="nav-submit" onclick="showBrowserPage()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      Workshops
+    </button>
     <button class="nav-link hidden" id="nav-myquotes" onclick="showMyQuotes()">My Quotes <span class="nav-badge" id="nav-quote-badge" style="display:none">0</span></button>
-    <!-- Workshop nav -->
     <button class="nav-link hidden" id="nav-requests" onclick="showWorkshopRequests()">Open Requests <span class="nav-badge" id="nav-req-badge" style="display:none">0</span></button>
     <button class="nav-link hidden" id="nav-sentquotes" onclick="showSentQuotes()">Sent Quotes</button>
   </div>
@@ -557,9 +566,9 @@ textarea { resize: vertical; min-height: 100px; }
   <div class="hero">
     <div class="hero-badge anim">&#x1F527; For car owners in Malaysia</div>
     <h1 class="anim">Stop calling workshops.<br><em>Get quotes instantly.</em></h1>
-    <p class="anim">Browse real workshops, see their services and reviews, then get quotes from the ones you trust.</p>
-    <button class="hero-cta anim" onclick="onBrowseWorkshops()">
-      Browse Workshops <span class="arrow">&#x2192;</span>
+    <p class="anim">Describe your car problem. Workshops send real quotes. You pick the best one.</p>
+    <button class="hero-cta anim" onclick="onGetQuotes()">
+      Get Quotes Now <span class="arrow">&#x2192;</span>
     </button>
   </div>
   <div class="steps">
@@ -582,13 +591,13 @@ textarea { resize: vertical; min-height: 100px; }
   </div>
 </div>
 
-<!-- Landing map — OUTSIDE steps, full page width -->
-<div style="width:100%;background:var(--bg);padding:0 0 60px;">
-  <div style="max-width:1100px;margin:0 auto;padding:0 40px;box-sizing:border-box;">
-    <h2 style="font-size:22px;font-weight:800;color:var(--navy);margin-bottom:6px;">Workshops Near You</h2>
-    <p style="color:var(--muted);font-size:14px;margin-bottom:16px;">Browse verified workshops across Malaysia. Click a pin to see details.</p>
+<!-- ══ LANDING MAP — outside all constrained containers ══ -->
+<div class="landing-map-section">
+  <div style="max-width:1100px;margin:0 auto;padding:0 40px 16px;box-sizing:border-box;">
+    <div style="font-size:20px;font-weight:800;color:var(--navy);margin-bottom:6px;font-family:'Syne',sans-serif;">Workshops Near You</div>
+    <div style="font-size:14px;color:var(--muted);margin-bottom:20px;">Browse verified workshops across Malaysia. Click a pin to see details.</div>
   </div>
-  <div style="max-width:1100px;margin:0 auto;padding:0 40px;box-sizing:border-box;">
+  <div style="max-width:1100px;margin:0 auto;padding:0 40px 60px;box-sizing:border-box;">
     <div id="workshop-map" style="height:460px;width:100%;display:block;border-radius:16px;overflow:hidden;border:1px solid var(--border);"></div>
   </div>
 </div>
@@ -601,7 +610,6 @@ textarea { resize: vertical; min-height: 100px; }
     <div class="panel anim" id="request-form-panel">
       <div class="panel-title">Submit a Service Request</div>
       <div class="panel-sub">Select your car, describe the issue, and upload photos or videos.</div>
-      <div id="selected-workshops-summary" style="display:none"></div>
 
       <!-- STEP 1: Brand -->
       <div style="margin-bottom:24px">
@@ -734,9 +742,10 @@ textarea { resize: vertical; min-height: 100px; }
 
     <div style="margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
       <div>
-        <h2 style="font-size:22px;margin-bottom:4px">&#x1F527; Explore Workshops</h2>
-        <p style="color:var(--muted);font-size:14px">Browse workshops, view their services and reviews, then select who you want to send your request to.</p>
+        <h2 style="font-size:22px;margin-bottom:4px">Choose Your Workshops</h2>
+        <p style="color:var(--muted);font-size:14px">Select one or more workshops to send your request to.</p>
       </div>
+      <button class="btn btn-ghost btn-sm" onclick="backToForm()" style="padding-left:0">&larr; Back to form</button>
     </div>
 
     <!-- Selected bar -->
@@ -744,7 +753,7 @@ textarea { resize: vertical; min-height: 100px; }
       <div class="selected-bar-text"><span id="selected-count">0</span> workshop(s) selected</div>
       <div style="display:flex;gap:10px">
         <button class="btn btn-ghost btn-sm" style="color:white;opacity:0.7" onclick="clearSelection()">Clear</button>
-        <button class="btn btn-mint btn-sm" onclick="goToRequestForm()">Submit a Request &rarr;</button>
+        <button class="btn btn-mint btn-sm" onclick="proceedWithSelected()">Send Request to Selected &rarr;</button>
       </div>
     </div>
 
@@ -774,13 +783,12 @@ textarea { resize: vertical; min-height: 100px; }
     </div>
 
     <!-- Bottom send button -->
-    <div style="margin-top:20px;text-align:center" id="browser-bottom-btn" style="display:none">
-      <button class="btn btn-primary" onclick="goToRequestForm()" style="padding:14px 40px">
-        &#x270F;&#xFE0F; Describe Your Issue &rarr;
+    <div style="margin-top:20px;text-align:center;display:none" id="browser-bottom-btn">
+      <button class="btn btn-primary" onclick="proceedWithSelected()" style="padding:14px 40px">
+        Send Request to Selected Workshops &rarr;
       </button>
       <div style="margin-top:10px;font-size:13px;color:var(--muted)">
-        Select workshops above, then describe your issue.
-        <br><a href="#" onclick="sendToAll();return false;" style="color:var(--mint-dark);font-weight:700">Or send to all workshops</a>
+        Or <a href="#" onclick="sendToAll();return false;" style="color:var(--mint-dark);font-weight:700">send to all workshops</a>
       </div>
     </div>
 
@@ -1305,6 +1313,8 @@ function updateNav() {
     document.getElementById('nav-avatar').textContent = initial;
   }
 
+  // Home
+  document.getElementById('nav-home').classList.toggle('hidden', !hasUser);
   // Customer nav
   document.getElementById('nav-submit').classList.toggle('hidden', !isCustomer);
   document.getElementById('nav-myquotes').classList.toggle('hidden', !isCustomer);
@@ -1320,7 +1330,8 @@ async function routeByRole() {
     showPage('workshop');
     showWorkshopRequests();
   } else {
-    // Check if customer has pending quotes — if so show those, otherwise show browser
+    showPage('customer');
+    // Auto-load the most recent open request and its quotes
     var res = await sb.from('requests')
       .select('*')
       .eq('user_id', currentUser.id)
@@ -1330,9 +1341,8 @@ async function routeByRole() {
       .single();
 
     if (res.data) {
-      // Has an active request — show quotes
+      // Has an open request — show quotes view immediately
       activeRequestId = res.data.id;
-      showPage('customer');
       document.getElementById('request-form-panel').style.display = 'none';
       document.getElementById('quotes-section').style.display = 'block';
       document.getElementById('request-summary').textContent =
@@ -1342,16 +1352,28 @@ async function routeByRole() {
       renderQuotes(qRes.data || []);
       subscribeToQuotes(res.data.id);
       setActiveNavLink('nav-myquotes');
+      // Update badge
       var badge = document.getElementById('nav-quote-badge');
       if (qRes.data && qRes.data.length) {
         badge.textContent = qRes.data.length;
         badge.style.display = '';
       }
-      loadMyRequests();
     } else {
-      // No active request — take them to workshop browser first
-      showBrowserPage();
+      // No open request — show submit form
+      showCustomerForm();
     }
+    loadMyRequests();
+  }
+}
+
+function goHome() {
+  if (!currentProfile) { showPage('landing'); return; }
+  if (currentProfile.role === 'workshop') {
+    showPage('workshop');
+    showWorkshopRequests();
+    setActiveNavLink('nav-requests');
+  } else {
+    showBrowserPage();
   }
 }
 
@@ -1360,55 +1382,22 @@ function onGetQuotes() {
   routeByRole();
 }
 
-function onBrowseWorkshops() {
-  if (!currentUser) { openAuth(); return; }
-  showBrowserPage();
-}
-
-function showBrowserPage() {
-  showPage('browser');
-  setActiveNavLink('nav-submit');
-  selectedWorkshops.clear();
-  updateSelectedBar();
-  initBrowserMap();
-  loadBrowserWorkshops();
-}
-
-function goToRequestForm() {
-  // Move from browser to request form, keeping selected workshops
-  showPage('customer');
-  document.getElementById('request-form-panel').style.display = 'block';
-  document.getElementById('quotes-section').style.display = 'none';
-  setActiveNavLink('nav-submit');
-  // Show selected workshops summary at top of form
-  var summary = document.getElementById('selected-workshops-summary');
-  if (summary) {
-    if (selectedWorkshops.size > 0) {
-      var names = [];
-      selectedWorkshops.forEach(function(id) {
-        var w = allWorkshops.find(function(x){ return x.id === id; });
-        if (w) names.push(w.name || 'Workshop');
-      });
-      summary.innerHTML = '<div style="background:var(--mint-pale);border:1px solid rgba(94,203,142,0.4);border-radius:10px;padding:12px 16px;margin-bottom:20px;font-size:13px;color:#085041;">' +
-        '<strong>&#x2713; Sending to ' + selectedWorkshops.size + ' workshop(s):</strong> ' + names.join(', ') +
-        ' &nbsp;<a href="#" onclick="showBrowserPage();return false;" style="color:var(--mint-dark);font-weight:700;margin-left:8px">Change</a>' +
-      '</div>';
-      summary.style.display = 'block';
-    } else {
-      summary.innerHTML = '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:20px;font-size:13px;color:var(--muted);">' +
-        'Sending to all workshops. <a href="#" onclick="showBrowserPage();return false;" style="color:var(--mint-dark);font-weight:700">Choose specific workshops</a>' +
-      '</div>';
-      summary.style.display = 'block';
-    }
-  }
-}
-
 // ══ PAGE / NAV ══
 function showPage(page) {
   document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
-  document.getElementById('page-' + page).classList.add('active');
+  var el = document.getElementById('page-' + page);
+  if (el) el.classList.add('active');
+  // Show/hide the landing map section which lives outside the page div
+  var mapSection = document.querySelector('.landing-map-section');
+  if (mapSection) mapSection.style.display = page === 'landing' ? 'block' : 'none';
   if (page === 'landing') {
-    setTimeout(initLandingMap, 100);
+    if (landingMap) {
+      try { landingMap.remove(); } catch(e) {}
+      landingMap = null;
+      var m = document.getElementById('workshop-map');
+      if (m) m.innerHTML = '';
+    }
+    setTimeout(initLandingMap, 200);
   }
 }
 
@@ -1552,13 +1541,16 @@ function renderQuotes(quotes) {
   var empty = document.getElementById('quotes-empty');
   if (!quotes.length) { list.innerHTML = ''; empty.style.display = 'block'; return; }
   empty.style.display = 'none';
-  var hasAccepted = quotes.some(function(q) { return q.status === 'accepted' || q.status === 'workshop_done'; });
+  var hasAccepted = quotes.some(function(q) { return q.status === 'accepted' || q.status === 'workshop_done' || q.status === 'completed'; });
   list.innerHTML = quotes.map(function(q, i) {
     var isAccepted = q.status === 'accepted' || q.status === 'workshop_done';
+    var isCompleted = q.status === 'completed';
     var isBest = i === 0 && !hasAccepted;
-    // Build contact card for accepted quote
     var contactHtml = '';
-    if (isAccepted) {
+
+    if (isCompleted) {
+      contactHtml = '<div class="completed-stamp">&#x1F3C6; Job completed &mdash; Thank you for using Drivara!</div>';
+    } else if (isAccepted) {
       var wPhone = q.profiles ? q.profiles.phone : null;
       var wName = esc(q.workshop_name);
       var waNum = wPhone ? wPhone.replace(/[^0-9]/g,'') : null;
@@ -1567,7 +1559,7 @@ function renderQuotes(quotes) {
         '<div class="contact-info">' +
           '<div class="contact-label">&#x2713; Accepted &mdash; Contact Workshop</div>' +
           '<div class="contact-name">' + wName + '</div>' +
-          (wPhone ? '<div class="contact-phone">&#x1F4DE; ' + esc(wPhone) + '</div>' : '<div class="contact-phone" style="color:#5ecb8e">No phone number added</div>') +
+          (wPhone ? '<div class="contact-phone">&#x1F4DE; ' + esc(wPhone) + '</div>' : '<div class="contact-phone" style="color:#5ecb8e">No phone added</div>') +
         '</div>' +
         '<div class="contact-actions">' +
           (waLink ? '<a href="' + waLink + '" target="_blank" class="btn-whatsapp">&#x1F4AC; WhatsApp</a>' : '') +
@@ -1576,16 +1568,14 @@ function renderQuotes(quotes) {
       '</div>' +
       '<div class="complete-banner">' +
         '<div class="banner-text">' +
-          '<div class="banner-title">&#x1F527; Job in progress?</div>' +
-          '<div class="banner-sub">Once the workshop has finished, confirm the job is complete below.</div>' +
+          '<div class="banner-title">Job in progress</div>' +
+          '<div class="banner-sub">Once the workshop finishes, confirm below. You can then leave a review.</div>' +
         '</div>' +
         '<button class="btn-complete" onclick="customerConfirmComplete(\'' + q.id + '\',\'' + q.request_id + '\',\'' + q.workshop_id + '\',\'' + esc(q.workshop_name) + '\')">&#x2713; Job Done</button>' +
       '</div>';
     }
-    if (q.status === 'completed') {
-      contactHtml = '<div class="completed-stamp">&#x1F3C6; Job completed &mdash; Thank you for using Drivara!</div>';
-    }
-    var cardClass = isAccepted ? 'accepted' : (q.status==='completed' ? 'completed' : '');
+
+    var cardClass = isCompleted ? 'completed' : (isAccepted ? 'accepted' : '');
     return '<div class="quote-card ' + cardClass + ' anim" style="animation-delay:' + (i*0.05) + 's">' +
       '<div style="grid-column:1/-1">' +
         '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:10px">' +
@@ -1593,18 +1583,19 @@ function renderQuotes(quotes) {
             '<div class="workshop-name">' + esc(q.workshop_name) + '</div>' +
             (isBest ? '<span class="badge badge-best">Best Price</span>' : '') +
             (isAccepted ? '<span class="badge badge-accepted">&#x2713; Accepted</span>' : '') +
-            (q.status==='completed' ? '<span class="badge badge-completed">&#x1F3C6; Completed</span>' : '') +
+            (isCompleted ? '<span class="badge badge-completed">&#x1F3C6; Completed</span>' : '') +
           '</div>' +
           '<div class="price-tag" style="font-size:24px">RM ' + q.price + '<span>total</span></div>' +
         '</div>' +
         '<div class="quote-meta"><div class="meta-chip">&#x23F1; ' + q.duration + ' day' + (q.duration>1?'s':'') + '</div>' + (q.workshop_distance ? '<div class="meta-chip">&#x1F4CD; ' + q.workshop_distance + '</div>' : '') + '</div>' +
-        (q.message ? '<div class="quote-msg">"' + esc(q.message) + '"</div>' : '') +
+        (q.message ? '<div class="quote-msg">&ldquo;' + esc(q.message) + '&rdquo;</div>' : '') +
         (!hasAccepted ? '<button class="btn btn-mint btn-sm" style="margin-top:14px" onclick="acceptQuote(\'' + q.id + '\',\'' + q.request_id + '\')">Accept Quote &rarr;</button>' : '') +
         contactHtml +
       '</div>' +
     '</div>';
   }).join('');
 }
+
 
 async function acceptQuote(quoteId, requestId) {
   await sb.from('quotes').update({ status: 'accepted' }).eq('id', quoteId);
@@ -1613,11 +1604,7 @@ async function acceptQuote(quoteId, requestId) {
   var res = await sb.from('quotes').select('*, profiles(name, phone)').eq('request_id', requestId).order('price');
   renderQuotes(res.data || []);
   showToast('Quote accepted! The workshop has been notified.');
-  // Prompt for review after short delay
-  var accepted = (res.data || []).find(function(q){ return q.status === 'accepted'; });
-  if (accepted) {
-    setTimeout(function(){ openReviewModal(accepted.workshop_id, accepted.workshop_name, quoteId); }, 1500);
-  }
+  // Review fires only after customerConfirmComplete, not here
 }
 
 async function loadMyRequests() {
@@ -2019,8 +2006,19 @@ var selectedWorkshops = new Set();
 var allWorkshops = [];
 var pendingRequestData = null;
 
+function showBrowserPage() {
+  showPage('browser');
+  setActiveNavLink('nav-submit');
+  if (typeof selectedWorkshops !== 'undefined') selectedWorkshops.clear();
+  if (typeof updateSelectedBar === 'function') updateSelectedBar();
+  if (typeof initBrowserMap === 'function') initBrowserMap();
+  if (typeof loadBrowserWorkshops === 'function') loadBrowserWorkshops();
+}
+
 function backToForm() {
-  showBrowserPage();
+  showPage('customer');
+  document.getElementById('request-form-panel').style.display = 'block';
+  document.getElementById('quotes-section').style.display = 'none';
 }
 
 function validateForm() {
@@ -2530,15 +2528,15 @@ function showProfilePage() {
 }
 
 function goBack() {
-  if (previousPage === 'workshop') { showPage('workshop'); showWorkshopRequests(); }
-  else if (previousPage === 'browser') { showBrowserPage(); }
+  showPage(previousPage);
+  // Re-trigger the right view
+  if (previousPage === 'workshop') showWorkshopRequests();
   else if (previousPage === 'customer') {
-    showPage('customer');
     if (activeRequestId) {
       document.getElementById('request-form-panel').style.display = 'none';
       document.getElementById('quotes-section').style.display = 'block';
     }
-  } else { showPage(previousPage); }
+  }
 }
 
 async function loadProfilePage() {
