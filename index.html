@@ -539,7 +539,7 @@ textarea { resize: vertical; min-height: 100px; }
 </div>
 
 <!-- ══ PAGE: CONFIG ══ -->
-<div class="page active" id="page-config">
+<div class="page" id="page-config">
   <div class="config-panel anim">
     <div style="font-size:40px;margin-bottom:16px">&#x2699;&#xFE0F;</div>
     <h2>Connect Supabase</h2>
@@ -1040,26 +1040,18 @@ window.addEventListener('load', function() {
   try { setupDragDrop(); } catch(e) {}
 
   // Auto-fill saved credentials
-  var url = localStorage.getItem('sb_url');
-  var key = localStorage.getItem('sb_key');
-
-  var urlEl = document.getElementById('sb-url');
-  var keyEl = document.getElementById('sb-key');
-  if (urlEl && url) urlEl.value = url;
-  if (keyEl && key) keyEl.value = key;
-
-  if (url && key) {
-    try {
-      sb = window.supabase.createClient(url, key);
-      showPage('landing');
-      checkSession();
-      setTimeout(function(){ try { initLandingMap(); } catch(e){} }, 300);
-    } catch(e) {
-      console.error('Supabase init failed:', e);
-      showPage('config');
-    }
-  } else {
-    // No saved credentials — stay on config page but pre-fill if partially saved
+  // Auto-connect with hardcoded credentials
+  var url = 'https://pcncfrokihyhtaonfynq.supabase.co';
+  var key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjbmNmcm9raWh5aHRhb25meW5xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIwMTkwMzcsImV4cCI6MjA1NzU5NTAzN30.hPWBSqOKfPjEpRyS7j3v8Zok0gA7c-A4UGJJzMRBDhY';
+  try {
+    sb = window.supabase.createClient(url, key);
+    localStorage.setItem('sb_url', url);
+    localStorage.setItem('sb_key', key);
+    showPage('landing');
+    checkSession();
+    setTimeout(function(){ try { initLandingMap(); } catch(e){} }, 300);
+  } catch(e) {
+    console.error('Supabase init failed:', e);
     showPage('config');
   }
 });
