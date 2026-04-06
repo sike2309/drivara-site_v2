@@ -296,11 +296,14 @@ textarea { resize: vertical; min-height: 100px; }
   .mobile-nav-btn {
     flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
     border: none; background: none; color: var(--muted); font-size: 10px;
-    font-weight: 600; cursor: pointer; font-family: inherit; padding: 4px 0;
-    transition: color 0.15s; letter-spacing: 0.02em;
+    font-weight: 600; cursor: pointer; font-family: inherit; padding: 6px 0;
+    transition: color 0.15s; letter-spacing: 0.02em; min-height: 44px;
+    -webkit-tap-highlight-color: transparent; position: relative;
   }
-  .mobile-nav-btn svg { width: 20px; height: 20px; }
+  .mobile-nav-btn svg { width: 22px; height: 22px; }
   .mobile-nav-btn.active { color: var(--mint-dark); }
+  .mobile-nav-btn.active svg { stroke: var(--mint-dark); }
+  .mobile-nav-btn:active { opacity: 0.7; }
   .mobile-nav-btn.hidden { display: none; }
 
   /* Layout */
@@ -334,8 +337,9 @@ textarea { resize: vertical; min-height: 100px; }
   .btn-whatsapp, .btn-call { justify-content: center; }
 
   /* Browser */
-  .filter-bar { gap: 6px; }
-  .filter-btn { padding: 5px 10px; font-size: 12px; }
+  .filter-bar { gap: 6px; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .filter-bar::-webkit-scrollbar { display: none; }
+  .filter-btn { padding: 6px 14px; font-size: 13px; white-space: nowrap; flex-shrink: 0; }
   .wb-name { font-size: 14px; }
 
   /* Slide panel */
@@ -459,8 +463,13 @@ textarea { resize: vertical; min-height: 100px; }
 .no-workshops .big { font-size: 36px; margin-bottom: 12px; }
 @media(max-width:900px) {
   .browser-layout { grid-template-columns: 1fr; }
-  .browser-map { height: 300px; position: static; }
+  .browser-map { height: 260px; position: static; }
   .browser-list { max-height: none; }
+}
+@media(max-width:700px) {
+  .browser-map { height: 220px; border-radius: 12px; }
+  .browser-layout { gap: 12px; }
+  .browser-list { gap: 8px; }
 }
 
 /* ── MAP ── */
@@ -872,7 +881,7 @@ textarea { resize: vertical; min-height: 100px; }
 
 <!-- ══ PAGE: WORKSHOP BROWSER ══ -->
 <div class="page" id="page-browser">
-  <div class="container" style="max-width:1100px">
+  <div class="container" style="max-width:1100px;padding-top:20px;">
 
     <div style="margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
       <div>
@@ -1550,8 +1559,13 @@ function showPage(page) {
 
 function setActiveNavLink(id) {
   document.querySelectorAll('.nav-link').forEach(function(l) { l.classList.remove('active'); });
+  document.querySelectorAll('.mobile-nav-btn').forEach(function(b) { b.classList.remove('active'); });
   var el = document.getElementById(id);
   if (el) el.classList.add('active');
+  // Mirror to mobile nav
+  var mobileMap = { 'nav-home':'mnav-home', 'nav-submit':'mnav-workshops', 'nav-myquotes':'mnav-quotes', 'nav-requests':'mnav-requests', 'nav-sentquotes':'mnav-sentquotes' };
+  var mId = mobileMap[id];
+  if (mId) { var mel = document.getElementById(mId); if (mel) mel.classList.add('active'); }
 }
 
 // ══ CUSTOMER ══
