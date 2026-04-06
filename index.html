@@ -289,7 +289,7 @@ textarea { resize: vertical; min-height: 100px; }
 
   /* Bottom nav for mobile */
   .mobile-nav {
-    display: flex; position: fixed; bottom: 0; left: 0; right: 0;
+    display: none; position: fixed; bottom: 0; left: 0; right: 0;
     background: var(--surface); border-top: 1px solid var(--border);
     padding: 8px 0 20px; z-index: 99; box-shadow: 0 -4px 20px rgba(30,42,58,0.08);
   }
@@ -1456,10 +1456,11 @@ function updateNav() {
   document.getElementById('nav-requests').classList.toggle('hidden', !isWorkshop);
   document.getElementById('nav-sentquotes').classList.toggle('hidden', !isWorkshop);
 
-  // Mobile bottom nav
+  // Mobile bottom nav — only on small screens
   var mobileNav = document.getElementById('mobile-nav');
   if (mobileNav) {
-    mobileNav.style.display = hasUser ? 'flex' : 'none';
+    var isMobile = window.innerWidth <= 700;
+    mobileNav.style.display = (hasUser && isMobile) ? 'flex' : 'none';
     document.getElementById('mnav-home').classList.toggle('hidden', !hasUser);
     document.getElementById('mnav-workshops').classList.toggle('hidden', !isCustomer);
     document.getElementById('mnav-quotes').classList.toggle('hidden', !isCustomer);
@@ -2809,6 +2810,14 @@ function timeAgo(ts) {
   if (mins < 1440) return Math.floor(mins/60) + 'h ago';
   return Math.floor(mins/1440) + 'd ago';
 }
+// Hide/show mobile nav on resize
+window.addEventListener('resize', function() {
+  var mobileNav = document.getElementById('mobile-nav');
+  if (mobileNav && mobileNav.style.display !== '') {
+    mobileNav.style.display = window.innerWidth <= 700 ? 'flex' : 'none';
+  }
+});
+
 function showToast(msg, type) {
   var t = document.getElementById('toast');
   t.textContent = msg;
