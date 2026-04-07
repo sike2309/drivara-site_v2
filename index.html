@@ -1996,14 +1996,8 @@ async function routeByRole() {
 }
 
 function goHome() {
-  if (!currentProfile) { showPage('landing'); return; }
-  if (currentProfile.role === 'workshop') {
-    showPage('workshop');
-    showWorkshopRequests();
-    setActiveNavLink('nav-requests');
-  } else {
-    showBrowserPage();
-  }
+  showPage('landing');
+  setActiveNavLink('nav-home');
 }
 
 function onGetQuotes() {
