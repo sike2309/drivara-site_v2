@@ -1314,6 +1314,22 @@ textarea { resize: vertical; min-height: 100px; }
         <div class="panel-title">Select Your Model</div>
         <div class="panel-sub" id="model-section-sub">Pick the model that matches your car.</div>
         <div class="model-grid" id="model-grid"></div>
+
+        <!-- Other brand: manual entry fields (shown only when "Other" is selected) -->
+        <div id="other-brand-fields" style="display:none;margin-top:4px">
+          <div class="form-grid" style="gap:12px">
+            <div class="form-group">
+              <label>Car Brand</label>
+              <input type="text" id="other-brand-input" placeholder="e.g. Kia, Hyundai, Subaru…" oninput="validateOtherFields()">
+            </div>
+            <div class="form-group">
+              <label>Car Model</label>
+              <input type="text" id="other-model-input" placeholder="e.g. Sportage, Elantra…" oninput="validateOtherFields()">
+            </div>
+          </div>
+          <button class="btn btn-primary btn-sm" id="other-continue-btn" onclick="confirmOtherBrand()" style="margin-top:12px;display:none">Continue &rarr;</button>
+        </div>
+
         <div class="year-row" style="margin-top:14px">
           <div class="form-group" style="flex:1">
             <label>Year</label>
@@ -1919,29 +1935,72 @@ function updateFormStep(step) {
 // ══ CAR SELECTOR ══
 function buildBrandGrid() {
   var grid = document.getElementById('brand-grid');
-  grid.innerHTML = Object.keys(CAR_DATA).map(function(brand) {
+  var brandCards = Object.keys(CAR_DATA).map(function(brand) {
     var logoUrl = LOGO_URLS[brand] || '';
     return '<div class="brand-card" id="brand-' + brand + '" onclick="selectBrand(\'' + brand + '\')">' +
       '<img class="brand-logo" src="' + logoUrl + '" alt="' + brand + '" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">' +
       '<div class="brand-logo-fallback" style="display:none">' + brand.substring(0,3).toUpperCase() + '</div>' +
       '<div class="brand-name">' + brand + '</div>' +
     '</div>';
-  }).join('');
+  });
+  // "Other" card at the end
+  brandCards.push(
+    '<div class="brand-card" id="brand-Other" onclick="selectBrand(\'Other\')">' +
+      '<div class="brand-logo-fallback" style="display:flex;font-size:22px;color:var(--muted)">+</div>' +
+      '<div class="brand-name">Other</div>' +
+    '</div>'
+  );
+  grid.innerHTML = brandCards.join('');
 }
 
 function selectBrand(brand) {
   selectedBrand = brand;
   selectedModel = null;
   document.querySelectorAll('.brand-card').forEach(function(c) { c.classList.remove('selected'); });
-  document.getElementById('brand-' + brand).classList.add('selected');
-  buildModelGrid(brand);
-  var sub = document.getElementById('model-section-sub');
-  if (sub) sub.textContent = 'Showing models for ' + brand + '.';
+  var card = document.getElementById('brand-' + brand);
+  if (card) card.classList.add('selected');
+
+  var otherFields = document.getElementById('other-brand-fields');
+  var modelGrid = document.getElementById('model-grid');
+
+  if (brand === 'Other') {
+    // Show manual entry fields, hide model pill grid
+    modelGrid.innerHTML = '';
+    otherFields.style.display = 'block';
+    document.getElementById('other-brand-input').value = '';
+    document.getElementById('other-model-input').value = '';
+    document.getElementById('other-continue-btn').style.display = 'none';
+    var sub = document.getElementById('model-section-sub');
+    if (sub) sub.textContent = 'Enter your car brand and model below.';
+  } else {
+    otherFields.style.display = 'none';
+    buildModelGrid(brand);
+    var sub = document.getElementById('model-section-sub');
+    if (sub) sub.textContent = 'Showing models for ' + brand + '.';
+  }
   setTimeout(function() { updateFormStep(2); }, 120);
 }
 
+function validateOtherFields() {
+  var b = (document.getElementById('other-brand-input').value || '').trim();
+  var m = (document.getElementById('other-model-input').value || '').trim();
+  var btn = document.getElementById('other-continue-btn');
+  if (btn) btn.style.display = (b && m) ? 'inline-flex' : 'none';
+}
+
+function confirmOtherBrand() {
+  var b = (document.getElementById('other-brand-input').value || '').trim();
+  var m = (document.getElementById('other-model-input').value || '').trim();
+  if (!b || !m) return;
+  selectedBrand = b;
+  selectedModel = m;
+  var sub = document.getElementById('issue-section-sub');
+  if (sub) sub.textContent = b + ' ' + m + ' — describe what needs fixing.';
+  updateFormStep(3);
+}
+
 function buildModelGrid(brand) {
-  var models = CAR_DATA[brand].models;
+  var models = (CAR_DATA[brand] && CAR_DATA[brand].models) || [];
   var grid = document.getElementById('model-grid');
   grid.innerHTML = models.map(function(m) {
     return '<div class="model-pill" id="model-' + m.replace(/\s/g,'_') + '" onclick="selectModel(\'' + m + '\')">' + m + '</div>';
