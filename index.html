@@ -1786,15 +1786,21 @@ var CAR_DATA = {
   'Volkswagen': { color: '#003478', models: ['Polo','Golf','Passat','Tiguan','T-Cross','T-Roc'] }
 };
 
-// Brand logos as inline SVG data URIs (no external dependency)
+function makeBrandLogo(label, color, fontSize) {
+  var svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 60'>" +
+    "<rect width='120' height='60' rx='6' fill='" + color + "'/>" +
+    "<text x='60' y='38' font-family='Arial Black,sans-serif' font-size='" + (fontSize||13) + "' font-weight='900' fill='white' text-anchor='middle'>" + label + "</text>" +
+    "</svg>";
+  return 'data:image/svg+xml;base64,' + btoa(svg);
+}
 var LOGO_URLS = {
-  'Perodua':    'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60"><rect width="120" height="60" rx="6" fill="%23005BAA"/><text x="60" y="38" font-family="Arial Black,sans-serif" font-size="13" font-weight="900" fill="white" text-anchor="middle">PERODUA</text></svg>',
-  'Proton':     'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60"><rect width="120" height="60" rx="6" fill="%23003DA5"/><text x="60" y="38" font-family="Arial Black,sans-serif" font-size="15" font-weight="900" fill="white" text-anchor="middle">PROTON</text></svg>',
+  'Perodua':    makeBrandLogo('PERODUA',    '#005BAA', 13),
+  'Proton':     makeBrandLogo('PROTON',     '#003DA5', 15),
   'Toyota':     'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Toyota_carlogo.svg/120px-Toyota_carlogo.svg.png',
   'Honda':      'https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Honda.svg/120px-Honda.svg.png',
   'Nissan':     'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Nissan_2020_logo.svg/120px-Nissan_2020_logo.svg.png',
-  'Mazda':      'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60"><rect width="120" height="60" rx="6" fill="%231A1A2E"/><text x="60" y="38" font-family="Arial Black,sans-serif" font-size="15" font-weight="900" fill="white" text-anchor="middle">MAZDA</text></svg>',
-  'Mitsubishi': 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60"><rect width="120" height="60" rx="6" fill="%23CC0000"/><text x="60" y="38" font-family="Arial Black,sans-serif" font-size="10" font-weight="900" fill="white" text-anchor="middle">MITSUBISHI</text></svg>',
+  'Mazda':      makeBrandLogo('MAZDA',      '#1A1A2E', 15),
+  'Mitsubishi': makeBrandLogo('MITSUBISHI', '#CC0000', 10),
   'BMW':        'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/BMW.svg/120px-BMW.svg.png',
   'Mercedes':   'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Mercedes-Logo.svg/120px-Mercedes-Logo.svg.png',
   'Volkswagen': 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Volkswagen_logo_2019.svg/120px-Volkswagen_logo_2019.svg.png'
