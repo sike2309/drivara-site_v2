@@ -371,6 +371,10 @@ textarea { resize: vertical; min-height: 100px; }
   .request-header > div:last-child { width: 100%; }
   .request-header button, .request-header span { width: 100%; justify-content: center; text-align: center; }
 
+  /* Stats bar */
+  .stats-bar { max-width: calc(100% - 32px); margin: 20px auto 0; }
+  .stat-val { font-size: 20px; }
+
   /* Hero CTA: full-width on mobile */
   .hero-cta { width: 100%; justify-content: center; }
 
@@ -580,6 +584,45 @@ textarea { resize: vertical; min-height: 100px; }
 .save-success { background:var(--mint-pale); border:1px solid rgba(94,203,142,0.4); color:#2e9e63; border-radius:8px; padding:10px 16px; font-size:13px; font-weight:600; margin-top:12px; display:none; }
 .skeleton { background: linear-gradient(90deg, var(--surface2) 25%, var(--border) 50%, var(--surface2) 75%); background-size: 200% 100%; animation: shimmer 1.2s infinite; border-radius: 6px; }
 @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+/* ── STATS BAR ── */
+.stats-bar {
+  display: flex; max-width: 460px; margin: 32px auto 0;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; box-shadow: var(--shadow); overflow: hidden;
+}
+.stat-item {
+  flex: 1; text-align: center; padding: 18px 10px;
+  border-right: 1px solid var(--border);
+}
+.stat-item:last-child { border-right: none; }
+.stat-val {
+  font-size: 24px; font-weight: 800; color: var(--navy);
+  line-height: 1; margin-bottom: 5px; letter-spacing: -0.02em;
+}
+.stat-val em { font-style: normal; color: var(--mint-dark); }
+.stat-label {
+  font-size: 11px; color: var(--muted); font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.07em;
+}
+
+/* ── QUOTE CARD VISUAL STATES ── */
+.quote-card.best-price {
+  border-color: var(--mint);
+  box-shadow: 0 4px 20px rgba(94,203,142,0.18);
+  background: linear-gradient(160deg, rgba(94,203,142,0.05) 0%, var(--surface) 60%);
+}
+.quote-card.rejected {
+  opacity: 0.38; filter: grayscale(0.4);
+  pointer-events: none;
+}
+
+/* ── SKELETON CARDS ── */
+.skel-card {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 16px; padding: 24px; margin-bottom: 14px;
+}
+.skel-line { height: 13px; margin-bottom: 10px; border-radius: 6px; }
 </style>
 </head>
 <body>
@@ -758,6 +801,23 @@ textarea { resize: vertical; min-height: 100px; }
       Get Quotes Now <span class="arrow">&#x2192;</span>
     </button>
   </div>
+
+  <!-- Live stats -->
+  <div class="stats-bar anim" style="animation-delay:0.2s">
+    <div class="stat-item">
+      <div class="stat-val" id="stat-workshops">—</div>
+      <div class="stat-label">Workshops</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val" id="stat-quotes">—</div>
+      <div class="stat-label">Quotes Sent</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val"><em>Free</em></div>
+      <div class="stat-label">Always</div>
+    </div>
+  </div>
+
   <div class="steps">
     <div class="step anim">
       <div class="step-num" data-num="1">Step One</div>
@@ -1560,6 +1620,7 @@ async function routeByRole() {
       document.getElementById('request-summary').textContent =
         res.data.car_brand + ' ' + res.data.car_model +
         ' — "' + res.data.issue.substring(0, 60) + (res.data.issue.length > 60 ? '...' : '') + '"';
+      document.getElementById('quotes-list').innerHTML = skeletonCards(3, 'quote');
       var qRes = await sb.from('quotes').select('*').eq('request_id', res.data.id).order('price');
       renderQuotes(qRes.data || []);
       subscribeToQuotes(res.data.id);
@@ -1612,6 +1673,7 @@ function showPage(page) {
       if (m) m.innerHTML = '';
     }
     setTimeout(initLandingMap, 200);
+    loadLandingStats();
   }
 }
 
@@ -1797,7 +1859,8 @@ function renderQuotes(quotes) {
       '</div>';
     }
 
-    var cardClass = isCompleted ? 'completed' : (isAccepted ? 'accepted' : '');
+    var isRejected = q.status === 'rejected';
+    var cardClass = isCompleted ? 'completed' : (isAccepted ? 'accepted' : (isRejected ? 'rejected' : (isBest ? 'best-price' : '')));
     return '<div class="quote-card ' + cardClass + ' anim" style="animation-delay:' + (i*0.05) + 's">' +
       '<div style="grid-column:1/-1">' +
         '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:10px">' +
@@ -1875,6 +1938,7 @@ function showSentQuotes() {
 
 async function loadOpenRequests() {
   if (!sb || !currentUser) return;
+  document.getElementById('requests-list').innerHTML = skeletonCards(3, 'request');
   var res = await sb.from('requests').select('*').eq('status','open').order('created_at',{ascending:false});
   // Filter: show requests targeted at this workshop OR open to all (no target_workshop_ids)
   var all = res.data || [];
@@ -2360,7 +2424,7 @@ async function initBrowserMap() {
 async function loadBrowserWorkshops() {
   var list = document.getElementById('browser-workshop-list');
   var empty = document.getElementById('browser-empty');
-  list.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px 0;text-align:center">Loading workshops...</div>';
+  list.innerHTML = skeletonCards(4, 'browser');
 
   var res = await sb.from('profiles').select('id, name, phone, lat, lng, address, about, role').eq('role', 'workshop');
   var workshops = res.data || [];
@@ -2436,7 +2500,7 @@ async function loadBrowserWorkshops() {
 function renderBrowserList(workshops) {
   var list = document.getElementById('browser-workshop-list');
   list.innerHTML = workshops.map(function(w) {
-    var ratingChip = w._rating ? '<span class="wb-chip wb-rating">&#9733; ' + w._rating.toFixed(1) + ' (' + w._reviewCount + ')</span>' : '';
+    var ratingChip = w._rating ? '<span class="wb-chip wb-rating">' + ratingChipHTML(w._rating, w._reviewCount) + '</span>' : '';
     var distChip = w._distStr ? '<span class="wb-chip wb-dist">&#x1F4CD; ' + w._distStr + '</span>' : '';
     var noLocChip = (!w.lat || !w.lng) ? '<span class="wb-chip">No location set</span>' : '';
     var isSelected = selectedWorkshops.has(w.id);
@@ -2915,6 +2979,79 @@ window.addEventListener('resize', function() {
     mobileNav.style.display = window.innerWidth <= 700 ? 'flex' : 'none';
   }
 });
+
+// ── LANDING STATS ──
+async function loadLandingStats() {
+  if (!sb) return;
+  try {
+    var wRes = await sb.from('profiles').select('id', { count: 'exact', head: true }).eq('role', 'workshop');
+    var qRes = await sb.from('quotes').select('id', { count: 'exact', head: true });
+    animateCounter('stat-workshops', wRes.count || 0);
+    animateCounter('stat-quotes', qRes.count || 0);
+  } catch(e) {}
+}
+
+function animateCounter(id, target) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  if (!target) { el.textContent = '0'; return; }
+  var start = performance.now();
+  var dur = 900;
+  function step(now) {
+    var p = Math.min((now - start) / dur, 1);
+    var eased = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(eased * target) + '+';
+    if (p < 1) requestAnimationFrame(step);
+    else el.textContent = target + '+';
+  }
+  requestAnimationFrame(step);
+}
+
+// ── SKELETON CARDS ──
+function skeletonCards(n, type) {
+  var s = '';
+  for (var i = 0; i < n; i++) {
+    s += '<div class="skel-card">';
+    if (type === 'browser') {
+      s += '<div class="skeleton skel-line" style="width:58%"></div>';
+      s += '<div class="skeleton skel-line" style="width:38%"></div>';
+      s += '<div style="display:flex;gap:8px;margin-top:12px">';
+      s += '<div class="skeleton skel-line" style="flex:1;height:32px;margin:0;border-radius:8px"></div>';
+      s += '<div class="skeleton skel-line" style="flex:1;height:32px;margin:0;border-radius:8px"></div>';
+      s += '</div>';
+    } else if (type === 'quote') {
+      s += '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">';
+      s += '<div style="flex:1"><div class="skeleton skel-line" style="width:55%"></div><div class="skeleton skel-line" style="width:32%"></div></div>';
+      s += '<div class="skeleton" style="width:72px;height:38px;border-radius:8px;margin-left:16px"></div>';
+      s += '</div>';
+      s += '<div style="display:flex;gap:8px;margin-bottom:12px">';
+      s += '<div class="skeleton skel-line" style="width:80px;height:24px;margin:0;border-radius:6px"></div>';
+      s += '<div class="skeleton skel-line" style="width:80px;height:24px;margin:0;border-radius:6px"></div>';
+      s += '</div>';
+      s += '<div class="skeleton skel-line" style="width:100%;height:44px;border-radius:8px;margin:0"></div>';
+    } else {
+      s += '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">';
+      s += '<div style="flex:1"><div class="skeleton skel-line" style="width:50%"></div><div class="skeleton skel-line" style="width:28%"></div></div>';
+      s += '<div class="skeleton" style="width:88px;height:32px;border-radius:8px"></div>';
+      s += '</div>';
+      s += '<div class="skeleton skel-line" style="width:100%"></div>';
+      s += '<div class="skeleton skel-line" style="width:72%;margin-top:2px"></div>';
+    }
+    s += '</div>';
+  }
+  return s;
+}
+
+// ── STAR RATING CHIP (for browser cards) ──
+function ratingChipHTML(rating, count) {
+  if (!rating) return '';
+  var stars = '';
+  var rounded = Math.round(rating);
+  for (var i = 1; i <= 5; i++) {
+    stars += '<span style="color:' + (i <= rounded ? '#e0b619' : '#dde1e7') + '">★</span>';
+  }
+  return stars + ' <strong>' + rating.toFixed(1) + '</strong>' + (count ? ' <span style="font-weight:400">(' + count + ')</span>' : '');
+}
 
 function showToast(msg, type) {
   var t = document.getElementById('toast');
