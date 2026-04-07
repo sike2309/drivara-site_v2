@@ -82,7 +82,7 @@ nav {
 .role-select { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
 .role-card { border: 2px solid var(--border); border-radius: 12px; padding: 16px; cursor: pointer; transition: all 0.2s; text-align: center; }
 .role-card.selected { border-color: var(--mint); background: var(--mint-pale); }
-.role-card .role-icon { font-size: 28px; margin-bottom: 8px; }
+.role-card .role-icon { display: flex; justify-content: center; align-items: center; margin-bottom: 10px; color: var(--navy); }
 .role-card .role-label { font-weight: 700; font-size: 14px; }
 .role-card .role-desc { font-size: 12px; color: var(--muted); margin-top: 4px; }
 
@@ -157,7 +157,7 @@ textarea { resize: vertical; min-height: 100px; }
 }
 .upload-zone:hover, .upload-zone.dragover { border-color: var(--mint); background: var(--mint-pale); }
 .upload-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
-.upload-icon { font-size: 32px; margin-bottom: 10px; }
+.upload-icon { margin-bottom: 10px; color: var(--muted); display: flex; justify-content: center; }
 .upload-label { font-weight: 700; color: var(--navy); font-size: 14px; margin-bottom: 4px; }
 .upload-hint { font-size: 12px; color: var(--muted); }
 .media-previews { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 14px; }
@@ -217,7 +217,7 @@ textarea { resize: vertical; min-height: 100px; }
 .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
 .section-title { font-size: 22px; }
 .empty-state { text-align: center; padding: 60px 40px; color: var(--muted); background: var(--surface); border-radius: 16px; border: 1.5px dashed var(--border); }
-.empty-state .big { font-size: 44px; margin-bottom: 16px; }
+.empty-icon { width: 64px; height: 64px; border-radius: 50%; background: var(--surface2); border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: var(--muted); }
 .empty-state h3 { font-size: 19px; color: var(--navy); margin-bottom: 8px; }
 .divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
 .pulse { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--mint); margin-right: 6px; animation: pulse-anim 1.5s infinite; }
@@ -480,7 +480,7 @@ textarea { resize: vertical; min-height: 100px; }
 .selected-bar-text { color: white; font-size: 14px; font-weight: 600; }
 .selected-bar-text span { color: var(--mint); font-weight: 800; }
 .no-workshops { text-align: center; padding: 40px 20px; color: var(--muted); }
-.no-workshops .big { font-size: 36px; margin-bottom: 12px; }
+.no-workshops .empty-icon { margin-bottom: 12px; }
 @media(max-width:900px) {
   .browser-layout { grid-template-columns: 1fr; }
   .browser-map { height: 260px; position: static; }
@@ -635,7 +635,7 @@ textarea { resize: vertical; min-height: 100px; }
 .empty-cta { margin-top: 16px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 .empty-tips { display: flex; flex-direction: column; gap: 8px; margin: 16px auto 0; max-width: 320px; text-align: left; }
 .empty-tip { font-size: 13px; color: var(--text-light); display: flex; align-items: flex-start; gap: 8px; }
-.empty-tip-icon { flex-shrink: 0; font-size: 15px; }
+.empty-tip-icon { flex-shrink: 0; width: 16px; height: 16px; color: var(--mint-dark); display: flex; align-items: center; }
 
 /* ── FORM PROGRESS STEPS ── */
 .form-progress { display: flex; align-items: center; margin-bottom: 28px; }
@@ -757,9 +757,9 @@ textarea { resize: vertical; min-height: 100px; }
 .testi-text { font-size: 14px; color: var(--text-light); line-height: 1.65; flex: 1; }
 .testi-author { display: flex; align-items: center; gap: 10px; }
 .testi-avatar {
-  width: 36px; height: 36px; border-radius: 50%; background: var(--mint-pale);
+  width: 38px; height: 38px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 15px; flex-shrink: 0;
+  font-size: 13px; font-weight: 800; flex-shrink: 0; letter-spacing: -0.02em;
 }
 .testi-name { font-size: 13px; font-weight: 700; color: var(--navy); }
 .testi-car { font-size: 11px; color: var(--muted); margin-top: 1px; }
@@ -782,7 +782,7 @@ textarea { resize: vertical; min-height: 100px; }
 .workshop-cta-section p { color: rgba(255,255,255,0.65); font-size: 16px; max-width: 500px; margin: 0 auto 36px; }
 .wc-perks { display: flex; justify-content: center; gap: 32px; margin-bottom: 40px; flex-wrap: wrap; }
 .wc-perk { text-align: center; }
-.wc-perk-icon { font-size: 26px; margin-bottom: 8px; }
+.wc-perk-icon { width: 52px; height: 52px; border-radius: 50%; background: rgba(94,203,142,0.12); border: 1px solid rgba(94,203,142,0.25); display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; color: var(--mint); }
 .wc-perk-label { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.06em; }
 .wc-perk-val { font-size: 18px; font-weight: 800; color: white; margin-top: 2px; }
 .workshop-cta-btn {
@@ -913,12 +913,12 @@ textarea { resize: vertical; min-height: 100px; }
       <div style="font-size:12px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px">I am a...</div>
       <div class="role-select">
         <div class="role-card selected" id="role-customer" onclick="selectRole('customer')">
-          <div class="role-icon">&#x1F697;</div>
+          <div class="role-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1l3-4h10l3 4h1a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="16.5" cy="17.5" r="2.5"/></svg></div>
           <div class="role-label">Car Owner</div>
           <div class="role-desc">I need repair quotes</div>
         </div>
         <div class="role-card" id="role-workshop" onclick="selectRole('workshop')">
-          <div class="role-icon">&#x1F527;</div>
+          <div class="role-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg></div>
           <div class="role-label">Workshop</div>
           <div class="role-desc">I send quotes</div>
         </div>
@@ -954,7 +954,7 @@ textarea { resize: vertical; min-height: 100px; }
 <!-- ══ PAGE: CONFIG ══ -->
 <div class="page active" id="page-config">
   <div class="config-panel anim">
-    <div style="font-size:40px;margin-bottom:16px">&#x2699;&#xFE0F;</div>
+    <div style="margin-bottom:16px;display:flex;justify-content:center"><div style="width:64px;height:64px;border-radius:50%;background:var(--surface2);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--navy)"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div></div>
     <h2>Connect Supabase</h2>
     <p style="color:var(--muted);font-size:14px;margin:12px 0 24px">Paste your Supabase Project URL and anon key to get started.</p>
     <div class="config-fields">
@@ -977,7 +977,7 @@ textarea { resize: vertical; min-height: 100px; }
 <!-- ══ PAGE: LANDING ══ -->
 <div class="page" id="page-landing">
   <div class="hero">
-    <div class="hero-badge anim">&#x1F527; For car owners in Malaysia</div>
+    <div class="hero-badge anim"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg> For car owners in Malaysia</div>
     <h1 class="anim">Stop calling workshops.<br><em>Get quotes instantly.</em></h1>
     <p class="anim">Describe your car problem. Workshops send real quotes. You pick the best one.</p>
     <button class="hero-cta anim" onclick="onGetQuotes()">
@@ -1030,17 +1030,17 @@ textarea { resize: vertical; min-height: 100px; }
       <div class="testi-card anim">
         <div class="testi-stars"><span class="testi-star">&#9733;</span><span class="testi-star">&#9733;</span><span class="testi-star">&#9733;</span><span class="testi-star">&#9733;</span><span class="testi-star">&#9733;</span></div>
         <div class="testi-text">"Got 4 quotes within 20 minutes. Saved RM180 compared to the first workshop I called. This should've existed years ago."</div>
-        <div class="testi-author"><div class="testi-avatar">&#x1F647;</div><div><div class="testi-name">Ahmad Farouk</div><div class="testi-car">Proton Saga — engine mount</div></div></div>
+        <div class="testi-author"><div class="testi-avatar" style="background:#dbeafe;color:#1e40af">AF</div><div><div class="testi-name">Ahmad Farouk</div><div class="testi-car">Proton Saga — engine mount</div></div></div>
       </div>
       <div class="testi-card anim" style="animation-delay:0.1s">
         <div class="testi-stars"><span class="testi-star">&#9733;</span><span class="testi-star">&#9733;</span><span class="testi-star">&#9733;</span><span class="testi-star">&#9733;</span><span class="testi-star">&#9733;</span></div>
         <div class="testi-text">"I was quoted RM650 at the dealer. Through Drivara I found a workshop that did the same job for RM390. Totally transparent."</div>
-        <div class="testi-author"><div class="testi-avatar">&#x1F469;</div><div><div class="testi-name">Nurul Ain</div><div class="testi-car">Honda City — brake pads</div></div></div>
+        <div class="testi-author"><div class="testi-avatar" style="background:#dcfce7;color:#166534">NA</div><div><div class="testi-name">Nurul Ain</div><div class="testi-car">Honda City — brake pads</div></div></div>
       </div>
       <div class="testi-card anim" style="animation-delay:0.2s">
         <div class="testi-stars"><span class="testi-star">&#9733;</span><span class="testi-star">&#9733;</span><span class="testi-star">&#9733;</span><span class="testi-star">&#9733;</span><span class="testi-star">&#9733;</span></div>
         <div class="testi-text">"No more awkward phone calls asking for prices. Just describe the problem, attach a photo, and wait for workshops to bid. Simple."</div>
-        <div class="testi-author"><div class="testi-avatar">&#x1F9D4;</div><div><div class="testi-name">Rajan Kumar</div><div class="testi-car">Toyota Vios — AC compressor</div></div></div>
+        <div class="testi-author"><div class="testi-avatar" style="background:#fef3c7;color:#92400e">RK</div><div><div class="testi-name">Rajan Kumar</div><div class="testi-car">Toyota Vios — AC compressor</div></div></div>
       </div>
     </div>
   </div>
@@ -1048,22 +1048,22 @@ textarea { resize: vertical; min-height: 100px; }
   <!-- For Workshops CTA -->
   <div class="workshop-cta-section">
     <div class="workshop-cta-inner">
-      <div class="workshop-cta-badge">&#x1F527; For Workshop Owners</div>
+      <div class="workshop-cta-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg> For Workshop Owners</div>
       <h2>Grow your workshop with <em style="font-style:normal;color:var(--mint)">qualified leads</em></h2>
       <p>Stop waiting for walk-ins. Get notified when car owners near you need your services — then send your best quote.</p>
       <div class="wc-perks">
         <div class="wc-perk">
-          <div class="wc-perk-icon">&#x1F4B0;</div>
+          <div class="wc-perk-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8M12 6v2m0 8v2"/></svg></div>
           <div class="wc-perk-val">Free</div>
           <div class="wc-perk-label">Always free to join</div>
         </div>
         <div class="wc-perk">
-          <div class="wc-perk-icon">&#x26A1;</div>
+          <div class="wc-perk-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
           <div class="wc-perk-val">Real-time</div>
           <div class="wc-perk-label">Instant notifications</div>
         </div>
         <div class="wc-perk">
-          <div class="wc-perk-icon">&#x1F4CD;</div>
+          <div class="wc-perk-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
           <div class="wc-perk-val">Nearby</div>
           <div class="wc-perk-label">Location-based jobs</div>
         </div>
@@ -1150,7 +1150,7 @@ textarea { resize: vertical; min-height: 100px; }
           <label>Upload Photos &amp; Videos (optional)</label>
           <div class="upload-zone" id="upload-zone">
             <input type="file" id="media-input" multiple accept="image/*,video/*" onchange="handleMediaSelect(this)">
-            <div class="upload-icon">&#x1F4F7;</div>
+            <div class="upload-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
             <div class="upload-label">Click to upload or drag &amp; drop</div>
             <div class="upload-hint">Photos (JPG, PNG) or Videos (MP4, MOV) &mdash; max 50MB each</div>
           </div>
@@ -1179,18 +1179,18 @@ textarea { resize: vertical; min-height: 100px; }
       </div>
       <div class="sort-bar">
         <span>Sort by:</span>
-        <button class="sort-btn active" onclick="sortQuotes('price',this)">&#x1F4B0; Price</button>
-        <button class="sort-btn" onclick="sortQuotes('duration',this)">&#x23F1; Duration</button>
+        <button class="sort-btn active" onclick="sortQuotes('price',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8M12 6v2m0 8v2"/></svg> Price</button>
+        <button class="sort-btn" onclick="sortQuotes('duration',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Duration</button>
       </div>
       <div id="quotes-list"></div>
       <div id="quotes-empty" class="empty-state" style="display:none">
-        <div class="big">&#x1F4EC;</div>
+        <div class="empty-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></div>
         <h3>Request sent!</h3>
         <p>Workshops are reviewing your request. Quotes usually arrive within minutes.</p>
         <div class="empty-tips">
-          <div class="empty-tip"><span class="empty-tip-icon">&#x23F0;</span><span>This page updates in real-time — no need to refresh.</span></div>
-          <div class="empty-tip"><span class="empty-tip-icon">&#x1F4AC;</span><span>You'll see each workshop's price, duration, and diagnosis notes here.</span></div>
-          <div class="empty-tip"><span class="empty-tip-icon">&#x1F527;</span><span>Want more quotes? Send to additional workshops below.</span></div>
+          <div class="empty-tip"><span class="empty-tip-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span><span>This page updates in real-time — no need to refresh.</span></div>
+          <div class="empty-tip"><span class="empty-tip-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><span>You'll see each workshop's price, duration, and diagnosis notes here.</span></div>
+          <div class="empty-tip"><span class="empty-tip-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg></span><span>Want more quotes? Send to additional workshops below.</span></div>
         </div>
         <div class="empty-cta">
           <button class="btn btn-mint btn-sm" onclick="showBrowserPage()">Browse More Workshops &rarr;</button>
@@ -1218,7 +1218,7 @@ textarea { resize: vertical; min-height: 100px; }
       <!-- Location warning banner -->
       <div id="location-warning" class="location-warning" style="display:none">
         <div>
-          <div class="lw-title">&#x26A0;&#xFE0F; Your location isn't set</div>
+          <div class="lw-title" style="display:flex;align-items:center;gap:6px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Your location isn't set</div>
           <div class="lw-text">Customers browse workshops by proximity. Without a pin, you won't appear on their map and may miss targeted requests.</div>
         </div>
         <button class="btn btn-sm" style="background:#f5c842;color:#5c3d00;font-weight:800;border:none;cursor:pointer;padding:10px 18px;border-radius:10px;font-family:inherit;white-space:nowrap" onclick="showProfilePage()">Set Location &rarr;</button>
@@ -1228,7 +1228,7 @@ textarea { resize: vertical; min-height: 100px; }
       <div id="onboarding-banner" class="onboarding-banner" style="display:none">
         <div class="ob-header">
           <div>
-            <div class="ob-title">&#x1F44B; Complete your profile</div>
+            <div class="ob-title" style="display:flex;align-items:center;gap:7px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Complete your profile</div>
             <div class="ob-sub">Finish setup to start receiving quote requests</div>
           </div>
           <button class="ob-dismiss" onclick="dismissOnboarding()" aria-label="Dismiss onboarding banner">&#x2715;</button>
@@ -1248,12 +1248,12 @@ textarea { resize: vertical; min-height: 100px; }
       </div>
       <div id="requests-list"></div>
       <div id="requests-empty" class="empty-state" style="display:none">
-        <div class="big">&#x1F50D;</div>
+        <div class="empty-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
         <h3>No open requests right now</h3>
         <p>New requests appear here in real-time as car owners submit them.</p>
         <div class="empty-tips">
-          <div class="empty-tip"><span class="empty-tip-icon">&#x1F4CD;</span><span id="empty-location-tip">Make sure your location is set so customers near you can find you.</span></div>
-          <div class="empty-tip"><span class="empty-tip-icon">&#x1F4CB;</span><span>Add your services and pricing to your profile — it builds customer trust.</span></div>
+          <div class="empty-tip"><span class="empty-tip-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span><span id="empty-location-tip">Make sure your location is set so customers near you can find you.</span></div>
+          <div class="empty-tip"><span class="empty-tip-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg></span><span>Add your services and pricing to your profile — it builds customer trust.</span></div>
         </div>
         <div class="empty-cta">
           <button class="btn btn-outline btn-sm" onclick="showProfilePage()">Complete My Profile &rarr;</button>
@@ -1313,8 +1313,8 @@ textarea { resize: vertical; min-height: 100px; }
     <!-- Filter bar -->
     <div class="filter-bar">
       <span style="font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.06em">Sort:</span>
-      <button class="filter-btn active" id="sort-nearest" onclick="sortWorkshops('nearest', this)">&#x1F4CD; Nearest</button>
-      <button class="filter-btn" id="sort-rating" onclick="sortWorkshops('rating', this)">&#x2B50; Top Rated</button>
+      <button class="filter-btn active" id="sort-nearest" onclick="sortWorkshops('nearest', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Nearest</button>
+      <button class="filter-btn" id="sort-rating" onclick="sortWorkshops('rating', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Top Rated</button>
       <button class="filter-btn" id="sort-all" onclick="sortWorkshops('all', this)">All Workshops</button>
     </div>
 
@@ -1340,7 +1340,7 @@ textarea { resize: vertical; min-height: 100px; }
       <div id="browser-list-wrapper">
         <div id="browser-workshop-list" class="browser-list"></div>
         <div id="browser-empty" class="no-workshops" style="display:none">
-          <div class="big">&#x1F527;</div>
+          <div class="empty-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg></div>
           <p>No workshops have set their location yet.</p>
         </div>
       </div>
@@ -1416,11 +1416,11 @@ textarea { resize: vertical; min-height: 100px; }
           <div class="location-search-row">
             <input type="text" id="location-search" placeholder="Search address or area..." style="font-size:13px;padding:9px 13px">
             <button class="btn btn-outline btn-sm" onclick="searchLocation()">Search</button>
-            <button class="btn btn-outline btn-sm" onclick="detectLocation()">&#x1F4CD; My Location</button>
+            <button class="btn btn-outline btn-sm" onclick="detectLocation()" style="display:inline-flex;align-items:center;gap:6px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> My Location</button>
           </div>
           <div id="location-map-picker"></div>
           <div id="location-coords-display" style="font-size:12px;color:var(--muted);margin-top:8px;display:none">
-            &#x1F4CD; Location set: <span id="coords-text"></span>
+            <span style="display:inline-flex;align-items:center;gap:4px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span> Location set: <span id="coords-text"></span>
           </div>
         </div>
         <div class="form-group" id="about-section" style="display:none;margin-top:4px">
@@ -1428,7 +1428,7 @@ textarea { resize: vertical; min-height: 100px; }
           <textarea id="profile-about" placeholder="Tell customers about your workshop — years of experience, specialisations, brands you service..." style="min-height:80px"></textarea>
         </div>
       </div>
-      <div id="profile-save-success" class="save-success">&#x2713; Profile updated successfully!</div>
+      <div id="profile-save-success" class="save-success" style="display:flex;align-items:center;gap:6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Profile updated successfully!</div>
       <div style="margin-top:20px;display:flex;justify-content:flex-end">
         <button class="btn btn-primary" onclick="saveProfile()">Save Changes</button>
       </div>
@@ -1492,7 +1492,7 @@ textarea { resize: vertical; min-height: 100px; }
           <input type="password" id="confirm-password" placeholder="Repeat new password">
         </div>
       </div>
-      <div id="password-save-success" class="save-success">&#x2713; Password updated!</div>
+      <div id="password-save-success" class="save-success" style="display:flex;align-items:center;gap:6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Password updated!</div>
       <div style="margin-top:20px;display:flex;justify-content:flex-end">
         <button class="btn btn-primary" onclick="changePassword()">Update Password</button>
       </div>
@@ -1574,6 +1574,23 @@ var LOGO_URLS = {
 };
 
 // ══ STATE ══
+// ── SVG ICON LIBRARY ──────────────────────────────────────────────
+var ICONS = {
+  wrench: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg>',
+  car: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1l3-4h10l3 4h1a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="16.5" cy="17.5" r="2.5"/></svg>',
+  pin: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+  clock: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+  phone: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 14a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.12 3h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 10.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 18z"/></svg>',
+  chat: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+  check: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+  award: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>',
+  hourglass: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14M5 2h14M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22M17 2v4.172a2 2 0 0 0-.586 1.414L12 12 7.586 7.586A2 2 0 0 1 7 6.172V2"/></svg>',
+  star: '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+  inbox: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>',
+  clipboard: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>',
+};
+// ─────────────────────────────────────────────────────────────────
+
 var sb = null;
 var currentUser = null;
 var currentProfile = null;
@@ -1641,7 +1658,7 @@ function updateFormStep(step) {
     var dotEl = document.getElementById('fpd-' + i);
     var line = document.getElementById('fpl-' + i);
     if (dot) { dot.classList.remove('active', 'done'); if (i < step) dot.classList.add('done'); else if (i === step) dot.classList.add('active'); }
-    if (dotEl) dotEl.textContent = i < step ? '✓' : String(i);
+    if (dotEl) dotEl.innerHTML = i < step ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' : String(i);
     if (line) line.classList.toggle('done', i < step);
   }
   if (window.innerWidth <= 700) {
@@ -2172,13 +2189,13 @@ function renderQuotes(quotes) {
     if (isCompleted) {
       contactHtml =
         '<div class="status-timeline">' +
-          '<div class="tl-step tl-done"><div class="tl-dot">&#x2713;</div><div class="tl-label">Accepted</div></div>' +
+          '<div class="tl-step tl-done"><div class="tl-dot">' + ICONS.check + '</div><div class="tl-label">Accepted</div></div>' +
           '<div class="tl-line tl-done"></div>' +
-          '<div class="tl-step tl-done"><div class="tl-dot">&#x2713;</div><div class="tl-label">In Progress</div></div>' +
+          '<div class="tl-step tl-done"><div class="tl-dot">' + ICONS.check + '</div><div class="tl-label">In Progress</div></div>' +
           '<div class="tl-line tl-done"></div>' +
-          '<div class="tl-step tl-done"><div class="tl-dot">&#x1F3C6;</div><div class="tl-label">Complete</div></div>' +
+          '<div class="tl-step tl-done"><div class="tl-dot">' + ICONS.award + '</div><div class="tl-label">Complete</div></div>' +
         '</div>' +
-        '<div class="completed-stamp">&#x1F3C6; Job completed &mdash; Thank you for using Drivara!</div>';
+        '<div class="completed-stamp">' + ICONS.award + ' Job completed &mdash; Thank you for using Drivara!</div>';
     } else if (isAccepted) {
       var wPhone = q.profiles ? q.profiles.phone : null;
       var wName = esc(q.workshop_name);
@@ -2186,21 +2203,21 @@ function renderQuotes(quotes) {
       var waLink = waNum ? 'https://wa.me/6' + waNum + '?text=' + encodeURIComponent('Hi, I accepted your quote on Drivara for RM' + q.price + '. When can we proceed?') : null;
       contactHtml =
         '<div class="status-timeline">' +
-          '<div class="tl-step tl-done"><div class="tl-dot">&#x2713;</div><div class="tl-label">Accepted</div></div>' +
+          '<div class="tl-step tl-done"><div class="tl-dot">' + ICONS.check + '</div><div class="tl-label">Accepted</div></div>' +
           '<div class="tl-line tl-done"></div>' +
-          '<div class="tl-step tl-active"><div class="tl-dot">&#x23F3;</div><div class="tl-label">In Progress</div></div>' +
+          '<div class="tl-step tl-active"><div class="tl-dot">' + ICONS.hourglass + '</div><div class="tl-label">In Progress</div></div>' +
           '<div class="tl-line"></div>' +
-          '<div class="tl-step"><div class="tl-dot">&#x25CB;</div><div class="tl-label">Job Done</div></div>' +
+          '<div class="tl-step"><div class="tl-dot" style="color:var(--border)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></div><div class="tl-label">Job Done</div></div>' +
         '</div>' +
         '<div class="contact-card">' +
         '<div class="contact-info">' +
-          '<div class="contact-label">&#x2713; Accepted &mdash; Contact Workshop</div>' +
+          '<div class="contact-label" style="display:flex;align-items:center;gap:5px">' + ICONS.check + ' Accepted &mdash; Contact Workshop</div>' +
           '<div class="contact-name">' + wName + '</div>' +
-          (wPhone ? '<div class="contact-phone">&#x1F4DE; ' + esc(wPhone) + '</div>' : '<div class="contact-phone" style="color:#5ecb8e">No phone added</div>') +
+          (wPhone ? '<div class="contact-phone" style="display:flex;align-items:center;gap:5px">' + ICONS.phone + ' ' + esc(wPhone) + '</div>' : '<div class="contact-phone" style="color:#5ecb8e">No phone added</div>') +
         '</div>' +
         '<div class="contact-actions">' +
-          (waLink ? '<a href="' + waLink + '" target="_blank" class="btn-whatsapp">&#x1F4AC; WhatsApp</a>' : '') +
-          (wPhone ? '<a href="tel:' + esc(wPhone) + '" class="btn-call">&#x1F4DE; Call</a>' : '') +
+          (waLink ? '<a href="' + waLink + '" target="_blank" class="btn-whatsapp">' + ICONS.chat + ' WhatsApp</a>' : '') +
+          (wPhone ? '<a href="tel:' + esc(wPhone) + '" class="btn-call">' + ICONS.phone + ' Call</a>' : '') +
         '</div>' +
       '</div>' +
       '<div class="complete-banner">' +
@@ -2208,7 +2225,7 @@ function renderQuotes(quotes) {
           '<div class="banner-title">Job in progress</div>' +
           '<div class="banner-sub">Once the workshop finishes, confirm below. You can then leave a review.</div>' +
         '</div>' +
-        '<button class="btn-complete" onclick="customerConfirmComplete(\'' + q.id + '\',\'' + q.request_id + '\',\'' + q.workshop_id + '\',\'' + esc(q.workshop_name) + '\')">&#x2713; Job Done</button>' +
+        '<button class="btn-complete" onclick="customerConfirmComplete(\'' + q.id + '\',\'' + q.request_id + '\',\'' + q.workshop_id + '\',\'' + esc(q.workshop_name) + '\'" style="display:inline-flex;align-items:center;gap:6px">' + ICONS.check + ' Job Done</button>' +
       '</div>';
     }
 
@@ -2220,12 +2237,12 @@ function renderQuotes(quotes) {
           '<div style="display:flex;align-items:center;gap:10px">' +
             '<div class="workshop-name">' + esc(q.workshop_name) + '</div>' +
             (isBest ? '<span class="badge badge-best">Best Price</span>' : '') +
-            (isAccepted ? '<span class="badge badge-accepted">&#x2713; Accepted</span>' : '') +
-            (isCompleted ? '<span class="badge badge-completed">&#x1F3C6; Completed</span>' : '') +
+            (isAccepted ? '<span class="badge badge-accepted" style="display:inline-flex;align-items:center;gap:3px">' + ICONS.check + ' Accepted</span>' : '') +
+            (isCompleted ? '<span class="badge badge-completed" style="display:inline-flex;align-items:center;gap:3px">' + ICONS.award + ' Completed</span>' : '') +
           '</div>' +
           '<div class="price-tag" style="font-size:24px">RM ' + q.price + '<span>total</span></div>' +
         '</div>' +
-        '<div class="quote-meta"><div class="meta-chip">&#x23F1; ' + q.duration + ' day' + (q.duration>1?'s':'') + '</div>' + (q.workshop_distance ? '<div class="meta-chip">&#x1F4CD; ' + q.workshop_distance + '</div>' : '') + '</div>' +
+        '<div class="quote-meta"><div class="meta-chip" style="display:inline-flex;align-items:center;gap:4px">' + ICONS.clock + ' ' + q.duration + ' day' + (q.duration>1?'s':'') + '</div>' + (q.workshop_distance ? '<div class="meta-chip" style="display:inline-flex;align-items:center;gap:4px">' + ICONS.pin + ' ' + q.workshop_distance + '</div>' : '') + '</div>' +
         (q.message ? '<div class="quote-msg">&ldquo;' + esc(q.message) + '&rdquo;</div>' : '') +
         (!hasAccepted ? '<button class="btn btn-mint btn-sm" style="margin-top:14px" onclick="acceptQuote(\'' + q.id + '\',\'' + q.request_id + '\')">Accept Quote &rarr;</button>' : '') +
         contactHtml +
@@ -2250,7 +2267,7 @@ async function loadMyRequests() {
   var res = await sb.from('requests').select('*').eq('user_id', currentUser.id).order('created_at', {ascending:false}).limit(10);
   var list = document.getElementById('my-requests-list');
   if (!res.data || !res.data.length) {
-    list.innerHTML = '<div style="text-align:center;padding:28px 20px;color:var(--muted);background:var(--surface);border-radius:14px;border:1.5px dashed var(--border);margin-top:8px"><div style="font-size:28px;margin-bottom:10px">&#x1F4CB;</div><div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:6px">No previous requests</div><div style="font-size:13px">Your submitted requests and their quotes will be saved here.</div></div>';
+    list.innerHTML = '<div style="text-align:center;padding:28px 20px;color:var(--muted);background:var(--surface);border-radius:14px;border:1.5px dashed var(--border);margin-top:8px"><div style="display:flex;justify-content:center;margin-bottom:10px"><div style="width:48px;height:48px;border-radius:50%;background:var(--surface2);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted)">' + ICONS.clipboard + '</div></div><div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:6px">No previous requests</div><div style="font-size:13px">Your submitted requests and their quotes will be saved here.</div></div>';
     return;
   }
   list.innerHTML = res.data.map(function(r) {
@@ -2265,10 +2282,10 @@ async function loadMyRequests() {
     return '<div class="request-card" onclick="viewRequest(\'' + r.id + '\',\'' + esc(r.car_brand) + ' ' + esc(r.car_model) + '\')" style="cursor:pointer">' +
       '<div class="request-header">' +
         '<div>' +
-          '<div class="car-model">&#x1F697; ' + esc(r.car_brand) + ' ' + esc(r.car_model) + '</div>' +
+          '<div class="car-model" style="display:flex;align-items:center;gap:5px">' + ICONS.car + ' ' + esc(r.car_brand) + ' ' + esc(r.car_model) + '</div>' +
           '<div class="issue-text">' + esc(r.issue.substring(0,100)) + (r.issue.length>100?'...':'') + '</div>' +
           mediaHtml +
-          '<span class="badge ' + (r.status==='open'?'badge-open':r.status==='completed'?'badge-completed':'badge-closed') + '">' + (r.status==='completed'?'&#x1F3C6; completed':r.status) + '</span>' +
+          '<span class="badge ' + (r.status==='open'?'badge-open':r.status==='completed'?'badge-completed':'badge-closed') + '" style="display:inline-flex;align-items:center;gap:3px">' + (r.status==='completed'?ICONS.award+' completed':r.status) + '</span>' +
         '</div>' +
         '<div style="font-size:12px;color:var(--muted);white-space:nowrap">' + timeAgo(r.created_at) + '</div>' +
       '</div>' +
@@ -2371,7 +2388,7 @@ async function renderWorkshopRequests(requests) {
     return '<div class="request-card anim" style="animation-delay:' + (i*0.05) + 's">' +
       '<div class="request-header">' +
         '<div style="flex:1">' +
-          '<div class="car-model">&#x1F697; ' + esc(req.car_brand) + ' ' + esc(req.car_model) + '</div>' +
+          '<div class="car-model" style="display:flex;align-items:center;gap:5px">' + ICONS.car + ' ' + esc(req.car_brand) + ' ' + esc(req.car_model) + '</div>' +
           '<div style="font-size:12px;color:var(--muted);margin-bottom:8px;font-weight:600">by ' + esc(req.customer_name) + ' &middot; ' + timeAgo(req.created_at) + '</div>' +
           '<div class="issue-text">' + esc(req.issue) + '</div>' +
           mediaHtml +
@@ -2380,7 +2397,7 @@ async function renderWorkshopRequests(requests) {
         '<div style="flex-shrink:0">' +
           (!alreadyQuoted
             ? '<button class="btn btn-primary btn-sm" onclick="toggleQuoteForm(\'' + req.id + '\')">Send Quote</button>'
-            : '<span class="badge badge-accepted" style="padding:8px 14px">Sent &#x2713;</span>') +
+            : '<span class="badge badge-accepted" style="padding:8px 14px;display:inline-flex;align-items:center;gap:4px">' + ICONS.check + ' Sent</span>') +
         '</div>' +
       '</div>' +
       qForm +
@@ -2427,13 +2444,13 @@ async function loadMyQuotes() {
       var waLink2 = waNum2 ? 'https://wa.me/6' + waNum2 + '?text=' + encodeURIComponent('Hi ' + custName + ', this is ' + currentProfile.name + ' from Drivara. Your quote has been accepted! When can you bring in your car?') : null;
       custContact = '<div class="contact-card">' +
         '<div class="contact-info">' +
-          '<div class="contact-label">&#x2713; Customer Contact</div>' +
+          '<div class="contact-label" style="display:flex;align-items:center;gap:5px">' + ICONS.check + ' Customer Contact</div>' +
           '<div class="contact-name">' + esc(custName) + '</div>' +
-          (custPhone ? '<div class="contact-phone">&#x1F4DE; ' + esc(custPhone) + '</div>' : '<div class="contact-phone" style="color:#5ecb8e">No phone number</div>') +
+          (custPhone ? '<div class="contact-phone" style="display:flex;align-items:center;gap:5px">' + ICONS.phone + ' ' + esc(custPhone) + '</div>' : '<div class="contact-phone" style="color:#5ecb8e">No phone number</div>') +
         '</div>' +
         '<div class="contact-actions">' +
-          (waLink2 ? '<a href="' + waLink2 + '" target="_blank" class="btn-whatsapp">&#x1F4AC; WhatsApp</a>' : '') +
-          (custPhone ? '<a href="tel:' + esc(custPhone) + '" class="btn-call">&#x1F4DE; Call</a>' : '') +
+          (waLink2 ? '<a href="' + waLink2 + '" target="_blank" class="btn-whatsapp">' + ICONS.chat + ' WhatsApp</a>' : '') +
+          (custPhone ? '<a href="tel:' + esc(custPhone) + '" class="btn-call">' + ICONS.phone + ' Call</a>' : '') +
         '</div>' +
       '</div>';
     }
@@ -2443,11 +2460,11 @@ async function loadMyQuotes() {
           '<div class="workshop-name">' + (q.requests?esc(q.requests.car_brand)+' '+esc(q.requests.car_model):'') + '</div>' +
           '<div class="price-tag" style="font-size:22px">RM ' + q.price + '<span>quoted</span></div>' +
         '</div>' +
-        '<div class="quote-meta"><div class="meta-chip">&#x23F1; ' + q.duration + ' day'+(q.duration>1?'s':'')+'</div><div class="meta-chip">'+timeAgo(q.created_at)+'</div></div>' +
+        '<div class="quote-meta"><div class="meta-chip" style="display:inline-flex;align-items:center;gap:4px">' + ICONS.clock + ' ' + q.duration + ' day'+(q.duration>1?'s':'')+'</div><div class="meta-chip">'+timeAgo(q.created_at)+'</div></div>' +
         (q.message?'<div class="quote-msg">"'+esc(q.message)+'"</div>':'') +
-        '<span class="badge ' + sc + '" style="margin-top:10px;display:inline-block">' + (q.status==='completed'?'&#x1F3C6; completed':q.status) + '</span>' +
-        (q.status==='accepted' ? '<div class="complete-banner" style="margin-top:14px"><div class="banner-text"><div class="banner-title">&#x2714; Quote accepted!</div><div class="banner-sub">Contact the customer and complete the job. Mark it done when finished.</div></div><button class="btn-complete" onclick="workshopMarkComplete(\'' + q.id + '\',\'' + q.request_id + '\')">&#x1F527; Mark as Complete</button></div>' : '') +
-        (q.status==='completed' ? '<div class="completed-stamp" style="margin-top:12px">&#x1F3C6; Job marked complete</div>' : '') +
+        '<span class="badge ' + sc + '" style="margin-top:10px;display:inline-flex;align-items:center;gap:3px">' + (q.status==='completed'?ICONS.award+' completed':q.status) + '</span>' +
+        (q.status==='accepted' ? '<div class="complete-banner" style="margin-top:14px"><div class="banner-text"><div class="banner-title" style="display:flex;align-items:center;gap:5px">' + ICONS.check + ' Quote accepted!</div><div class="banner-sub">Contact the customer and complete the job. Mark it done when finished.</div></div><button class="btn-complete" onclick="workshopMarkComplete(\'' + q.id + '\',\'' + q.request_id + '\')" style="display:inline-flex;align-items:center;gap:6px">' + ICONS.wrench + ' Mark as Complete</button></div>' : '') +
+        (q.status==='completed' ? '<div class="completed-stamp" style="margin-top:12px;display:inline-flex;align-items:center;gap:6px">' + ICONS.award + ' Job marked complete</div>' : '') +
         custContact +
       '</div>' +
     '</div>';
@@ -2470,18 +2487,18 @@ async function openWorkshopPanel(workshopId) {
 
   // Header
   document.getElementById('wsp-name').textContent = w.name || 'Workshop';
-  document.getElementById('wsp-addr').textContent = w.address ? '📍 ' + w.address : '';
+  document.getElementById('wsp-addr').innerHTML = w.address ? '<span style="display:inline-flex;align-items:center;gap:4px">' + ICONS.pin + ' ' + esc(w.address) + '</span>' : '';
 
   // Meta chips
   var metaHtml = '';
-  if (w._rating) metaHtml += '<span class="ws-panel-chip rating">&#9733; ' + w._rating.toFixed(1) + ' (' + w._reviewCount + ' review' + (w._reviewCount>1?'s':'') + ')</span>';
-  if (w._distStr) metaHtml += '<span class="ws-panel-chip dist">📍 ' + w._distStr + ' away</span>';
+  if (w._rating) metaHtml += '<span class="ws-panel-chip rating" style="display:inline-flex;align-items:center;gap:3px">' + ICONS.star + ' ' + w._rating.toFixed(1) + ' (' + w._reviewCount + ' review' + (w._reviewCount>1?'s':'') + ')</span>';
+  if (w._distStr) metaHtml += '<span class="ws-panel-chip dist" style="display:inline-flex;align-items:center;gap:3px">' + ICONS.pin + ' ' + w._distStr + ' away</span>';
   document.getElementById('wsp-meta').innerHTML = metaHtml;
 
   // Select button
   var isSelected = selectedWorkshops.has(workshopId);
   var btn = document.getElementById('wsp-select-btn');
-  btn.textContent = isSelected ? '✓ Selected — Click to Deselect' : '+ Select This Workshop';
+  btn.innerHTML = isSelected ? ICONS.check + ' Selected — Click to Deselect' : '+ Select This Workshop';
   btn.className = 'panel-select-btn' + (isSelected ? ' selected' : '');
 
   // About
@@ -2554,7 +2571,7 @@ function toggleFromPanel() {
   // Update panel button
   var isSelected = selectedWorkshops.has(currentPanelWorkshopId);
   var btn = document.getElementById('wsp-select-btn');
-  btn.textContent = isSelected ? '✓ Selected — Click to Deselect' : '+ Select This Workshop';
+  btn.innerHTML = isSelected ? ICONS.check + ' Selected — Click to Deselect' : '+ Select This Workshop';
   btn.className = 'panel-select-btn' + (isSelected ? ' selected' : '');
 }
 
@@ -2850,20 +2867,20 @@ async function loadBrowserWorkshops() {
 
   // Add markers
   var mintIcon = L.divIcon({
-    html: '<div style="width:34px;height:34px;background:#1e2a3a;border:3px solid #5ecb8e;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 3px 10px rgba(30,42,58,0.3);cursor:pointer">&#x1F527;</div>',
+    html: '<div style="width:34px;height:34px;background:#1e2a3a;border:3px solid #5ecb8e;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(30,42,58,0.3);cursor:pointer;color:#5ecb8e"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg></div>',
     className: '', iconSize: [34,34], iconAnchor: [17,17], popupAnchor: [0,-20]
   });
 
   workshops.forEach(function(w) {
     if (!w.lat || !w.lng) return;
     var marker = L.marker([w.lat, w.lng], { icon: mintIcon }).addTo(browserMap);
-    var ratingHtml = w._rating ? '&#9733; ' + w._rating.toFixed(1) + ' (' + w._reviewCount + ' review' + (w._reviewCount>1?'s':'') + ')' : 'No reviews yet';
+    var ratingHtml = w._rating ? '<span style="display:inline-flex;align-items:center;gap:3px">' + ICONS.star + ' ' + w._rating.toFixed(1) + ' (' + w._reviewCount + ' review' + (w._reviewCount>1?'s':'') + ')</span>' : 'No reviews yet';
     marker.bindPopup(
       '<div style="font-family:Plus Jakarta Sans,sans-serif;min-width:160px">' +
       '<div style="font-weight:800;font-size:15px;color:#1e2a3a;margin-bottom:4px">' + esc(w.name||'Workshop') + '</div>' +
-      (w.address ? '<div style="font-size:12px;color:#7a8799;margin-bottom:4px">&#x1F4CD; ' + esc(w.address) + '</div>' : '') +
+      (w.address ? '<div style="font-size:12px;color:#7a8799;margin-bottom:4px;display:flex;align-items:center;gap:3px">' + ICONS.pin + ' ' + esc(w.address) + '</div>' : '') +
       '<div style="font-size:13px;color:#2e9e63;font-weight:700;margin-bottom:6px">' + ratingHtml + '</div>' +
-      (w._distStr ? '<div style="font-size:12px;color:#7a8799">&#x1F4CD; ' + w._distStr + ' away</div>' : '') +
+      (w._distStr ? '<div style="font-size:12px;color:#7a8799;display:flex;align-items:center;gap:3px">' + ICONS.pin + ' ' + w._distStr + ' away</div>' : '') +
       '<button onclick="toggleWorkshopSelect(\'' + w.id + '\')" style="margin-top:10px;background:#1e2a3a;color:white;border:none;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;width:100%">Select Workshop</button>' +
       '</div>'
     );
@@ -2902,22 +2919,22 @@ function renderBrowserList(workshops) {
   var list = document.getElementById('browser-workshop-list');
   list.innerHTML = workshops.map(function(w) {
     var ratingChip = w._rating ? '<span class="wb-chip wb-rating">' + ratingChipHTML(w._rating, w._reviewCount) + '</span>' : '';
-    var distChip = w._distStr ? '<span class="wb-chip wb-dist">&#x1F4CD; ' + w._distStr + '</span>' : '';
+    var distChip = w._distStr ? '<span class="wb-chip wb-dist" style="display:inline-flex;align-items:center;gap:3px">' + ICONS.pin + ' ' + w._distStr + '</span>' : '';
     var noLocChip = (!w.lat || !w.lng) ? '<span class="wb-chip">No location set</span>' : '';
     var isSelected = selectedWorkshops.has(w.id);
     var wid = w.id;
     var selBtnClass = isSelected ? 'btn-mint' : 'btn-primary';
-    var selBtnText = isSelected ? '&#x2713; Selected' : '+ Select';
+    var selBtnText = isSelected ? ICONS.check + ' Selected' : '+ Select';
     var card = '<div class="workshop-browser-card ' + (isSelected?'selected':'') + '" id="wb-card-' + wid + '">';
-    card += '<div class="wb-check" onclick="toggleWorkshopSelect(\'' + wid + '\')">' + (isSelected ? '&#x2713;' : '') + '</div>';
+    card += '<div class="wb-check" onclick="toggleWorkshopSelect(\'' + wid + '\')">' + (isSelected ? ICONS.check : '') + '</div>';
     card += '<div onclick="openWorkshopPanel(\'' + wid + '\')" style="cursor:pointer">';
     card += '<div class="wb-name">' + esc(w.name || 'Workshop') + '</div>';
-    if (w.address) card += '<div style="font-size:12px;color:var(--muted);margin-top:2px">&#x1F4CD; ' + esc(w.address) + '</div>';
+    if (w.address) card += '<div style="font-size:12px;color:var(--muted);margin-top:2px;display:flex;align-items:center;gap:3px">' + ICONS.pin + ' ' + esc(w.address) + '</div>';
     card += '<div class="wb-meta" style="margin-top:6px">' + ratingChip + distChip + noLocChip + '</div>';
     card += '</div>';
     card += '<div style="display:flex;gap:8px;margin-top:12px">';
     card += '<button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="openWorkshopPanel(\'' + wid + '\')">View Profile</button>';
-    card += '<button class="btn ' + selBtnClass + ' btn-sm" style="flex:1;justify-content:center" onclick="toggleWorkshopSelect(\'' + wid + '\')">' + selBtnText + '</button>';
+    card += '<button class="btn ' + selBtnClass + ' btn-sm" style="flex:1;justify-content:center;display:inline-flex;align-items:center;gap:5px" onclick="toggleWorkshopSelect(\'' + wid + '\')">' + selBtnText + '</button>';
     card += '</div></div>';
     return card;
   }).join('');
@@ -2969,7 +2986,7 @@ async function loadWorkshopMarkers() {
 
   // Custom mint marker
   var mintIcon = L.divIcon({
-    html: '<div style="width:32px;height:32px;background:#1e2a3a;border:3px solid #5ecb8e;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 3px 10px rgba(30,42,58,0.3)">&#x1F527;</div>',
+    html: '<div style="width:32px;height:32px;background:#1e2a3a;border:3px solid #5ecb8e;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(30,42,58,0.3);color:#5ecb8e"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg></div>',
     className: '',
     iconSize: [32, 32],
     iconAnchor: [16, 16],
@@ -2984,12 +3001,12 @@ async function loadWorkshopMarkers() {
   workshops.forEach(function(w) {
     var wRevs = reviews.filter(function(r){ return r.workshop_id === w.id; });
     var avgRating = wRevs.length ? (wRevs.reduce(function(s,r){return s+r.rating;},0)/wRevs.length).toFixed(1) : null;
-    var ratingHtml = avgRating ? '<div class="map-popup-rating">&#9733; ' + avgRating + ' (' + wRevs.length + ' review' + (wRevs.length>1?'s':'') + ')</div>' : '<div class="map-popup-rating" style="color:var(--muted)">No reviews yet</div>';
+    var ratingHtml = avgRating ? '<div class="map-popup-rating" style="display:flex;align-items:center;gap:3px">' + ICONS.star + ' ' + avgRating + ' (' + wRevs.length + ' review' + (wRevs.length>1?'s':'') + ')</div>' : '<div class="map-popup-rating" style="color:var(--muted)">No reviews yet</div>';
 
     var marker = L.marker([w.lat, w.lng], { icon: mintIcon }).addTo(landingMap);
     marker.bindPopup(
-      '<div class="map-popup-name">' + (w.name || 'Workshop') + '</div>' +
-      (w.address ? '<div class="map-popup-addr">&#x1F4CD; ' + w.address + '</div>' : '') +
+      '<div class="map-popup-name">' + esc(w.name || 'Workshop') + '</div>' +
+      (w.address ? '<div class="map-popup-addr" style="display:flex;align-items:center;gap:3px">' + ICONS.pin + ' ' + esc(w.address) + '</div>' : '') +
       ratingHtml
     );
   });
@@ -3256,7 +3273,9 @@ async function loadProfilePage() {
   var initial = (currentProfile.name || 'U').charAt(0).toUpperCase();
   document.getElementById('profile-avatar-big').textContent = initial;
   document.getElementById('profile-display-name').textContent = currentProfile.name || '';
-  document.getElementById('profile-display-role').innerHTML = currentProfile.role === 'workshop' ? '&#x1F527; Workshop' : '&#x1F697; Car Owner';
+  document.getElementById('profile-display-role').innerHTML = currentProfile.role === 'workshop'
+    ? '<span style="display:inline-flex;align-items:center;gap:5px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg> Workshop</span>'
+    : '<span style="display:inline-flex;align-items:center;gap:5px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1l3-4h10l3 4h1a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="16.5" cy="17.5" r="2.5"/></svg> Car Owner</span>';
   document.getElementById('profile-display-email').textContent = currentUser.email || '';
   document.getElementById('profile-email-display').textContent = currentUser.email || '';
   document.getElementById('profile-name').value = currentProfile.name || '';
@@ -3302,7 +3321,7 @@ async function loadProfilePage() {
     var revs = revRes.data || [];
     if (revs.length) {
       var avg = (revs.reduce(function(s,r){return s+r.rating;},0)/revs.length).toFixed(1);
-      document.getElementById('stat-requests').innerHTML = avg + ' &#9733;';
+      document.getElementById('stat-requests').innerHTML = avg + ' <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none" style="vertical-align:middle"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
       document.getElementById('profile-stats-section').querySelectorAll('.profile-stat-label')[0].textContent = 'Avg Rating';
     } else {
       document.getElementById('stat-requests').textContent = '—';
@@ -3496,7 +3515,7 @@ function checkWorkshopOnboarding() {
 
   var itemsHtml = checks.map(function(c) {
     var dotClass = c.done ? 'done' : 'todo';
-    var dotIcon = c.done ? '&#x2713;' : '&#x25CB;';
+    var dotIcon = c.done ? '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' : '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9"/></svg>';
     var actionHtml = !c.done
       ? '<span class="ob-item-action" onclick="' + c.action + '">' + c.actionLabel + ' &rarr;</span>'
       : '';
