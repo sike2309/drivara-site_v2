@@ -1786,16 +1786,17 @@ var CAR_DATA = {
   'Volkswagen': { color: '#003478', models: ['Polo','Golf','Passat','Tiguan','T-Cross','T-Roc'] }
 };
 
+// Brand logos as inline SVG data URIs (no external dependency)
 var LOGO_URLS = {
-  'Perodua': 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Perodua_logo.svg/120px-Perodua_logo.svg.png',
-  'Proton': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Proton_logo.svg/120px-Proton_logo.svg.png',
-  'Toyota': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Toyota_carlogo.svg/120px-Toyota_carlogo.svg.png',
-  'Honda': 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Honda.svg/120px-Honda.svg.png',
-  'Nissan': 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Nissan_2020_logo.svg/120px-Nissan_2020_logo.svg.png',
-  'Mazda': 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Mazda_logo.svg/120px-Mazda_logo.svg.png',
-  'Mitsubishi': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Mitsubishi_Motors_new_logo.svg/120px-Mitsubishi_Motors_new_logo.svg.png',
-  'BMW': 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/BMW.svg/120px-BMW.svg.png',
-  'Mercedes': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Mercedes-Logo.svg/120px-Mercedes-Logo.svg.png',
+  'Perodua':    'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60"><rect width="120" height="60" rx="6" fill="%23005BAA"/><text x="60" y="38" font-family="Arial Black,sans-serif" font-size="13" font-weight="900" fill="white" text-anchor="middle">PERODUA</text></svg>',
+  'Proton':     'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60"><rect width="120" height="60" rx="6" fill="%23003DA5"/><text x="60" y="38" font-family="Arial Black,sans-serif" font-size="15" font-weight="900" fill="white" text-anchor="middle">PROTON</text></svg>',
+  'Toyota':     'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Toyota_carlogo.svg/120px-Toyota_carlogo.svg.png',
+  'Honda':      'https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Honda.svg/120px-Honda.svg.png',
+  'Nissan':     'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Nissan_2020_logo.svg/120px-Nissan_2020_logo.svg.png',
+  'Mazda':      'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60"><rect width="120" height="60" rx="6" fill="%231A1A2E"/><text x="60" y="38" font-family="Arial Black,sans-serif" font-size="15" font-weight="900" fill="white" text-anchor="middle">MAZDA</text></svg>',
+  'Mitsubishi': 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60"><rect width="120" height="60" rx="6" fill="%23CC0000"/><text x="60" y="38" font-family="Arial Black,sans-serif" font-size="10" font-weight="900" fill="white" text-anchor="middle">MITSUBISHI</text></svg>',
+  'BMW':        'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/BMW.svg/120px-BMW.svg.png',
+  'Mercedes':   'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Mercedes-Logo.svg/120px-Mercedes-Logo.svg.png',
   'Volkswagen': 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Volkswagen_logo_2019.svg/120px-Volkswagen_logo_2019.svg.png'
 };
 
@@ -2146,6 +2147,8 @@ async function signOut() {
   currentUser = null; currentProfile = null;
   realtimeSubs.forEach(function(s) { if (sb) sb.removeChannel(s); });
   realtimeSubs = [];
+  if (_msgNotifSub && sb) { sb.removeChannel(_msgNotifSub); _msgNotifSub = null; }
+  notifList = []; notifUnread = 0;
   updateNav();
   showPage('landing');
   showToast('Signed out.');
@@ -2201,6 +2204,7 @@ async function routeByRole() {
     showWorkshopRequests();
     subscribeToWorkshopQuotes();
     seedWorkshopNotifs();
+    subscribeToMessageNotifs();
   } else {
     showPage('customer');
     // Auto-load the most recent open request and its quotes
@@ -2239,6 +2243,7 @@ async function routeByRole() {
     }
     loadMyRequests();
     seedCustomerNotifs();
+    subscribeToMessageNotifs();
   }
 }
 
@@ -4464,6 +4469,7 @@ function subscribeToChat(quoteId) {
     .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: 'quote_id=eq.' + quoteId }, function(payload) {
       var m = payload.new;
       if (!m || m.sender_id === (currentUser && currentUser.id)) return;
+      // Append message to open chat panel
       var container = document.getElementById('chat-messages');
       if (!container) return;
       var existing = container.querySelector('.chat-empty');
@@ -4473,8 +4479,35 @@ function subscribeToChat(quoteId) {
       div.innerHTML = '<div>' + esc(m.content) + '</div><div class="chat-msg-time">Just now</div>';
       container.appendChild(div);
       container.scrollTop = container.scrollHeight;
-      // Notification
-      addNotif('message', 'New message', esc(m.content).substring(0, 50), function(){ openChat(quoteId, ''); });
+      // Notification is handled by subscribeToMessageNotifs — no duplicate here
+    }).subscribe();
+}
+
+// Persistent background subscription — notifies on ANY incoming message for this user's quotes
+var _msgNotifSub = null;
+function subscribeToMessageNotifs() {
+  if (!sb || !currentUser) return;
+  if (_msgNotifSub) { sb.removeChannel(_msgNotifSub); _msgNotifSub = null; }
+  // Subscribe to all message inserts — Supabase RLS ensures we only receive
+  // messages for quotes we're allowed to see (our quotes / our requests).
+  _msgNotifSub = sb.channel('msg-notifs-' + currentUser.id)
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, function(payload) {
+      var m = payload.new;
+      if (!m) return;
+      // Ignore own messages
+      if (m.sender_id === currentUser.id) return;
+      // Add notification
+      var preview = (m.content || '').substring(0, 60);
+      var capturedQuoteId = m.quote_id;
+      addNotif('message', 'New message', preview, function() {
+        openChat(capturedQuoteId, 'Chat');
+      });
+      // Also show a toast if the chat panel is not open for this quote
+      var chatPanelOpen = document.getElementById('chat-panel').classList.contains('open');
+      var isThisChat = activeChatQuoteId === m.quote_id;
+      if (!chatPanelOpen || !isThisChat) {
+        showToast('New message received');
+      }
     }).subscribe();
 }
 
