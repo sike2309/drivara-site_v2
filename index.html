@@ -617,6 +617,58 @@ textarea { resize: vertical; min-height: 100px; }
   pointer-events: none;
 }
 
+/* ── FORM PROGRESS STEPS ── */
+.form-progress { display: flex; align-items: center; margin-bottom: 28px; }
+.fp-step { display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; }
+.fp-dot {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--surface2); border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 800; color: var(--muted); transition: all 0.25s;
+}
+.fp-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; transition: color 0.25s; }
+.fp-line { flex: 1; height: 2px; background: var(--border); margin: 0 8px; margin-bottom: 22px; transition: background 0.3s; }
+.fp-step.active .fp-dot { background: var(--navy); border-color: var(--navy); color: white; }
+.fp-step.active .fp-label { color: var(--navy); }
+.fp-step.done .fp-dot { background: var(--mint); border-color: var(--mint-dark); color: var(--navy); }
+.fp-step.done .fp-label { color: var(--mint-dark); }
+.fp-line.done { background: var(--mint); }
+.step-back-btn { padding-left: 0 !important; margin-bottom: 16px; }
+
+/* ── BROWSER SEARCH ── */
+.browser-search-wrap { position: relative; margin-bottom: 12px; }
+.browser-search {
+  width: 100%; padding: 10px 14px 10px 38px;
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 10px; font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14px; color: var(--text); outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.browser-search:focus { border-color: var(--mint); box-shadow: 0 0 0 3px rgba(94,203,142,0.15); }
+.browser-search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+.browser-no-results { text-align: center; padding: 32px 20px; color: var(--muted); font-size: 14px; font-weight: 600; }
+
+/* ── QUOTE STATUS TIMELINE ── */
+.status-timeline {
+  display: flex; align-items: center;
+  padding: 12px 16px; background: var(--surface2);
+  border-radius: 12px; border: 1px solid var(--border); margin-bottom: 16px;
+}
+.tl-step { display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0; }
+.tl-dot {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--surface); border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; transition: all 0.2s;
+}
+.tl-label { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; text-align: center; max-width: 62px; line-height: 1.3; }
+.tl-line { flex: 1; height: 2px; background: var(--border); margin: 0 6px; margin-bottom: 20px; transition: background 0.3s; }
+.tl-step.tl-done .tl-dot { background: var(--mint-pale); border-color: var(--mint); color: var(--mint-dark); }
+.tl-step.tl-done .tl-label { color: var(--mint-dark); }
+.tl-step.tl-active .tl-dot { background: var(--navy); border-color: var(--navy); color: white; }
+.tl-step.tl-active .tl-label { color: var(--navy); font-weight: 800; }
+.tl-line.tl-done { background: var(--mint); }
+
 /* ── SKELETON CARDS ── */
 .skel-card {
   background: var(--surface); border: 1.5px solid var(--border);
@@ -855,18 +907,37 @@ textarea { resize: vertical; min-height: 100px; }
 
     <!-- SUBMIT FORM -->
     <div class="panel anim" id="request-form-panel">
-      <div class="panel-title">Submit a Service Request</div>
-      <div class="panel-sub">Select your car, describe the issue, and upload photos or videos.</div>
 
-      <!-- STEP 1: Brand -->
-      <div style="margin-bottom:24px">
-        <label style="display:block;margin-bottom:12px">Select Your Car Brand</label>
+      <!-- Progress indicator -->
+      <div class="form-progress">
+        <div class="fp-step active" id="fps-1">
+          <div class="fp-dot" id="fpd-1">1</div>
+          <div class="fp-label">Brand</div>
+        </div>
+        <div class="fp-line" id="fpl-1"></div>
+        <div class="fp-step" id="fps-2">
+          <div class="fp-dot" id="fpd-2">2</div>
+          <div class="fp-label">Model</div>
+        </div>
+        <div class="fp-line" id="fpl-2"></div>
+        <div class="fp-step" id="fps-3">
+          <div class="fp-dot" id="fpd-3">3</div>
+          <div class="fp-label">Issue</div>
+        </div>
+      </div>
+
+      <!-- Step 1: Brand -->
+      <div id="brand-section">
+        <div class="panel-title">Choose Your Car Brand</div>
+        <div class="panel-sub">Select the brand of your vehicle.</div>
         <div class="brand-grid" id="brand-grid"></div>
       </div>
 
-      <!-- STEP 2: Model + Year -->
-      <div id="model-section" style="display:none;margin-bottom:24px">
-        <label style="display:block;margin-bottom:12px">Select Model</label>
+      <!-- Step 2: Model + Year -->
+      <div id="model-section" style="display:none">
+        <button class="btn btn-ghost btn-sm step-back-btn" onclick="updateFormStep(1)">&larr; Change Brand</button>
+        <div class="panel-title">Select Your Model</div>
+        <div class="panel-sub" id="model-section-sub">Pick the model that matches your car.</div>
         <div class="model-grid" id="model-grid"></div>
         <div class="year-row" style="margin-top:14px">
           <div class="form-group" style="flex:1">
@@ -878,11 +949,13 @@ textarea { resize: vertical; min-height: 100px; }
         </div>
       </div>
 
-      <!-- STEP 3: Issue -->
+      <!-- Step 3: Issue -->
       <div id="issue-section" style="display:none">
-        <hr class="divider">
+        <button class="btn btn-ghost btn-sm step-back-btn" onclick="updateFormStep(2)">&larr; Change Model</button>
+        <div class="panel-title">Describe the Issue</div>
+        <div class="panel-sub" id="issue-section-sub">Tell workshops what's wrong with your car.</div>
         <div class="form-group full" style="margin-bottom:20px">
-          <label>Describe the Issue</label>
+          <label>What's the problem?</label>
           <textarea id="issue-desc" placeholder="e.g. Engine makes a knocking sound when starting. Air-cond not cold. Check engine light on..."></textarea>
         </div>
 
@@ -1002,6 +1075,12 @@ textarea { resize: vertical; min-height: 100px; }
         <button class="btn btn-ghost btn-sm" style="color:white;opacity:0.7" onclick="clearSelection()">Clear</button>
         <button class="btn btn-mint btn-sm" onclick="proceedWithSelected()">Send Request to Selected &rarr;</button>
       </div>
+    </div>
+
+    <!-- Search -->
+    <div class="browser-search-wrap">
+      <svg class="browser-search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input class="browser-search" id="browser-search" type="text" placeholder="Search workshops by name or area…" oninput="searchWorkshops(this.value)">
     </div>
 
     <!-- Filter bar -->
@@ -1323,6 +1402,27 @@ window.addEventListener('load', function() {
   }
 });
 
+// ══ FORM STEP WIZARD ══
+function updateFormStep(step) {
+  var sections = { 1: 'brand-section', 2: 'model-section', 3: 'issue-section' };
+  Object.keys(sections).forEach(function(k) {
+    var el = document.getElementById(sections[k]);
+    if (el) el.style.display = parseInt(k) === step ? 'block' : 'none';
+  });
+  for (var i = 1; i <= 3; i++) {
+    var dot = document.getElementById('fps-' + i);
+    var dotEl = document.getElementById('fpd-' + i);
+    var line = document.getElementById('fpl-' + i);
+    if (dot) { dot.classList.remove('active', 'done'); if (i < step) dot.classList.add('done'); else if (i === step) dot.classList.add('active'); }
+    if (dotEl) dotEl.textContent = i < step ? '✓' : String(i);
+    if (line) line.classList.toggle('done', i < step);
+  }
+  if (window.innerWidth <= 700) {
+    var panel = document.getElementById('request-form-panel');
+    if (panel) setTimeout(function(){ panel.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
+  }
+}
+
 // ══ CAR SELECTOR ══
 function buildBrandGrid() {
   var grid = document.getElementById('brand-grid');
@@ -1342,9 +1442,9 @@ function selectBrand(brand) {
   document.querySelectorAll('.brand-card').forEach(function(c) { c.classList.remove('selected'); });
   document.getElementById('brand-' + brand).classList.add('selected');
   buildModelGrid(brand);
-  document.getElementById('model-section').style.display = 'block';
-  document.getElementById('issue-section').style.display = 'none';
-  document.getElementById('model-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  var sub = document.getElementById('model-section-sub');
+  if (sub) sub.textContent = 'Showing models for ' + brand + '.';
+  setTimeout(function() { updateFormStep(2); }, 120);
 }
 
 function buildModelGrid(brand) {
@@ -1360,8 +1460,9 @@ function selectModel(model) {
   document.querySelectorAll('.model-pill').forEach(function(p) { p.classList.remove('selected'); });
   var el = document.getElementById('model-' + model.replace(/\s/g,'_'));
   if (el) el.classList.add('selected');
-  document.getElementById('issue-section').style.display = 'block';
-  document.getElementById('issue-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  var sub = document.getElementById('issue-section-sub');
+  if (sub) sub.textContent = selectedBrand + ' ' + model + ' — describe what needs fixing.';
+  setTimeout(function() { updateFormStep(3); }, 120);
 }
 
 function buildYearDropdown() {
@@ -1694,6 +1795,7 @@ function showCustomerForm() {
   document.getElementById('request-form-panel').style.display = 'block';
   document.getElementById('quotes-section').style.display = 'none';
   setActiveNavLink('nav-submit');
+  updateFormStep(1);
 }
 
 async function showMyQuotes() {
@@ -1769,8 +1871,7 @@ async function submitRequest(targetWorkshopIds) {
   document.getElementById('media-previews').innerHTML = '';
   document.getElementById('issue-desc').value = '';
   document.querySelectorAll('.brand-card').forEach(function(c){c.classList.remove('selected');});
-  document.getElementById('model-section').style.display = 'none';
-  document.getElementById('issue-section').style.display = 'none';
+  updateFormStep(1);
 
   var msg = (targetWorkshopIds && targetWorkshopIds.length)
     ? 'Request sent to ' + targetWorkshopIds.length + ' workshop(s)!'
@@ -1833,13 +1934,29 @@ function renderQuotes(quotes) {
     var contactHtml = '';
 
     if (isCompleted) {
-      contactHtml = '<div class="completed-stamp">&#x1F3C6; Job completed &mdash; Thank you for using Drivara!</div>';
+      contactHtml =
+        '<div class="status-timeline">' +
+          '<div class="tl-step tl-done"><div class="tl-dot">&#x2713;</div><div class="tl-label">Accepted</div></div>' +
+          '<div class="tl-line tl-done"></div>' +
+          '<div class="tl-step tl-done"><div class="tl-dot">&#x2713;</div><div class="tl-label">In Progress</div></div>' +
+          '<div class="tl-line tl-done"></div>' +
+          '<div class="tl-step tl-done"><div class="tl-dot">&#x1F3C6;</div><div class="tl-label">Complete</div></div>' +
+        '</div>' +
+        '<div class="completed-stamp">&#x1F3C6; Job completed &mdash; Thank you for using Drivara!</div>';
     } else if (isAccepted) {
       var wPhone = q.profiles ? q.profiles.phone : null;
       var wName = esc(q.workshop_name);
       var waNum = wPhone ? wPhone.replace(/[^0-9]/g,'') : null;
       var waLink = waNum ? 'https://wa.me/6' + waNum + '?text=' + encodeURIComponent('Hi, I accepted your quote on Drivara for RM' + q.price + '. When can we proceed?') : null;
-      contactHtml = '<div class="contact-card">' +
+      contactHtml =
+        '<div class="status-timeline">' +
+          '<div class="tl-step tl-done"><div class="tl-dot">&#x2713;</div><div class="tl-label">Accepted</div></div>' +
+          '<div class="tl-line tl-done"></div>' +
+          '<div class="tl-step tl-active"><div class="tl-dot">&#x23F3;</div><div class="tl-label">In Progress</div></div>' +
+          '<div class="tl-line"></div>' +
+          '<div class="tl-step"><div class="tl-dot">&#x25CB;</div><div class="tl-label">Job Done</div></div>' +
+        '</div>' +
+        '<div class="contact-card">' +
         '<div class="contact-info">' +
           '<div class="contact-label">&#x2713; Accepted &mdash; Contact Workshop</div>' +
           '<div class="contact-name">' + wName + '</div>' +
@@ -2317,6 +2434,7 @@ function switchBrowserTab(tab) {
 function showBrowserPage() {
   showPage('browser');
   setActiveNavLink('nav-submit');
+  var s = document.getElementById('browser-search'); if (s) s.value = '';
   if (typeof selectedWorkshops !== 'undefined') selectedWorkshops.clear();
   if (typeof updateSelectedBar === 'function') updateSelectedBar();
   if (typeof initBrowserMap === 'function') initBrowserMap();
@@ -2397,13 +2515,30 @@ function toggleWorkshopSelect(workshopId) {
 function sortWorkshops(by, btn) {
   document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
   btn.classList.add('active');
-  var sorted = [...allWorkshops];
+  var q = (document.getElementById('browser-search') || {}).value || '';
+  var base = q.trim() ? allWorkshops.filter(function(w) {
+    var s = q.toLowerCase();
+    return (w.name || '').toLowerCase().includes(s) || (w.address || '').toLowerCase().includes(s);
+  }) : [...allWorkshops];
   if (by === 'nearest' && customerLat) {
-    sorted.sort(function(a,b) { return (a._dist||9999) - (b._dist||9999); });
+    base.sort(function(a,b) { return (a._dist||9999) - (b._dist||9999); });
   } else if (by === 'rating') {
-    sorted.sort(function(a,b) { return (b._rating||0) - (a._rating||0); });
+    base.sort(function(a,b) { return (b._rating||0) - (a._rating||0); });
   }
-  renderBrowserList(sorted);
+  renderBrowserList(base);
+}
+
+function searchWorkshops(query) {
+  var q = query.trim().toLowerCase();
+  var filtered = q ? allWorkshops.filter(function(w) {
+    return (w.name || '').toLowerCase().includes(q) || (w.address || '').toLowerCase().includes(q);
+  }) : [...allWorkshops];
+  if (!filtered.length) {
+    document.getElementById('browser-workshop-list').innerHTML =
+      '<div class="browser-no-results">No workshops found for &ldquo;' + query + '&rdquo;</div>';
+    return;
+  }
+  renderBrowserList(filtered);
 }
 
 async function initBrowserMap() {
