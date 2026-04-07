@@ -1172,10 +1172,6 @@ textarea { resize: vertical; min-height: 100px; }
     <button class="hero-cta anim" onclick="onGetQuotes()">
       Get Quotes Now <span class="arrow">&#x2192;</span>
     </button>
-    <div class="hero-search-wrap anim" style="animation-delay:0.1s">
-      <input type="text" class="hero-search" id="hero-search-input" placeholder="What's wrong with your car? e.g. engine noise, AC not cold..." onkeydown="if(event.key==='Enter')heroSearch()">
-      <button class="hero-search-btn" onclick="heroSearch()">Get Quotes</button>
-    </div>
   </div>
 
   <!-- Live stats -->
@@ -2563,6 +2559,7 @@ async function loadMyRequests() {
 
 // ══ WORKSHOP ══
 function showWorkshopRequests() {
+  showPage('workshop');
   document.getElementById('workshop-requests-view').style.display = 'block';
   document.getElementById('workshop-sent-view').style.display = 'none';
   setActiveNavLink('nav-requests');
@@ -2580,6 +2577,7 @@ function showWorkshopRequests() {
 }
 
 function showSentQuotes() {
+  showPage('workshop');
   document.getElementById('workshop-requests-view').style.display = 'none';
   document.getElementById('workshop-sent-view').style.display = 'block';
   setActiveNavLink('nav-sentquotes');
