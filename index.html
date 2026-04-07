@@ -358,9 +358,6 @@ textarea { resize: vertical; min-height: 100px; }
   .modal { padding: 24px 18px; border-radius: 16px 16px 0 0; position: fixed; bottom: 0; left: 0; right: 0; max-height: 92vh; margin: 0; max-width: 100%; border-radius: 20px 20px 0 0; }
   .modal-overlay { align-items: flex-end; }
 
-  /* Toast */
-  .toast { width: calc(100% - 32px); text-align: center; white-space: normal; bottom: 88px; }
-
   /* Profile stats */
   .profile-stat-grid { grid-template-columns: repeat(3,1fr); gap: 8px; }
   .profile-stat-val { font-size: 20px; }
@@ -373,6 +370,24 @@ textarea { resize: vertical; min-height: 100px; }
   .request-header { flex-direction: column; gap: 12px; }
   .request-header > div:last-child { width: 100%; }
   .request-header button, .request-header span { width: 100%; justify-content: center; text-align: center; }
+
+  /* Hero CTA: full-width on mobile */
+  .hero-cta { width: 100%; justify-content: center; }
+
+  /* Issue form action buttons: stacked full-width */
+  .issue-actions { flex-direction: column !important; }
+  .issue-actions .btn { width: 100%; justify-content: center; }
+
+  /* Browser map/list tabs: show on mobile */
+  .browser-tab-bar { display: flex; }
+  .browser-map.tab-hidden, #browser-list-wrapper.tab-hidden { display: none !important; }
+
+  /* Safe-area insets (iPhone notch / home indicator) */
+  .mobile-nav { padding-bottom: max(20px, env(safe-area-inset-bottom, 0px)); }
+  .container { padding-bottom: max(96px, calc(76px + env(safe-area-inset-bottom, 0px))); }
+
+  /* Toast: stay above mobile nav */
+  .toast { bottom: max(88px, calc(72px + env(safe-area-inset-bottom, 0px))); right: 16px; width: calc(100% - 32px); text-align: center; white-space: normal; }
 }
 
 /* ── SMALL MOBILE (375px) ── */
@@ -470,6 +485,29 @@ textarea { resize: vertical; min-height: 100px; }
   .browser-map { height: 220px; border-radius: 12px; }
   .browser-layout { gap: 12px; }
   .browser-list { gap: 8px; }
+}
+
+/* ── BROWSER MAP/LIST TAB TOGGLE (mobile only) ── */
+.browser-tab-bar {
+  display: none; gap: 0; background: var(--surface2); border-radius: 10px;
+  padding: 4px; margin-bottom: 14px; border: 1px solid var(--border);
+}
+.browser-tab {
+  flex: 1; padding: 9px 0; border-radius: 7px; border: none; background: transparent;
+  color: var(--muted); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px;
+  font-weight: 600; cursor: pointer; transition: all 0.2s;
+  -webkit-tap-highlight-color: transparent; display: inline-flex; align-items: center;
+  justify-content: center; gap: 6px;
+}
+.browser-tab.active { background: var(--navy); color: white; }
+
+/* ── MOBILE NAV BADGE (dot) ── */
+.mnav-icon-wrap { position: relative; display: inline-flex; }
+.mnav-badge {
+  position: absolute; top: -5px; right: -7px; background: var(--mint);
+  color: var(--navy); font-size: 9px; font-weight: 900; border-radius: 100px;
+  padding: 1px 5px; min-width: 16px; text-align: center; line-height: 1.5;
+  display: none;
 }
 
 /* ── MAP ── */
@@ -585,11 +623,17 @@ textarea { resize: vertical; min-height: 100px; }
     Workshops
   </button>
   <button class="mobile-nav-btn hidden" id="mnav-quotes" onclick="showMyQuotes()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <div class="mnav-icon-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span class="mnav-badge" id="mnav-quote-badge"></span>
+    </div>
     Quotes
   </button>
   <button class="mobile-nav-btn hidden" id="mnav-requests" onclick="showWorkshopRequests()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    <div class="mnav-icon-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <span class="mnav-badge" id="mnav-req-badge"></span>
+    </div>
     Requests
   </button>
   <button class="mobile-nav-btn hidden" id="mnav-sentquotes" onclick="showSentQuotes()">
@@ -798,7 +842,7 @@ textarea { resize: vertical; min-height: 100px; }
           </div>
         </div>
 
-        <div style="display:flex;gap:12px;justify-content:flex-end">
+        <div class="issue-actions" style="display:flex;gap:12px;justify-content:flex-end">
           <button class="btn btn-outline btn-sm" onclick="submitToAll()">Send to All Workshops</button>
           <button class="btn btn-primary" id="submit-request-btn" onclick="goToWorkshopBrowser()">Choose Workshops &rarr;</button>
         </div>
@@ -908,6 +952,18 @@ textarea { resize: vertical; min-height: 100px; }
       <button class="filter-btn" id="sort-all" onclick="sortWorkshops('all', this)">All Workshops</button>
     </div>
 
+    <!-- Mobile Map/List tab toggle -->
+    <div class="browser-tab-bar" id="browser-tab-bar">
+      <button class="browser-tab active" id="btab-list" onclick="switchBrowserTab('list')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        List
+      </button>
+      <button class="browser-tab" id="btab-map" onclick="switchBrowserTab('map')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+        Map
+      </button>
+    </div>
+
     <!-- Map + List layout -->
     <div class="browser-layout">
 
@@ -915,7 +971,7 @@ textarea { resize: vertical; min-height: 100px; }
       <div id="browser-map" class="browser-map"></div>
 
       <!-- Workshop list -->
-      <div>
+      <div id="browser-list-wrapper">
         <div id="browser-workshop-list" class="browser-list"></div>
         <div id="browser-empty" class="no-workshops" style="display:none">
           <div class="big">&#x1F527;</div>
@@ -1508,11 +1564,13 @@ async function routeByRole() {
       renderQuotes(qRes.data || []);
       subscribeToQuotes(res.data.id);
       setActiveNavLink('nav-myquotes');
-      // Update badge
+      // Update badge (desktop + mobile)
       var badge = document.getElementById('nav-quote-badge');
+      var mbadge = document.getElementById('mnav-quote-badge');
       if (qRes.data && qRes.data.length) {
         badge.textContent = qRes.data.length;
         badge.style.display = '';
+        if (mbadge) { mbadge.textContent = qRes.data.length; mbadge.style.display = ''; }
       }
     } else {
       // No open request — show submit form
@@ -1681,8 +1739,10 @@ function subscribeToQuotes(requestId) {
       var res = await sb.from('quotes').select('*').eq('request_id', requestId).order(sortKey);
       renderQuotes(res.data || []);
       var badge = document.getElementById('nav-quote-badge');
-      badge.style.display = '';
-      badge.textContent = (res.data || []).length;
+      var mbadge = document.getElementById('mnav-quote-badge');
+      var cnt = (res.data || []).length;
+      badge.style.display = ''; badge.textContent = cnt;
+      if (mbadge) { mbadge.textContent = cnt; mbadge.style.display = ''; }
       showToast('New quote received!');
     }).subscribe();
   realtimeSubs.push(sub);
@@ -1824,8 +1884,10 @@ async function loadOpenRequests() {
   });
   await renderWorkshopRequests(filtered);
   var badge = document.getElementById('nav-req-badge');
+  var mbadge = document.getElementById('mnav-req-badge');
   badge.textContent = filtered.length;
   badge.style.display = filtered.length ? '' : 'none';
+  if (mbadge) { mbadge.textContent = filtered.length; mbadge.style.display = filtered.length ? '' : 'none'; }
 
   // realtime
   realtimeSubs.forEach(function(s){if(sb)sb.removeChannel(s);});
@@ -2168,6 +2230,26 @@ var selectedWorkshops = new Set();
 var allWorkshops = [];
 var pendingRequestData = null;
 
+function switchBrowserTab(tab) {
+  var mapEl = document.getElementById('browser-map');
+  var listEl = document.getElementById('browser-list-wrapper');
+  var tabList = document.getElementById('btab-list');
+  var tabMap = document.getElementById('btab-map');
+  if (!mapEl || !listEl) return;
+  if (tab === 'map') {
+    mapEl.classList.remove('tab-hidden');
+    listEl.classList.add('tab-hidden');
+    tabMap.classList.add('active');
+    tabList.classList.remove('active');
+    if (browserMap) setTimeout(function(){ browserMap.invalidateSize(); }, 50);
+  } else {
+    mapEl.classList.add('tab-hidden');
+    listEl.classList.remove('tab-hidden');
+    tabList.classList.add('active');
+    tabMap.classList.remove('active');
+  }
+}
+
 function showBrowserPage() {
   showPage('browser');
   setActiveNavLink('nav-submit');
@@ -2175,6 +2257,7 @@ function showBrowserPage() {
   if (typeof updateSelectedBar === 'function') updateSelectedBar();
   if (typeof initBrowserMap === 'function') initBrowserMap();
   if (typeof loadBrowserWorkshops === 'function') loadBrowserWorkshops();
+  if (window.innerWidth <= 700) switchBrowserTab('list');
 }
 
 function backToForm() {
@@ -2199,6 +2282,7 @@ async function goToWorkshopBrowser() {
   updateSelectedBar();
   await initBrowserMap();
   await loadBrowserWorkshops();
+  if (window.innerWidth <= 700) switchBrowserTab('list');
 }
 
 async function submitToAll() {
@@ -2827,7 +2911,7 @@ function timeAgo(ts) {
 // Hide/show mobile nav on resize
 window.addEventListener('resize', function() {
   var mobileNav = document.getElementById('mobile-nav');
-  if (mobileNav && mobileNav.style.display !== '') {
+  if (mobileNav && currentUser) {
     mobileNav.style.display = window.innerWidth <= 700 ? 'flex' : 'none';
   }
 });
