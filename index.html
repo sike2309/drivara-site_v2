@@ -696,6 +696,49 @@ textarea { resize: vertical; min-height: 100px; }
 }
 .skel-line { height: 13px; margin-bottom: 10px; border-radius: 6px; }
 
+/* ── HERO SEARCH ── */
+.hero-search-wrap { position: relative; max-width: 460px; margin: 20px auto 0; }
+.hero-search { width: 100%; padding: 14px 120px 14px 20px; border-radius: 12px; border: 1.5px solid var(--border); font-size: 15px; font-family: 'Plus Jakarta Sans', sans-serif; color: var(--text); outline: none; transition: all 0.2s; box-shadow: var(--shadow); background: var(--surface); }
+.hero-search:focus { border-color: var(--mint); box-shadow: 0 0 0 3px rgba(94,203,142,0.15), var(--shadow); }
+.hero-search-btn { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: var(--navy); color: white; border: none; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 700; font-family: inherit; transition: background 0.2s; }
+.hero-search-btn:hover { background: var(--navy-light); }
+@media(max-width:700px) { .hero-search { font-size: 14px; padding-right: 100px; } .hero-search-btn { padding: 8px 12px; font-size: 12px; } }
+
+/* ── QUOTE EXPIRY CHIP ── */
+.quote-expiry { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; }
+.quote-expiry.fresh { background: var(--mint-pale); color: var(--mint-dark); }
+.quote-expiry.soon { background: #fff8e1; color: #7a5800; }
+.quote-expiry.urgent { background: #fff5f5; color: var(--red); }
+.quote-expiry.expired { background: var(--surface2); color: var(--muted); opacity: 0.7; }
+
+/* ── RESPONSE TIME BADGE ── */
+.wb-resp { background: var(--surface2); color: var(--muted); border: 1px solid var(--border); font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 3px; }
+.wb-resp.fast { background: var(--mint-pale); color: var(--mint-dark); border-color: rgba(94,203,142,0.3); }
+
+/* ── EDIT QUOTE INLINE FORM ── */
+.quote-edit-form { background: var(--surface2); border: 1.5px solid var(--border); border-radius: 12px; padding: 14px; margin-top: 12px; display: none; }
+.quote-edit-form.open { display: block; }
+.quote-edit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+
+/* ── GALLERY ── */
+.gallery-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+.gallery-slot { aspect-ratio: 1; border-radius: 10px; overflow: hidden; position: relative; background: var(--surface2); border: 1.5px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.gallery-slot:hover { border-color: var(--mint); }
+.gallery-slot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.gallery-slot.empty { border-style: dashed; color: var(--muted); flex-direction: column; gap: 4px; font-size: 11px; font-weight: 700; }
+.gallery-slot.empty:hover { color: var(--mint-dark); }
+.gallery-remove-btn { position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.55); color: white; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 11px; }
+.gallery-panel-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 8px; }
+.gallery-panel-img { aspect-ratio: 1; border-radius: 8px; overflow: hidden; }
+.gallery-panel-img img { width: 100%; height: 100%; object-fit: cover; display: block; cursor: pointer; transition: transform 0.2s; }
+.gallery-panel-img img:hover { transform: scale(1.03); }
+
+/* ── REVIEW REPLY ── */
+.review-reply { background: var(--surface2); border-left: 3px solid var(--mint); border-radius: 0 8px 8px 0; padding: 10px 14px; margin-top: 8px; }
+.review-reply-label { font-size: 11px; font-weight: 700; color: var(--mint-dark); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+.review-reply-text { font-size: 13px; color: var(--text-light); line-height: 1.5; }
+.reply-form { margin-top: 8px; display: flex; flex-direction: column; gap: 8px; }
+
 /* ── WORKSHOP ONBOARDING BANNER ── */
 .onboarding-banner {
   background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
@@ -806,6 +849,115 @@ textarea { resize: vertical; min-height: 100px; }
 @media(max-width:560px) {
   .testi-grid { grid-template-columns: 1fr; }
 }
+
+/* ── NOTIFICATION BELL ── */
+.notif-btn {
+  position: relative; background: transparent; border: none; cursor: pointer;
+  width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center;
+  justify-content: center; color: var(--muted); transition: all 0.15s; flex-shrink: 0;
+}
+.notif-btn:hover { background: var(--surface2); color: var(--navy); }
+.notif-btn.has-unread { color: var(--navy); }
+.notif-dot {
+  position: absolute; top: 6px; right: 6px; width: 8px; height: 8px;
+  background: var(--mint); border-radius: 50%; border: 2px solid var(--surface);
+  display: none;
+}
+.notif-dot.show { display: block; }
+.notif-dropdown {
+  position: absolute; top: calc(100% + 10px); right: 0; width: 320px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+  box-shadow: var(--shadow-md); z-index: 500; overflow: hidden;
+  opacity: 0; pointer-events: none; transform: translateY(-8px);
+  transition: opacity 0.2s, transform 0.2s;
+}
+.notif-dropdown.open { opacity: 1; pointer-events: all; transform: translateY(0); }
+.notif-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px 10px; border-bottom: 1px solid var(--border);
+}
+.notif-header-title { font-size: 13px; font-weight: 800; color: var(--navy); }
+.notif-clear { font-size: 11px; color: var(--mint-dark); font-weight: 700; cursor: pointer; border: none; background: none; font-family: inherit; }
+.notif-list { max-height: 320px; overflow-y: auto; }
+.notif-item {
+  padding: 12px 16px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: flex-start; gap: 10px; cursor: pointer;
+  transition: background 0.15s;
+}
+.notif-item:last-child { border-bottom: none; }
+.notif-item:hover { background: var(--surface2); }
+.notif-item.unread { background: var(--mint-pale); }
+.notif-item.unread:hover { background: #d4f5e5; }
+.notif-icon {
+  width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 14px;
+}
+.notif-icon.green { background: var(--mint-pale); color: var(--mint-dark); }
+.notif-icon.navy { background: rgba(30,42,58,0.08); color: var(--navy); }
+.notif-icon.amber { background: #fff8e1; color: #b07a00; }
+.notif-body { flex: 1; min-width: 0; }
+.notif-title { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.notif-sub { font-size: 12px; color: var(--muted); line-height: 1.4; }
+.notif-time { font-size: 11px; color: var(--muted); margin-top: 3px; }
+.notif-empty { padding: 32px 16px; text-align: center; color: var(--muted); font-size: 13px; }
+.notif-wrap { position: relative; }
+@media(max-width:700px) {
+  .notif-dropdown { width: calc(100vw - 32px); right: -40px; }
+}
+
+/* ── CHAT PANEL ── */
+.chat-panel-overlay { position: fixed; inset: 0; background: rgba(30,42,58,0.4); z-index: 400; opacity: 0; pointer-events: none; transition: opacity 0.25s; backdrop-filter: blur(3px); }
+.chat-panel-overlay.open { opacity: 1; pointer-events: all; }
+.chat-panel {
+  position: fixed; bottom: 0; right: 0; width: min(420px, 100vw); height: min(580px, 100vh);
+  background: var(--surface); z-index: 401; box-shadow: -4px 0 40px rgba(30,42,58,0.15);
+  display: flex; flex-direction: column; border-radius: 20px 0 0 0;
+  transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+.chat-panel.open { transform: translateY(0); }
+.chat-panel-header {
+  padding: 16px 20px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.chat-panel-title { font-size: 15px; font-weight: 800; color: var(--navy); }
+.chat-panel-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.chat-close { width: 30px; height: 30px; border-radius: 50%; border: none; background: var(--surface2); cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; color: var(--muted); transition: all 0.15s; }
+.chat-close:hover { background: var(--border); color: var(--navy); }
+.chat-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.chat-msg { max-width: 78%; padding: 10px 14px; border-radius: 14px; font-size: 14px; line-height: 1.5; }
+.chat-msg.mine { background: var(--navy); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+.chat-msg.theirs { background: var(--surface2); color: var(--text); align-self: flex-start; border-bottom-left-radius: 4px; border: 1px solid var(--border); }
+.chat-msg-time { font-size: 10px; opacity: 0.6; margin-top: 4px; }
+.chat-input-row { padding: 12px 16px; border-top: 1px solid var(--border); display: flex; gap: 8px; flex-shrink: 0; }
+.chat-input { flex: 1; padding: 10px 14px; border-radius: 10px; border: 1.5px solid var(--border); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; color: var(--text); outline: none; transition: border-color 0.2s; resize: none; height: 42px; max-height: 100px; overflow-y: auto; }
+.chat-input:focus { border-color: var(--mint); }
+.chat-send-btn { width: 42px; height: 42px; border-radius: 10px; background: var(--navy); color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.2s; }
+.chat-send-btn:hover { background: var(--navy-light); }
+.chat-loading { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 13px; }
+.chat-empty { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 13px; }
+.btn-chat { background: var(--mint-pale); color: var(--mint-dark); border: 1px solid rgba(94,203,142,0.3); }
+.btn-chat:hover { background: #d4f5e5; }
+@media(max-width:700px) {
+  .chat-panel { width: 100vw; height: 70vh; border-radius: 20px 20px 0 0; }
+}
+
+/* ── ANALYTICS ── */
+.analytics-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
+.analytics-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; padding: 18px; }
+.analytics-card-val { font-size: 28px; font-weight: 800; color: var(--navy); line-height: 1; margin-bottom: 4px; letter-spacing: -0.02em; }
+.analytics-card-val em { font-style: normal; color: var(--mint-dark); }
+.analytics-card-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; }
+.analytics-card-trend { font-size: 12px; font-weight: 700; margin-top: 6px; }
+.analytics-card-trend.up { color: #2e9e63; }
+.analytics-card-trend.down { color: var(--red); }
+.analytics-card-trend.flat { color: var(--muted); }
+.analytics-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.analytics-bar-label { font-size: 12px; font-weight: 600; color: var(--text-light); width: 100px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.analytics-bar-track { flex: 1; height: 8px; background: var(--border); border-radius: 100px; overflow: hidden; }
+.analytics-bar-fill { height: 100%; background: var(--mint); border-radius: 100px; transition: width 0.5s ease; }
+.analytics-bar-val { font-size: 12px; font-weight: 700; color: var(--navy); width: 30px; text-align: right; flex-shrink: 0; }
+@media(max-width:700px) { .analytics-grid { grid-template-columns: 1fr 1fr; } }
 </style>
 </head>
 <body>
@@ -834,6 +986,22 @@ textarea { resize: vertical; min-height: 100px; }
       <div id="nav-avatar" style="width:30px;height:30px;border-radius:50%;background:var(--navy);color:var(--mint);font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center"></div>
       <span id="nav-user-name" style="font-size:13px;font-weight:600;color:var(--navy)"></span>
     </button>
+    <!-- Notification Bell -->
+    <div class="notif-wrap" id="notif-wrap" style="display:none">
+      <button class="notif-btn" id="notif-bell-btn" onclick="toggleNotifDropdown()" aria-label="Notifications">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="notif-dot" id="notif-dot"></span>
+      </button>
+      <div class="notif-dropdown" id="notif-dropdown">
+        <div class="notif-header">
+          <div class="notif-header-title">Notifications</div>
+          <button class="notif-clear" onclick="clearNotifs()">Mark all read</button>
+        </div>
+        <div class="notif-list" id="notif-list">
+          <div class="notif-empty">No notifications yet</div>
+        </div>
+      </div>
+    </div>
     <button class="btn btn-danger btn-sm" id="nav-signout-btn" style="display:none" onclick="signOut()">Sign Out</button>
   </div>
 </nav>
@@ -897,6 +1065,27 @@ textarea { resize: vertical; min-height: 100px; }
       <button class="btn btn-ghost" onclick="closeReviewModal()">Skip</button>
       <button class="btn btn-primary" onclick="submitReview()">Submit Review</button>
     </div>
+  </div>
+</div>
+
+<!-- ══ CHAT PANEL ══ -->
+<div class="chat-panel-overlay" id="chat-panel-overlay" onclick="closeChat()"></div>
+<div class="chat-panel" id="chat-panel">
+  <div class="chat-panel-header">
+    <div>
+      <div class="chat-panel-title" id="chat-panel-title">Messages</div>
+      <div class="chat-panel-sub" id="chat-panel-sub"></div>
+    </div>
+    <button class="chat-close" onclick="closeChat()" aria-label="Close chat">&#x2715;</button>
+  </div>
+  <div class="chat-messages" id="chat-messages">
+    <div class="chat-loading">Loading messages…</div>
+  </div>
+  <div class="chat-input-row">
+    <textarea class="chat-input" id="chat-input" placeholder="Type a message…" rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChatMessage();}"></textarea>
+    <button class="chat-send-btn" onclick="sendChatMessage()" aria-label="Send message">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
   </div>
 </div>
 
@@ -983,6 +1172,10 @@ textarea { resize: vertical; min-height: 100px; }
     <button class="hero-cta anim" onclick="onGetQuotes()">
       Get Quotes Now <span class="arrow">&#x2192;</span>
     </button>
+    <div class="hero-search-wrap anim" style="animation-delay:0.1s">
+      <input type="text" class="hero-search" id="hero-search-input" placeholder="What's wrong with your car? e.g. engine noise, AC not cold..." onkeydown="if(event.key==='Enter')heroSearch()">
+      <button class="hero-search-btn" onclick="heroSearch()">Get Quotes</button>
+    </div>
   </div>
 
   <!-- Live stats -->
@@ -1175,7 +1368,15 @@ textarea { resize: vertical; min-height: 100px; }
           <div class="section-title"><span class="pulse"></span>Your Quotes</div>
           <div style="color:var(--muted);font-size:13px;margin-top:4px" id="request-summary"></div>
         </div>
-        <button class="btn btn-outline btn-sm" onclick="showCustomerForm()">+ New Request</button>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-ghost btn-sm" id="cancel-request-btn" onclick="cancelRequest()" style="color:var(--red);display:none">Cancel Request</button>
+          <button class="btn btn-outline btn-sm" onclick="showCustomerForm()">+ New Request</button>
+        </div>
+      </div>
+      <div id="no-quotes-nudge" style="display:none;background:var(--surface2);border:1.5px solid var(--border);border-radius:12px;padding:14px 18px;margin-bottom:16px;display:none">
+        <div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:4px">Still no quotes yet?</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:10px">Workshops may be busy. Try sending your request to more workshops to increase your chances.</div>
+        <button class="btn btn-mint btn-sm" onclick="showBrowserPage()">Browse More Workshops &rarr;</button>
       </div>
       <div class="sort-bar">
         <span>Sort by:</span>
@@ -1262,19 +1463,34 @@ textarea { resize: vertical; min-height: 100px; }
     </div>
 
     <div id="workshop-sent-view" style="display:none">
-      <div class="section-header">
-        <div class="section-title">Sent Quotes</div>
+      <!-- Sub-tabs: Quotes / Analytics -->
+      <div style="display:flex;gap:0;background:var(--surface2);border-radius:10px;padding:4px;border:1px solid var(--border);margin-bottom:20px;max-width:340px">
+        <button class="browser-tab active" id="stab-quotes" onclick="switchSentTab('quotes')" style="border-radius:7px">Sent Quotes</button>
+        <button class="browser-tab" id="stab-analytics" onclick="switchSentTab('analytics')" style="border-radius:7px">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Analytics
+        </button>
       </div>
-      <div id="my-quotes-list"></div>
 
-      <div style="margin-top:36px">
-        <div class="section-header">
-          <div>
-            <div class="section-title" style="font-size:17px;color:var(--muted)">My Reviews</div>
+      <!-- Quotes tab -->
+      <div id="sent-tab-quotes">
+        <div id="my-quotes-list"></div>
+        <div style="margin-top:36px">
+          <div class="section-header">
+            <div>
+              <div class="section-title" style="font-size:17px;color:var(--muted)">My Reviews</div>
+            </div>
+            <div id="workshop-rating-summary"></div>
           </div>
-          <div id="workshop-rating-summary"></div>
+          <div id="workshop-reviews-list"></div>
         </div>
-        <div id="workshop-reviews-list"></div>
+      </div>
+
+      <!-- Analytics tab -->
+      <div id="sent-tab-analytics" style="display:none">
+        <div id="analytics-content">
+          <div style="text-align:center;padding:40px 20px;color:var(--muted);font-size:14px">Loading analytics…</div>
+        </div>
       </div>
     </div>
 
@@ -1479,6 +1695,14 @@ textarea { resize: vertical; min-height: 100px; }
       </div>
     </div>
 
+    <!-- Workshop Photo Gallery -->
+    <div class="panel" id="gallery-panel" style="display:none">
+      <div class="profile-section-title">Workshop Photos</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:4px">Add up to 3 photos of your workshop. Customers see these on your profile.</p>
+      <div class="gallery-grid-3" id="gallery-upload-grid"></div>
+      <input type="file" id="gallery-file-input" accept="image/*" style="display:none" onchange="handleGalleryUpload(this)">
+    </div>
+
     <!-- Change Password -->
     <div class="panel">
       <div class="profile-section-title">Change Password</div>
@@ -1520,6 +1744,12 @@ textarea { resize: vertical; min-height: 100px; }
     <button class="panel-select-btn" id="wsp-select-btn" onclick="toggleFromPanel()"></button>
   </div>
   <div class="slide-panel-body">
+
+    <!-- Gallery -->
+    <div class="ws-panel-section" id="wsp-gallery-section" style="display:none">
+      <div class="ws-panel-section-title">Photos</div>
+      <div class="gallery-panel-grid" id="wsp-gallery"></div>
+    </div>
 
     <!-- About -->
     <div class="ws-panel-section" id="wsp-about-section" style="display:none">
@@ -1577,6 +1807,10 @@ var LOGO_URLS = {
 // ── SVG ICON LIBRARY ──────────────────────────────────────────────
 var ICONS = {
   wrench: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg>',
+  edit: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
+  trash: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
+  reply: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>',
+  camera: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>',
   car: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1l3-4h10l3 4h1a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="16.5" cy="17.5" r="2.5"/></svg>',
   pin: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
   clock: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
@@ -1598,6 +1832,10 @@ var activeRequestId = null;
 var sortKey = 'price';
 var realtimeSubs = [];
 var authMode = 'login';
+var notifList = [];
+var notifUnread = 0;
+var activeChatQuoteId = null;
+var chatSub = null;
 var selectedRole = 'customer';
 var selectedBrand = null;
 var selectedModel = null;
@@ -1664,6 +1902,14 @@ function updateFormStep(step) {
   if (window.innerWidth <= 700) {
     var panel = document.getElementById('request-form-panel');
     if (panel) setTimeout(function(){ panel.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
+  }
+  // Apply prefilled issue when arriving at step 3
+  if (step === 3 && window._prefillIssue) {
+    setTimeout(function() {
+      var issueEl = document.getElementById('issue-desc');
+      if (issueEl) issueEl.value = window._prefillIssue;
+      window._prefillIssue = null;
+    }, 60);
   }
 }
 
@@ -1918,6 +2164,9 @@ function updateNav() {
   document.getElementById('nav-signout-btn').style.display = hasUser ? '' : 'none';
   var profileBtn = document.getElementById('nav-profile-btn');
   profileBtn.style.display = hasUser ? 'inline-flex' : 'none';
+  // Notification bell
+  var notifWrap = document.getElementById('notif-wrap');
+  if (notifWrap) notifWrap.style.display = hasUser ? 'block' : 'none';
 
   if (currentProfile) {
     var initial = (currentProfile.name || 'U').charAt(0).toUpperCase();
@@ -1955,6 +2204,7 @@ async function routeByRole() {
     showPage('workshop');
     showWorkshopRequests();
     subscribeToWorkshopQuotes();
+    seedWorkshopNotifs();
   } else {
     showPage('customer');
     // Auto-load the most recent open request and its quotes
@@ -1992,6 +2242,7 @@ async function routeByRole() {
       showCustomerForm();
     }
     loadMyRequests();
+    seedCustomerNotifs();
   }
 }
 
@@ -2154,6 +2405,7 @@ function subscribeToQuotes(requestId) {
       badge.style.display = ''; badge.textContent = cnt;
       if (mbadge) { mbadge.textContent = cnt; mbadge.style.display = ''; }
       showToast('New quote received!');
+      addNotif('message', 'New quote received!', 'A workshop has sent you a quote.', function(){ showMyQuotes(); });
     }).subscribe();
   realtimeSubs.push(sub);
 }
@@ -2170,6 +2422,19 @@ function sortQuotes(key, btn) {
 function renderQuotes(quotes) {
   var list = document.getElementById('quotes-list');
   var empty = document.getElementById('quotes-empty');
+  // Cancel button visibility
+  var hasAcceptedQ = quotes.some(function(q){ return q.status==='accepted'||q.status==='completed'; });
+  var cancelBtn = document.getElementById('cancel-request-btn');
+  if (cancelBtn) cancelBtn.style.display = (activeRequestId && !hasAcceptedQ) ? 'inline-flex' : 'none';
+  // No-quotes nudge timer
+  clearTimeout(window._noQuotesTimer);
+  var nudge = document.getElementById('no-quotes-nudge');
+  if (nudge) nudge.style.display = 'none';
+  if (!quotes.length && activeRequestId) {
+    window._noQuotesTimer = setTimeout(function() {
+      if (nudge) nudge.style.display = 'block';
+    }, 40000);
+  }
   if (!quotes.length) { list.innerHTML = ''; empty.style.display = 'block'; return; }
   empty.style.display = 'none';
   list.innerHTML = ''; // clear any skeleton
@@ -2210,6 +2475,9 @@ function renderQuotes(quotes) {
           (wPhone ? '<div class="contact-phone" style="display:flex;align-items:center;gap:5px">' + ICONS.phone + ' ' + esc(wPhone) + '</div>' : '<div class="contact-phone" style="color:#5ecb8e">No phone added</div>') +
         '</div>' +
         '<div class="contact-actions">' +
+          '<button class="btn btn-sm btn-chat" style="display:inline-flex;align-items:center;gap:6px" onclick="openChat(\'' + q.id + '\',\'' + wName + '\')">' +
+            ICONS.chat + ' In-App Chat' +
+          '</button>' +
           (waLink ? '<a href="' + waLink + '" target="_blank" class="btn-whatsapp">' + ICONS.chat + ' WhatsApp</a>' : '') +
           (wPhone ? '<a href="tel:' + esc(wPhone) + '" class="btn-call">' + ICONS.phone + ' Call</a>' : '') +
         '</div>' +
@@ -2236,7 +2504,7 @@ function renderQuotes(quotes) {
           '</div>' +
           '<div class="price-tag" style="font-size:24px">RM ' + q.price + '<span>total</span></div>' +
         '</div>' +
-        '<div class="quote-meta"><div class="meta-chip" style="display:inline-flex;align-items:center;gap:4px">' + ICONS.clock + ' ' + q.duration + ' day' + (q.duration>1?'s':'') + '</div>' + (q.workshop_distance ? '<div class="meta-chip" style="display:inline-flex;align-items:center;gap:4px">' + ICONS.pin + ' ' + q.workshop_distance + '</div>' : '') + '</div>' +
+        '<div class="quote-meta" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><div class="meta-chip" style="display:inline-flex;align-items:center;gap:4px">' + ICONS.clock + ' ' + q.duration + ' day' + (q.duration>1?'s':'') + '</div>' + (q.workshop_distance ? '<div class="meta-chip" style="display:inline-flex;align-items:center;gap:4px">' + ICONS.pin + ' ' + q.workshop_distance + '</div>' : '') + (!isAccepted && !isCompleted ? quoteExpiryChip(q.created_at) : '') + '</div>' +
         (q.message ? '<div class="quote-msg">&ldquo;' + esc(q.message) + '&rdquo;</div>' : '') +
         (!hasAccepted ? '<button class="btn btn-mint btn-sm" style="margin-top:14px" onclick="acceptQuote(\'' + q.id + '\',\'' + q.request_id + '\')">Accept Quote &rarr;</button>' : '') +
         contactHtml +
@@ -2273,6 +2541,11 @@ async function loadMyRequests() {
         return '<div class="req-media-thumb">' + (isVideo ? '<video src="' + url + '" muted></video>' : '<img src="' + url + '" alt="photo">') + '</div>';
       }).join('') + '</div>';
     }
+    var sendAgainId = 'ra-' + r.id;
+    window['_ra_' + r.id] = { brand: r.car_brand, model: r.car_model, year: r.car_year||'', issue: r.issue };
+    var sendAgainBtn = '<button class="btn btn-outline btn-sm" style="margin-top:10px;display:inline-flex;align-items:center;gap:5px;font-size:12px" onclick="event.stopPropagation();var d=window[\'_ra_' + r.id + '\'];resubmitRequest(d.brand,d.model,d.year,d.issue)">' +
+      '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.17"/></svg>' +
+      ' Send Again</button>';
     return '<div class="request-card" onclick="viewRequest(\'' + r.id + '\',\'' + esc(r.car_brand) + ' ' + esc(r.car_model) + '\')" style="cursor:pointer">' +
       '<div class="request-header">' +
         '<div>' +
@@ -2280,6 +2553,7 @@ async function loadMyRequests() {
           '<div class="issue-text">' + esc(r.issue.substring(0,100)) + (r.issue.length>100?'...':'') + '</div>' +
           mediaHtml +
           '<span class="badge ' + (r.status==='open'?'badge-open':r.status==='completed'?'badge-completed':'badge-closed') + '" style="display:inline-flex;align-items:center;gap:3px">' + (r.status==='completed'?ICONS.award+' completed':r.status) + '</span>' +
+          sendAgainBtn +
         '</div>' +
         '<div style="font-size:12px;color:var(--muted);white-space:nowrap">' + timeAgo(r.created_at) + '</div>' +
       '</div>' +
@@ -2443,20 +2717,43 @@ async function loadMyQuotes() {
           (custPhone ? '<div class="contact-phone" style="display:flex;align-items:center;gap:5px">' + ICONS.phone + ' ' + esc(custPhone) + '</div>' : '<div class="contact-phone" style="color:#5ecb8e">No phone number</div>') +
         '</div>' +
         '<div class="contact-actions">' +
+          '<button class="btn btn-sm btn-chat" style="display:inline-flex;align-items:center;gap:6px" onclick="openChat(\'' + q.id + '\',\'' + esc(custName) + '\')">' +
+            ICONS.chat + ' In-App Chat' +
+          '</button>' +
           (waLink2 ? '<a href="' + waLink2 + '" target="_blank" class="btn-whatsapp">' + ICONS.chat + ' WhatsApp</a>' : '') +
           (custPhone ? '<a href="tel:' + esc(custPhone) + '" class="btn-call">' + ICONS.phone + ' Call</a>' : '') +
         '</div>' +
       '</div>';
     }
+    var editForm = q.status === 'pending' ?
+      '<div class="quote-edit-form" id="qedit-' + q.id + '">' +
+        '<div style="font-size:12px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px">Edit Quote</div>' +
+        '<div class="quote-edit-grid">' +
+          '<div class="form-group"><label>Price (RM)</label><input type="number" id="qe-price-' + q.id + '" value="' + q.price + '" min="0"></div>' +
+          '<div class="form-group"><label>Duration (days)</label><input type="number" id="qe-dur-' + q.id + '" value="' + q.duration + '" min="1"></div>' +
+        '</div>' +
+        '<div class="form-group" style="margin-bottom:10px"><label>Note (optional)</label><input type="text" id="qe-msg-' + q.id + '" value="' + esc(q.message||'') + '" placeholder="Additional notes..."></div>' +
+        '<div style="display:flex;gap:8px;justify-content:flex-end">' +
+          '<button class="btn btn-ghost btn-sm" onclick="document.getElementById(\'qedit-' + q.id + '\').classList.remove(\'open\')">Cancel</button>' +
+          '<button class="btn btn-primary btn-sm" onclick="saveEditedQuote(\'' + q.id + '\')">Save Changes</button>' +
+        '</div>' +
+      '</div>' : '';
     return '<div class="quote-card">' +
       '<div style="grid-column:1/-1">' +
         '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:10px">' +
           '<div class="workshop-name">' + (q.requests?esc(q.requests.car_brand)+' '+esc(q.requests.car_model):'') + '</div>' +
           '<div class="price-tag" style="font-size:22px">RM ' + q.price + '<span>quoted</span></div>' +
         '</div>' +
-        '<div class="quote-meta"><div class="meta-chip" style="display:inline-flex;align-items:center;gap:4px">' + ICONS.clock + ' ' + q.duration + ' day'+(q.duration>1?'s':'')+'</div><div class="meta-chip">'+timeAgo(q.created_at)+'</div></div>' +
+        '<div class="quote-meta" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><div class="meta-chip" style="display:inline-flex;align-items:center;gap:4px">' + ICONS.clock + ' ' + q.duration + ' day'+(q.duration>1?'s':'')+'</div><div class="meta-chip">'+timeAgo(q.created_at)+'</div></div>' +
         (q.message?'<div class="quote-msg">"'+esc(q.message)+'"</div>':'') +
-        '<span class="badge ' + sc + '" style="margin-top:10px;display:inline-flex;align-items:center;gap:3px">' + (q.status==='completed'?ICONS.award+' completed':q.status) + '</span>' +
+        '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px">' +
+          '<span class="badge ' + sc + '" style="display:inline-flex;align-items:center;gap:3px">' + (q.status==='completed'?ICONS.award+' completed':q.status) + '</span>' +
+          (q.status === 'pending' ?
+            '<button class="btn btn-ghost btn-sm" style="padding:4px 10px;font-size:12px;display:inline-flex;align-items:center;gap:4px" onclick="document.getElementById(\'qedit-' + q.id + '\').classList.toggle(\'open\')">' + ICONS.edit + ' Edit</button>' +
+            '<button class="btn btn-ghost btn-sm" style="padding:4px 10px;font-size:12px;color:var(--red);display:inline-flex;align-items:center;gap:4px" onclick="withdrawQuote(\'' + q.id + '\')">' + ICONS.trash + ' Withdraw</button>'
+            : '') +
+        '</div>' +
+        editForm +
         (q.status==='accepted' ? '<div class="complete-banner" style="margin-top:14px"><div class="banner-text"><div class="banner-title" style="display:flex;align-items:center;gap:5px">' + ICONS.check + ' Quote accepted!</div><div class="banner-sub">Contact the customer and complete the job. Mark it done when finished.</div></div><button class="btn-complete" onclick="workshopMarkComplete(\'' + q.id + '\',\'' + q.request_id + '\')" style="display:inline-flex;align-items:center;gap:6px">' + ICONS.wrench + ' Mark as Complete</button></div>' : '') +
         (q.status==='completed' ? '<div class="completed-stamp" style="margin-top:12px;display:inline-flex;align-items:center;gap:6px">' + ICONS.award + ' Job marked complete</div>' : '') +
         custContact +
@@ -2494,6 +2791,16 @@ async function openWorkshopPanel(workshopId) {
   var btn = document.getElementById('wsp-select-btn');
   btn.innerHTML = isSelected ? ICONS.check + ' Selected — Click to Deselect' : '+ Select This Workshop';
   btn.className = 'panel-select-btn' + (isSelected ? ' selected' : '');
+
+  // Gallery
+  var gallerySection = document.getElementById('wsp-gallery-section');
+  var galleryUrls = Array.isArray(w.gallery_urls) ? w.gallery_urls.filter(Boolean) : [];
+  if (galleryUrls.length) {
+    gallerySection.style.display = 'block';
+    document.getElementById('wsp-gallery').innerHTML = galleryUrls.map(function(url) {
+      return '<div class="gallery-panel-img"><img src="' + url + '" alt="Workshop photo" onclick="window.open(\'' + url + '\',\'_blank\')"></div>';
+    }).join('');
+  } else { gallerySection.style.display = 'none'; }
 
   // About
   var aboutSection = document.getElementById('wsp-about-section');
@@ -2548,6 +2855,7 @@ async function openWorkshopPanel(workshopId) {
         '</div>' +
         renderStars(r.rating, true) +
         (r.comment ? '<div class="review-mini-text">' + esc(r.comment) + '</div>' : '') +
+        (r.workshop_reply ? '<div class="review-reply" style="margin-top:6px"><div class="review-reply-label" style="display:flex;align-items:center;gap:4px">' + ICONS.reply + ' Workshop reply</div><div class="review-reply-text">' + esc(r.workshop_reply) + '</div></div>' : '') +
       '</div>';
     }).join('');
   }
@@ -2827,18 +3135,37 @@ async function loadBrowserWorkshops() {
   var empty = document.getElementById('browser-empty');
   list.innerHTML = skeletonCards(4, 'browser');
 
-  var res = await sb.from('profiles').select('id, name, phone, lat, lng, address, about, role').eq('role', 'workshop');
+  var res = await sb.from('profiles').select('id, name, phone, lat, lng, address, about, role, gallery_urls').eq('role', 'workshop');
   var workshops = res.data || [];
 
-  // Get ratings
+  // Get ratings + response times
   var wIds = workshops.map(function(w){ return w.id; });
   var revRes = wIds.length ? await sb.from('reviews').select('workshop_id, rating').in('workshop_id', wIds) : { data: [] };
   var reviews = revRes.data || [];
+
+  // Response time: avg hours between request created_at and quote created_at
+  var qrtRes = wIds.length ? await sb.from('quotes')
+    .select('workshop_id, created_at, requests(created_at)')
+    .in('workshop_id', wIds).limit(200) : { data: [] };
+  var qrtData = qrtRes.data || [];
+  var respTimes = {};
+  qrtData.forEach(function(q) {
+    if (!q.requests || !q.requests.created_at) return;
+    var diff = (new Date(q.created_at) - new Date(q.requests.created_at)) / 3600000;
+    if (diff < 0 || diff > 72) return;
+    if (!respTimes[q.workshop_id]) respTimes[q.workshop_id] = [];
+    respTimes[q.workshop_id].push(diff);
+  });
 
   workshops.forEach(function(w) {
     var wRevs = reviews.filter(function(r){ return r.workshop_id === w.id; });
     w._rating = wRevs.length ? wRevs.reduce(function(s,r){return s+r.rating;},0)/wRevs.length : 0;
     w._reviewCount = wRevs.length;
+    var times = respTimes[w.id];
+    if (times && times.length) {
+      var avg = times.reduce(function(s,t){return s+t;},0) / times.length;
+      w._respH = avg;
+    }
     if (customerLat && w.lat && w.lng) {
       w._dist = parseFloat(calcDistanceRaw(customerLat, customerLng, w.lat, w.lng));
       w._distStr = w._dist < 1 ? (w._dist * 1000).toFixed(0) + ' m' : w._dist.toFixed(1) + ' km';
@@ -2915,6 +3242,11 @@ function renderBrowserList(workshops) {
     var ratingChip = w._rating ? '<span class="wb-chip wb-rating">' + ratingChipHTML(w._rating, w._reviewCount) + '</span>' : '';
     var distChip = w._distStr ? '<span class="wb-chip wb-dist" style="display:inline-flex;align-items:center;gap:3px">' + ICONS.pin + ' ' + w._distStr + '</span>' : '';
     var noLocChip = (!w.lat || !w.lng) ? '<span class="wb-chip">No location set</span>' : '';
+    var respLabel = '';
+    if (w._respH !== undefined) {
+      var isFast = w._respH < 2;
+      respLabel = '<span class="wb-resp' + (isFast ? ' fast' : '') + '" style="display:inline-flex;align-items:center;gap:3px">' + ICONS.clock + ' ' + (w._respH < 1 ? 'Under 1h' : '~' + Math.round(w._respH) + 'h') + ' response</span>';
+    }
     var isSelected = selectedWorkshops.has(w.id);
     var wid = w.id;
     var selBtnClass = isSelected ? 'btn-mint' : 'btn-primary';
@@ -2924,7 +3256,7 @@ function renderBrowserList(workshops) {
     card += '<div onclick="openWorkshopPanel(\'' + wid + '\')" style="cursor:pointer">';
     card += '<div class="wb-name">' + esc(w.name || 'Workshop') + '</div>';
     if (w.address) card += '<div style="font-size:12px;color:var(--muted);margin-top:2px;display:flex;align-items:center;gap:3px">' + ICONS.pin + ' ' + esc(w.address) + '</div>';
-    card += '<div class="wb-meta" style="margin-top:6px">' + ratingChip + distChip + noLocChip + '</div>';
+    card += '<div class="wb-meta" style="margin-top:6px">' + ratingChip + distChip + noLocChip + respLabel + '</div>';
     card += '</div>';
     card += '<div style="display:flex;gap:8px;margin-top:12px">';
     card += '<button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="openWorkshopPanel(\'' + wid + '\')">View Profile</button>';
@@ -3219,6 +3551,21 @@ async function loadWorkshopReviews() {
   '</div>';
 
   list.innerHTML = reviews.map(function(r) {
+    var replyHtml = '';
+    if (r.workshop_reply) {
+      replyHtml = '<div class="review-reply"><div class="review-reply-label">' + ICONS.reply + ' Your reply</div><div class="review-reply-text">' + esc(r.workshop_reply) + '</div></div>';
+    } else {
+      replyHtml = '<div class="reply-form" id="rform-' + r.id + '">' +
+        '<button class="btn btn-ghost btn-sm" style="padding:4px 10px;font-size:12px;display:inline-flex;align-items:center;gap:4px;margin-top:6px" onclick="toggleReplyForm(\'' + r.id + '\')">' + ICONS.reply + ' Reply</button>' +
+        '<div id="rinput-' + r.id + '" style="display:none">' +
+          '<textarea id="rtxt-' + r.id + '" placeholder="Write a professional reply..." style="width:100%;min-height:70px;margin-top:6px;font-size:13px;padding:8px 12px;border-radius:8px;border:1.5px solid var(--border);font-family:inherit;resize:vertical"></textarea>' +
+          '<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:6px">' +
+            '<button class="btn btn-ghost btn-sm" onclick="toggleReplyForm(\'' + r.id + '\')">Cancel</button>' +
+            '<button class="btn btn-primary btn-sm" onclick="saveReviewReply(\'' + r.id + '\')">Post Reply</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }
     return '<div class="review-card">' +
       '<div class="review-header">' +
         '<div class="reviewer-name">' + esc(r.customer_name) + '</div>' +
@@ -3226,6 +3573,7 @@ async function loadWorkshopReviews() {
       '</div>' +
       renderStars(r.rating, true) +
       (r.comment ? '<div class="review-text">' + esc(r.comment) + '</div>' : '') +
+      replyHtml +
     '</div>';
   }).join('');
 }
@@ -3281,6 +3629,8 @@ async function loadProfilePage() {
     document.getElementById('location-picker-section').style.display = 'block';
     document.getElementById('about-section').style.display = 'block';
     document.getElementById('services-panel').style.display = 'block';
+    document.getElementById('gallery-panel').style.display = 'block';
+    renderGalleryUploadGrid();
     document.getElementById('profile-about').value = currentProfile.about || '';
     if (currentProfile.lat && currentProfile.lng) {
       selectedLat = currentProfile.lat;
@@ -3475,6 +3825,154 @@ function showToast(msg, type) {
   setTimeout(function(){ t.classList.remove('show'); }, 3500);
 }
 
+// ══ #1 HERO SEARCH ══
+var heroSearchText = '';
+function heroSearch() {
+  var val = document.getElementById('hero-search-input').value.trim();
+  if (!val) return;
+  heroSearchText = val;
+  if (!currentUser) { openAuth(); return; }
+  if (currentProfile && currentProfile.role === 'workshop') {
+    showToast('Workshops can\'t submit requests', 'warning'); return;
+  }
+  // Navigate to customer form, pre-fill issue
+  showPage('customer');
+  showCustomerForm();
+  setTimeout(function() {
+    var issueEl = document.getElementById('issue-description');
+    if (issueEl) { issueEl.value = heroSearchText; heroSearchText = ''; }
+  }, 100);
+}
+
+// ══ #2 QUOTE EXPIRY ══
+function quoteExpiryChip(createdAt) {
+  var created = new Date(createdAt);
+  var expires = new Date(created.getTime() + 24 * 3600000);
+  var now = new Date();
+  var msLeft = expires - now;
+  if (msLeft <= 0) return '<span class="quote-expiry expired">' + ICONS.clock + ' Expired</span>';
+  var hLeft = msLeft / 3600000;
+  if (hLeft < 3) return '<span class="quote-expiry urgent">' + ICONS.clock + ' Expires in ' + Math.round(hLeft * 60) + 'm</span>';
+  if (hLeft < 12) return '<span class="quote-expiry soon">' + ICONS.clock + ' Expires in ' + Math.round(hLeft) + 'h</span>';
+  return '<span class="quote-expiry fresh">' + ICONS.clock + ' ' + Math.round(hLeft) + 'h left</span>';
+}
+
+// ══ #4 CANCEL REQUEST ══
+async function cancelRequest() {
+  if (!activeRequestId) return;
+  if (!confirm('Cancel this request? Workshops will no longer be able to send quotes.')) return;
+  await sb.from('requests').update({ status: 'cancelled' }).eq('id', activeRequestId);
+  await sb.from('quotes').update({ status: 'rejected' }).eq('request_id', activeRequestId).eq('status', 'pending');
+  activeRequestId = null;
+  showToast('Request cancelled.');
+  showCustomerForm();
+  loadMyRequests();
+}
+
+function updateCancelBtn(quotes) {
+  var btn = document.getElementById('cancel-request-btn');
+  if (!btn) return;
+  var hasAccepted = quotes.some(function(q){ return q.status === 'accepted' || q.status === 'completed'; });
+  btn.style.display = (activeRequestId && !hasAccepted) ? 'inline-flex' : 'none';
+}
+
+
+// ══ #5 EDIT / WITHDRAW QUOTE (workshop) ══
+async function saveEditedQuote(quoteId) {
+  var price = parseFloat(document.getElementById('qe-price-' + quoteId).value);
+  var duration = parseInt(document.getElementById('qe-dur-' + quoteId).value);
+  var message = document.getElementById('qe-msg-' + quoteId).value.trim();
+  if (!price || price <= 0 || !duration || duration < 1) { showToast('Please enter valid price and duration', 'warning'); return; }
+  var res = await sb.from('quotes').update({ price: price, duration: duration, message: message }).eq('id', quoteId);
+  if (res.error) { showToast('Failed to update: ' + res.error.message, 'error'); return; }
+  showToast('Quote updated!');
+  loadMyQuotes();
+}
+
+async function withdrawQuote(quoteId) {
+  if (!confirm('Withdraw this quote? The customer will no longer see it.')) return;
+  await sb.from('quotes').delete().eq('id', quoteId).eq('status', 'pending');
+  showToast('Quote withdrawn.');
+  loadMyQuotes();
+}
+
+// ══ #7 WORKSHOP GALLERY ══
+var galleryUrls = [];
+
+function renderGalleryUploadGrid() {
+  galleryUrls = Array.isArray(currentProfile.gallery_urls) ? currentProfile.gallery_urls.filter(Boolean) : [];
+  var grid = document.getElementById('gallery-upload-grid');
+  if (!grid) return;
+  var html = '';
+  for (var i = 0; i < 3; i++) {
+    if (galleryUrls[i]) {
+      html += '<div class="gallery-slot" onclick="triggerGalleryUpload(' + i + ')">' +
+        '<img src="' + galleryUrls[i] + '" alt="Workshop photo">' +
+        '<button class="gallery-remove-btn" onclick="event.stopPropagation();removeGalleryPhoto(' + i + ')">&#x2715;</button>' +
+      '</div>';
+    } else {
+      html += '<div class="gallery-slot empty" onclick="triggerGalleryUpload(' + i + ')">' +
+        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>' +
+        '<span>Add photo</span>' +
+      '</div>';
+    }
+  }
+  grid.innerHTML = html;
+}
+
+var galleryUploadSlot = 0;
+function triggerGalleryUpload(slot) {
+  galleryUploadSlot = slot;
+  document.getElementById('gallery-file-input').click();
+}
+
+async function handleGalleryUpload(input) {
+  var file = input.files[0];
+  if (!file) return;
+  input.value = '';
+  var ext = file.name.split('.').pop();
+  var path = 'gallery/' + currentUser.id + '/' + Date.now() + '.' + ext;
+  showToast('Uploading photo...');
+  var upRes = await sb.storage.from('request-media').upload(path, file, { upsert: true });
+  if (upRes.error) { showToast('Upload failed: ' + upRes.error.message, 'error'); return; }
+  var url = sb.storage.from('request-media').getPublicUrl(path).data.publicUrl;
+  while (galleryUrls.length < 3) galleryUrls.push('');
+  galleryUrls[galleryUploadSlot] = url;
+  var cleanUrls = galleryUrls.filter(Boolean);
+  await sb.from('profiles').update({ gallery_urls: cleanUrls }).eq('id', currentUser.id);
+  currentProfile.gallery_urls = cleanUrls;
+  galleryUrls = cleanUrls;
+  renderGalleryUploadGrid();
+  showToast('Photo uploaded!');
+}
+
+async function removeGalleryPhoto(slot) {
+  galleryUrls[slot] = '';
+  var cleanUrls = galleryUrls.filter(Boolean);
+  await sb.from('profiles').update({ gallery_urls: cleanUrls }).eq('id', currentUser.id);
+  currentProfile.gallery_urls = cleanUrls;
+  galleryUrls = cleanUrls;
+  renderGalleryUploadGrid();
+}
+
+// ══ #8 REVIEW REPLY ══
+function toggleReplyForm(reviewId) {
+  var input = document.getElementById('rinput-' + reviewId);
+  if (!input) return;
+  var isOpen = input.style.display !== 'none';
+  input.style.display = isOpen ? 'none' : 'block';
+  if (!isOpen) document.getElementById('rtxt-' + reviewId).focus();
+}
+
+async function saveReviewReply(reviewId) {
+  var txt = document.getElementById('rtxt-' + reviewId).value.trim();
+  if (!txt) { showToast('Please write a reply first', 'warning'); return; }
+  var res = await sb.from('reviews').update({ workshop_reply: txt }).eq('id', reviewId);
+  if (res.error) { showToast('Failed: ' + res.error.message, 'error'); return; }
+  showToast('Reply posted!');
+  loadWorkshopReviews();
+}
+
 // ══ WORKSHOP ONBOARDING BANNER ══
 function checkWorkshopOnboarding() {
   if (!currentProfile || currentProfile.role !== 'workshop') return;
@@ -3544,7 +4042,8 @@ function subscribeToWorkshopQuotes() {
     }, function(payload) {
       var row = payload.new;
       if (row && row.status === 'accepted') {
-        showToast('\uD83C\uDF89 Your quote was accepted! Check Sent Quotes.', 'success');
+        showToast('Your quote was accepted! Check Sent Quotes.', 'success');
+        addNotif('accepted', 'Quote accepted!', 'Your quote of RM ' + (row.price || '?') + ' was accepted.', function(){ showSentQuotes(); });
         highlightSentQuotesNav();
         // If currently on sent quotes view, auto-refresh
         var sentView = document.getElementById('workshop-sent-view');
@@ -3578,6 +4077,10 @@ document.addEventListener('keydown', function(e) {
     if (document.getElementById('ws-panel').classList.contains('open')) {
       closeWorkshopPanel(); return;
     }
+    if (document.getElementById('chat-panel').classList.contains('open')) {
+      closeChat(); return;
+    }
+    closeNotifDropdown();
   }
   // Star rating keyboard support
   if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('star')) {
@@ -3585,6 +4088,397 @@ document.addEventListener('keydown', function(e) {
     setReviewStar(parseInt(e.target.getAttribute('data-val'), 10));
   }
 });
+
+// ══ #6 RE-REQUEST FROM HISTORY ══
+function resubmitRequest(brand, model, year, issue) {
+  showCustomerForm();
+  // Store prefill data to be applied once form renders
+  window._prefill = { brand: brand, model: model, year: year, issue: issue };
+  setTimeout(function() {
+    var p = window._prefill;
+    if (!p) return;
+    // Select brand card
+    var brandEl = document.getElementById('brand-' + p.brand);
+    if (brandEl) {
+      selectBrand(p.brand);
+      // After model grid renders, select model
+      setTimeout(function() {
+        var pills = document.querySelectorAll('.model-pill');
+        pills.forEach(function(pill) {
+          if (pill.textContent.trim().toLowerCase() === (p.model||'').toLowerCase()) {
+            pill.click();
+          }
+        });
+        // Pre-fill year
+        var yearInput = document.getElementById('car-year');
+        if (yearInput && p.year) yearInput.value = p.year;
+        // Store issue for step 2
+        window._prefillIssue = p.issue;
+        window._prefill = null;
+      }, 120);
+    }
+  }, 80);
+}
+
+// ══ #9 NOTIFICATION INBOX ══
+function addNotif(type, title, sub, action) {
+  var n = { id: Date.now() + Math.random(), type: type, title: title, sub: sub, action: action || null, time: new Date().toISOString(), read: false };
+  notifList.unshift(n);
+  if (notifList.length > 20) notifList = notifList.slice(0, 20);
+  notifUnread++;
+  renderNotifDropdown();
+}
+
+function renderNotifDropdown() {
+  var list = document.getElementById('notif-list');
+  var dot = document.getElementById('notif-dot');
+  if (!list) return;
+  if (dot) { dot.classList.toggle('show', notifUnread > 0); }
+  if (!notifList.length) {
+    list.innerHTML = '<div class="notif-empty">No notifications yet</div>';
+    return;
+  }
+  list.innerHTML = notifList.map(function(n) {
+    var iconClass = n.type === 'accepted' ? 'green' : n.type === 'review' ? 'amber' : 'navy';
+    var iconSvg = n.type === 'accepted'
+      ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
+      : n.type === 'review'
+      ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>'
+      : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
+    return '<div class="notif-item' + (n.read ? '' : ' unread') + '" onclick="handleNotifClick(\'' + n.id + '\')">' +
+      '<div class="notif-icon ' + iconClass + '">' + iconSvg + '</div>' +
+      '<div class="notif-body">' +
+        '<div class="notif-title">' + esc(n.title) + '</div>' +
+        '<div class="notif-sub">' + esc(n.sub) + '</div>' +
+        '<div class="notif-time">' + timeAgo(n.time) + '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function handleNotifClick(id) {
+  var n = notifList.find(function(x){ return String(x.id) === String(id); });
+  if (!n) return;
+  n.read = true;
+  notifUnread = Math.max(0, notifUnread - 1);
+  renderNotifDropdown();
+  closeNotifDropdown();
+  if (n.action) n.action();
+}
+
+function clearNotifs() {
+  notifList.forEach(function(n){ n.read = true; });
+  notifUnread = 0;
+  renderNotifDropdown();
+}
+
+function toggleNotifDropdown() {
+  var dd = document.getElementById('notif-dropdown');
+  if (!dd) return;
+  var isOpen = dd.classList.contains('open');
+  if (!isOpen) {
+    dd.classList.add('open');
+    // Mark all read after opening
+    setTimeout(function() {
+      notifList.forEach(function(n){ n.read = true; });
+      notifUnread = 0;
+      var dot = document.getElementById('notif-dot');
+      if (dot) dot.classList.remove('show');
+    }, 800);
+  } else {
+    closeNotifDropdown();
+  }
+}
+
+function closeNotifDropdown() {
+  var dd = document.getElementById('notif-dropdown');
+  if (dd) dd.classList.remove('open');
+}
+
+// Close notif dropdown when clicking outside
+document.addEventListener('click', function(e) {
+  var wrap = document.getElementById('notif-wrap');
+  if (wrap && !wrap.contains(e.target)) closeNotifDropdown();
+});
+
+async function seedCustomerNotifs() {
+  if (!sb || !currentUser) return;
+  try {
+    // Find quotes for requests owned by this customer
+    var res = await sb.from('quotes')
+      .select('*, requests!inner(car_brand, car_model, user_id)')
+      .eq('requests.user_id', currentUser.id)
+      .in('status', ['accepted', 'completed'])
+      .order('created_at', { ascending: false })
+      .limit(5);
+    var seenIds = new Set(notifList.map(function(n){ return n._qid; }));
+    (res.data || []).forEach(function(q) {
+      if (seenIds.has(q.id)) return;
+      var car = q.requests ? (q.requests.car_brand + ' ' + q.requests.car_model) : '';
+      var n = { id: q.id + '_accepted', _qid: q.id, type: 'accepted', title: 'Quote accepted!', sub: (q.workshop_name||'Workshop') + (car ? ' — ' + car : ''), action: function(){ showMyQuotes(); }, time: q.created_at, read: true };
+      notifList.push(n);
+    });
+    notifList.sort(function(a,b){ return new Date(b.time) - new Date(a.time); });
+    renderNotifDropdown();
+  } catch(e) {}
+}
+
+async function seedWorkshopNotifs() {
+  if (!sb || !currentUser) return;
+  try {
+    var res = await sb.from('quotes')
+      .select('*, requests(car_brand, car_model)')
+      .eq('workshop_id', currentUser.id)
+      .in('status', ['accepted', 'completed'])
+      .order('updated_at', { ascending: false })
+      .limit(5);
+    var seenIds = new Set(notifList.map(function(n){ return n._qid; }));
+    (res.data || []).forEach(function(q) {
+      if (seenIds.has(q.id)) return;
+      var car = q.requests ? (q.requests.car_brand + ' ' + q.requests.car_model) : '';
+      var n = { id: q.id + '_ws', _qid: q.id, type: 'accepted', title: 'Quote accepted by customer!', sub: (car||'') + ' — RM ' + q.price, action: function(){ showSentQuotes(); }, time: q.updated_at || q.created_at, read: true };
+      notifList.push(n);
+    });
+    // Also check for new reviews
+    var rev = await sb.from('reviews')
+      .select('*')
+      .eq('workshop_id', currentUser.id)
+      .order('created_at', { ascending: false })
+      .limit(3);
+    var seenRevIds = new Set(notifList.map(function(n){ return n._rid; }));
+    (rev.data || []).forEach(function(r) {
+      if (seenRevIds.has(r.id)) return;
+      var n = { id: r.id + '_rev', _rid: r.id, type: 'review', title: 'New review!', sub: (r.rating ? r.rating + ' stars' : '') + (r.comment ? ' — ' + r.comment.substring(0,40) : ''), action: function(){ showSentQuotes(); }, time: r.created_at, read: true };
+      notifList.push(n);
+    });
+    notifList.sort(function(a,b){ return new Date(b.time) - new Date(a.time); });
+    renderNotifDropdown();
+  } catch(e) {}
+}
+
+// Hook: when a quote is accepted, add live notification
+var _origSubscribeToQuotes = null;
+function patchNotifIntoQuoteSubscription(requestId) {
+  var sub = sb.channel('notif-quotes-' + requestId)
+    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'quotes', filter: 'request_id=eq.' + requestId }, function(payload) {
+      var row = payload.new;
+      if (row && row.status === 'accepted') {
+        addNotif('accepted', 'Quote accepted!', esc(row.workshop_name || 'A workshop') + ' accepted your request — RM ' + row.price, function(){ showMyQuotes(); });
+      }
+    }).subscribe();
+  realtimeSubs.push(sub);
+}
+
+// ══ #7 WORKSHOP ANALYTICS ══
+function switchSentTab(tab) {
+  document.getElementById('stab-quotes').classList.toggle('active', tab === 'quotes');
+  document.getElementById('stab-analytics').classList.toggle('active', tab === 'analytics');
+  document.getElementById('sent-tab-quotes').style.display = tab === 'quotes' ? 'block' : 'none';
+  document.getElementById('sent-tab-analytics').style.display = tab === 'analytics' ? 'block' : 'none';
+  if (tab === 'analytics') loadAnalytics();
+}
+
+async function loadAnalytics() {
+  if (!sb || !currentUser) return;
+  var el = document.getElementById('analytics-content');
+  if (!el) return;
+  el.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--muted);font-size:14px">Loading analytics…</div>';
+
+  try {
+    var res = await sb.from('quotes')
+      .select('*, requests(created_at)')
+      .eq('workshop_id', currentUser.id)
+      .order('created_at', { ascending: false })
+      .limit(200);
+
+    var quotes = res.data || [];
+    var now = new Date();
+    var weekAgo = new Date(now - 7 * 86400000);
+    var twoWeekAgo = new Date(now - 14 * 86400000);
+
+    var total = quotes.length;
+    var accepted = quotes.filter(function(q){ return q.status === 'accepted' || q.status === 'completed'; });
+    var completed = quotes.filter(function(q){ return q.status === 'completed'; });
+    var thisWeek = quotes.filter(function(q){ return new Date(q.created_at) >= weekAgo; });
+    var lastWeek = quotes.filter(function(q){ return new Date(q.created_at) >= twoWeekAgo && new Date(q.created_at) < weekAgo; });
+    var acceptRate = total ? Math.round((accepted.length / total) * 100) : 0;
+
+    // Avg response time (time between request created_at and quote created_at)
+    var responseTimes = quotes.filter(function(q){ return q.requests && q.requests.created_at; }).map(function(q){
+      return (new Date(q.created_at) - new Date(q.requests.created_at)) / 3600000; // hours
+    });
+    var avgRespH = responseTimes.length ? (responseTimes.reduce(function(a,b){return a+b;},0) / responseTimes.length) : null;
+    var avgRespStr = avgRespH === null ? 'N/A' : (avgRespH < 1 ? Math.round(avgRespH * 60) + 'm' : avgRespH.toFixed(1) + 'h');
+
+    // Revenue from accepted quotes
+    var totalRevenue = accepted.reduce(function(sum, q){ return sum + (parseFloat(q.price) || 0); }, 0);
+    var revenueStr = totalRevenue >= 1000 ? 'RM ' + (totalRevenue/1000).toFixed(1) + 'k' : 'RM ' + Math.round(totalRevenue);
+
+    // Week trend
+    var weekDiff = thisWeek.length - lastWeek.length;
+    var weekTrend = weekDiff > 0 ? '<span class="analytics-card-trend up">+' + weekDiff + ' vs last week</span>'
+      : weekDiff < 0 ? '<span class="analytics-card-trend down">' + weekDiff + ' vs last week</span>'
+      : '<span class="analytics-card-trend flat">Same as last week</span>';
+
+    // Top services (from quotes message — just count by status buckets for now)
+    var statusBreakdown = [
+      { label: 'Accepted', val: accepted.length, max: total || 1 },
+      { label: 'Completed', val: completed.length, max: total || 1 },
+      { label: 'Pending', val: quotes.filter(function(q){ return q.status==='pending'; }).length, max: total || 1 },
+      { label: 'Rejected', val: quotes.filter(function(q){ return q.status==='rejected'; }).length, max: total || 1 },
+    ];
+    var barsHtml = statusBreakdown.map(function(s) {
+      var pct = s.max ? Math.round((s.val / s.max) * 100) : 0;
+      return '<div class="analytics-bar-row">' +
+        '<div class="analytics-bar-label">' + esc(s.label) + '</div>' +
+        '<div class="analytics-bar-track"><div class="analytics-bar-fill" style="width:' + pct + '%"></div></div>' +
+        '<div class="analytics-bar-val">' + s.val + '</div>' +
+      '</div>';
+    }).join('');
+
+    el.innerHTML =
+      '<div class="analytics-grid">' +
+        '<div class="analytics-card">' +
+          '<div class="analytics-card-val">' + thisWeek.length + '</div>' +
+          '<div class="analytics-card-label">Quotes This Week</div>' +
+          weekTrend +
+        '</div>' +
+        '<div class="analytics-card">' +
+          '<div class="analytics-card-val">' + acceptRate + '<em>%</em></div>' +
+          '<div class="analytics-card-label">Acceptance Rate</div>' +
+          '<div class="analytics-card-trend flat">' + accepted.length + ' of ' + total + ' quotes</div>' +
+        '</div>' +
+        '<div class="analytics-card">' +
+          '<div class="analytics-card-val">' + avgRespStr + '</div>' +
+          '<div class="analytics-card-label">Avg Response Time</div>' +
+          '<div class="analytics-card-trend flat">From request to quote</div>' +
+        '</div>' +
+        '<div class="analytics-card">' +
+          '<div class="analytics-card-val" style="font-size:22px">' + revenueStr + '</div>' +
+          '<div class="analytics-card-label">Potential Revenue</div>' +
+          '<div class="analytics-card-trend flat">From accepted quotes</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="panel" style="margin-top:0">' +
+        '<div class="profile-section-title" style="margin-bottom:14px">Quote Status Breakdown</div>' +
+        barsHtml +
+      '</div>';
+  } catch(e) {
+    el.innerHTML = '<div style="padding:20px;color:var(--red)">Failed to load analytics.</div>';
+  }
+}
+
+// ══ #1 IN-APP MESSAGING ══
+async function openChat(quoteId, withName) {
+  activeChatQuoteId = quoteId;
+  document.getElementById('chat-panel-title').textContent = 'Chat';
+  document.getElementById('chat-panel-sub').textContent = withName || '';
+  document.getElementById('chat-panel-overlay').classList.add('open');
+  document.getElementById('chat-panel').classList.add('open');
+  document.getElementById('chat-input').value = '';
+  await loadChatMessages(quoteId);
+  subscribeToChat(quoteId);
+}
+
+function closeChat() {
+  document.getElementById('chat-panel-overlay').classList.remove('open');
+  document.getElementById('chat-panel').classList.remove('open');
+  if (chatSub && sb) { sb.removeChannel(chatSub); chatSub = null; }
+  activeChatQuoteId = null;
+}
+
+async function loadChatMessages(quoteId) {
+  var container = document.getElementById('chat-messages');
+  container.innerHTML = '<div class="chat-loading">Loading…</div>';
+  if (!sb) { container.innerHTML = '<div class="chat-empty">Chat unavailable.</div>'; return; }
+  try {
+    var res = await sb.from('messages')
+      .select('*')
+      .eq('quote_id', quoteId)
+      .order('created_at', { ascending: true })
+      .limit(100);
+    if (res.error) throw res.error;
+    renderChatMessages(res.data || []);
+  } catch(e) {
+    if (e && e.code === '42P01') {
+      // Table doesn't exist
+      container.innerHTML = '<div class="chat-empty" style="padding:32px 20px">' +
+        '<div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:8px">Chat not set up yet</div>' +
+        '<div style="font-size:13px;color:var(--muted);line-height:1.6">To enable in-app messaging, create a <code>messages</code> table in your Supabase dashboard:<br><br>' +
+        '<code style="background:var(--surface2);border-radius:6px;padding:8px 12px;display:block;font-size:12px;text-align:left;white-space:pre-wrap">create table messages (\n  id uuid primary key default gen_random_uuid(),\n  quote_id uuid references quotes(id),\n  sender_id uuid references profiles(id),\n  content text not null,\n  created_at timestamptz default now()\n);\nalter table messages enable row level security;\ncreate policy "Users can read/write their messages"\n  on messages for all using (\n    auth.uid() = sender_id or\n    quote_id in (select id from quotes where workshop_id = auth.uid())\n  );</code>' +
+        '</div>' +
+      '</div>';
+    } else {
+      container.innerHTML = '<div class="chat-empty">Failed to load messages.</div>';
+    }
+  }
+}
+
+function renderChatMessages(msgs) {
+  var container = document.getElementById('chat-messages');
+  if (!msgs.length) {
+    container.innerHTML = '<div class="chat-empty">No messages yet. Say hello!</div>';
+    return;
+  }
+  container.innerHTML = msgs.map(function(m) {
+    var isMine = m.sender_id === (currentUser && currentUser.id);
+    return '<div class="chat-msg ' + (isMine ? 'mine' : 'theirs') + '">' +
+      '<div>' + esc(m.content) + '</div>' +
+      '<div class="chat-msg-time">' + timeAgo(m.created_at) + '</div>' +
+    '</div>';
+  }).join('');
+  // Scroll to bottom
+  container.scrollTop = container.scrollHeight;
+}
+
+async function sendChatMessage() {
+  var input = document.getElementById('chat-input');
+  var content = (input.value || '').trim();
+  if (!content || !activeChatQuoteId || !currentUser) return;
+  input.value = '';
+  if (!sb) return;
+  try {
+    var res = await sb.from('messages').insert({
+      quote_id: activeChatQuoteId,
+      sender_id: currentUser.id,
+      content: content
+    });
+    if (res.error) throw res.error;
+    // Optimistic render
+    var container = document.getElementById('chat-messages');
+    var existing = container.querySelector('.chat-empty');
+    if (existing) container.innerHTML = '';
+    var div = document.createElement('div');
+    div.className = 'chat-msg mine';
+    div.innerHTML = '<div>' + esc(content) + '</div><div class="chat-msg-time">Just now</div>';
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+  } catch(e) {
+    showToast('Failed to send message.', 'error');
+    input.value = content;
+  }
+}
+
+function subscribeToChat(quoteId) {
+  if (!sb) return;
+  if (chatSub) { sb.removeChannel(chatSub); }
+  chatSub = sb.channel('chat-' + quoteId)
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: 'quote_id=eq.' + quoteId }, function(payload) {
+      var m = payload.new;
+      if (!m || m.sender_id === (currentUser && currentUser.id)) return;
+      var container = document.getElementById('chat-messages');
+      if (!container) return;
+      var existing = container.querySelector('.chat-empty');
+      if (existing) container.innerHTML = '';
+      var div = document.createElement('div');
+      div.className = 'chat-msg theirs';
+      div.innerHTML = '<div>' + esc(m.content) + '</div><div class="chat-msg-time">Just now</div>';
+      container.appendChild(div);
+      container.scrollTop = container.scrollHeight;
+      // Notification
+      addNotif('message', 'New message', esc(m.content).substring(0, 50), function(){ openChat(quoteId, ''); });
+    }).subscribe();
+}
 
 </script>
 </body>
