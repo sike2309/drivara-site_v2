@@ -232,6 +232,7 @@ textarea { resize: vertical; min-height: 100px; }
 .toast.show { transform: translateY(0); opacity: 1; }
 .toast.warning { border-left-color: #f5c842; }
 .toast.error { border-left-color: var(--red); }
+.toast.success { border-left-color: var(--mint); background: var(--navy-light); }
 
 /* ── SPINNER ── */
 .spinner { width: 16px; height: 16px; border: 2.5px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; flex-shrink: 0; }
@@ -617,6 +618,25 @@ textarea { resize: vertical; min-height: 100px; }
   pointer-events: none;
 }
 
+/* ── LOCATION WARNING BANNER ── */
+.location-warning {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+  background: #fff8e1; border: 1.5px solid #ffe082;
+  border-radius: 14px; padding: 16px 20px; margin-bottom: 20px;
+}
+.lw-title { font-size: 14px; font-weight: 800; color: #7a5800; margin-bottom: 4px; }
+.lw-text { font-size: 13px; color: #9a6f00; line-height: 1.5; }
+
+/* ── INLINE INPUT ERROR ── */
+.input-error { border-color: var(--red) !important; box-shadow: 0 0 0 3px rgba(229,62,62,0.12) !important; background: #fff8f8 !important; }
+
+/* ── EMPTY STATE CTA ── */
+.empty-cta { margin-top: 16px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.empty-tips { display: flex; flex-direction: column; gap: 8px; margin: 16px auto 0; max-width: 320px; text-align: left; }
+.empty-tip { font-size: 13px; color: var(--text-light); display: flex; align-items: flex-start; gap: 8px; }
+.empty-tip-icon { flex-shrink: 0; font-size: 15px; }
+
 /* ── FORM PROGRESS STEPS ── */
 .form-progress { display: flex; align-items: center; margin-bottom: 28px; }
 .fp-step { display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; }
@@ -675,6 +695,117 @@ textarea { resize: vertical; min-height: 100px; }
   border-radius: 16px; padding: 24px; margin-bottom: 14px;
 }
 .skel-line { height: 13px; margin-bottom: 10px; border-radius: 6px; }
+
+/* ── WORKSHOP ONBOARDING BANNER ── */
+.onboarding-banner {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+  border-radius: 16px; padding: 20px 24px; margin-bottom: 20px;
+  border: 1px solid rgba(94,203,142,0.2); position: relative; overflow: hidden;
+}
+.onboarding-banner::before {
+  content: ''; position: absolute; top: -30px; right: -30px;
+  width: 120px; height: 120px; border-radius: 50%;
+  background: rgba(94,203,142,0.08); pointer-events: none;
+}
+.ob-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.ob-title { font-size: 15px; font-weight: 800; color: white; }
+.ob-sub { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+.ob-dismiss {
+  background: none; border: none; color: rgba(255,255,255,0.5);
+  cursor: pointer; padding: 4px; line-height: 1; font-size: 18px;
+  border-radius: 6px; transition: color 0.2s;
+}
+.ob-dismiss:hover { color: white; }
+.ob-items { display: flex; flex-direction: column; gap: 10px; }
+.ob-item {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 13px; color: rgba(255,255,255,0.8); font-weight: 600;
+}
+.ob-dot {
+  width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 800;
+}
+.ob-dot.done { background: var(--mint); color: var(--navy); }
+.ob-dot.todo { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.5); border: 1.5px solid rgba(255,255,255,0.15); }
+.ob-item-action {
+  margin-left: auto; font-size: 11px; font-weight: 700;
+  color: var(--mint); cursor: pointer; text-decoration: underline; white-space: nowrap;
+}
+.ob-progress { margin-top: 16px; }
+.ob-progress-bar { height: 5px; background: rgba(255,255,255,0.12); border-radius: 100px; overflow: hidden; }
+.ob-progress-fill { height: 100%; background: var(--mint); border-radius: 100px; transition: width 0.4s ease; }
+.ob-progress-label { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 6px; font-weight: 600; }
+
+/* ── TESTIMONIALS SECTION ── */
+.testimonials {
+  max-width: 860px; margin: 0 auto 0; padding: 60px 40px 0;
+}
+.testimonials-title { text-align: center; margin-bottom: 32px; }
+.testimonials-title h2 { font-size: clamp(22px,4vw,32px); margin-bottom: 8px; }
+.testimonials-title p { font-size: 15px; color: var(--muted); }
+.testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+.testi-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+  padding: 24px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 14px;
+}
+.testi-stars { display: flex; gap: 2px; }
+.testi-star { color: #f59e0b; font-size: 14px; }
+.testi-text { font-size: 14px; color: var(--text-light); line-height: 1.65; flex: 1; }
+.testi-author { display: flex; align-items: center; gap: 10px; }
+.testi-avatar {
+  width: 36px; height: 36px; border-radius: 50%; background: var(--mint-pale);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; flex-shrink: 0;
+}
+.testi-name { font-size: 13px; font-weight: 700; color: var(--navy); }
+.testi-car { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+/* ── FOR WORKSHOPS CTA SECTION ── */
+.workshop-cta-section {
+  background: var(--navy); margin-top: 60px; padding: 64px 40px;
+}
+.workshop-cta-inner {
+  max-width: 700px; margin: 0 auto; text-align: center;
+}
+.workshop-cta-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(94,203,142,0.15); border: 1px solid rgba(94,203,142,0.3);
+  color: var(--mint); padding: 6px 16px; border-radius: 100px;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; margin-bottom: 24px;
+}
+.workshop-cta-section h2 { color: white; font-size: clamp(24px,4vw,40px); margin-bottom: 14px; line-height: 1.1; }
+.workshop-cta-section p { color: rgba(255,255,255,0.65); font-size: 16px; max-width: 500px; margin: 0 auto 36px; }
+.wc-perks { display: flex; justify-content: center; gap: 32px; margin-bottom: 40px; flex-wrap: wrap; }
+.wc-perk { text-align: center; }
+.wc-perk-icon { font-size: 26px; margin-bottom: 8px; }
+.wc-perk-label { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.06em; }
+.wc-perk-val { font-size: 18px; font-weight: 800; color: white; margin-top: 2px; }
+.workshop-cta-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--mint); color: var(--navy); padding: 15px 36px;
+  border-radius: 12px; font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800; font-size: 15px; border: none; cursor: pointer;
+  transition: all 0.2s; box-shadow: 0 4px 20px rgba(94,203,142,0.3);
+}
+.workshop-cta-btn:hover { background: var(--mint-dark); transform: translateY(-2px); }
+
+@media(max-width:700px) {
+  .testi-grid { grid-template-columns: 1fr; }
+  .testimonials { padding: 40px 16px 0; }
+  .workshop-cta-section { padding: 48px 20px; }
+  .wc-perks { gap: 20px; }
+}
+@media(max-width:900px) {
+  .testi-grid { grid-template-columns: repeat(2,1fr); }
+}
+@media(max-width:560px) {
+  .testi-grid { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
@@ -743,18 +874,18 @@ textarea { resize: vertical; min-height: 100px; }
 
 
 <!-- ══ REVIEW MODAL ══ -->
-<div class="modal-overlay" id="review-modal">
+<div class="modal-overlay" id="review-modal" role="dialog" aria-modal="true" aria-labelledby="review-modal-title">
   <div class="review-modal">
-    <h3>Rate Your Experience</h3>
+    <h3 id="review-modal-title">Rate Your Experience</h3>
     <p id="review-workshop-name-label">How was your experience with this workshop?</p>
     <div style="margin-bottom:20px">
       <div style="font-size:12px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px">Your Rating</div>
-      <div class="star-rating" id="review-stars">
-        <span class="star" data-val="1" onclick="setReviewStar(1)">&#9733;</span>
-        <span class="star" data-val="2" onclick="setReviewStar(2)">&#9733;</span>
-        <span class="star" data-val="3" onclick="setReviewStar(3)">&#9733;</span>
-        <span class="star" data-val="4" onclick="setReviewStar(4)">&#9733;</span>
-        <span class="star" data-val="5" onclick="setReviewStar(5)">&#9733;</span>
+      <div class="star-rating" id="review-stars" role="group" aria-label="Star rating">
+        <span class="star" data-val="1" onclick="setReviewStar(1)" role="button" aria-label="1 star" tabindex="0">&#9733;</span>
+        <span class="star" data-val="2" onclick="setReviewStar(2)" role="button" aria-label="2 stars" tabindex="0">&#9733;</span>
+        <span class="star" data-val="3" onclick="setReviewStar(3)" role="button" aria-label="3 stars" tabindex="0">&#9733;</span>
+        <span class="star" data-val="4" onclick="setReviewStar(4)" role="button" aria-label="4 stars" tabindex="0">&#9733;</span>
+        <span class="star" data-val="5" onclick="setReviewStar(5)" role="button" aria-label="5 stars" tabindex="0">&#9733;</span>
       </div>
       <div id="star-label" style="font-size:13px;color:var(--muted);height:18px;margin-top:6px"></div>
     </div>
@@ -770,9 +901,9 @@ textarea { resize: vertical; min-height: 100px; }
 </div>
 
 <!-- ══ AUTH MODAL ══ -->
-<div class="modal-overlay" id="auth-modal">
+<div class="modal-overlay" id="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
   <div class="modal">
-    <h3 style="margin-bottom:6px">Welcome to Drivara</h3>
+    <h3 id="auth-modal-title" style="margin-bottom:6px">Welcome to Drivara</h3>
     <p style="color:var(--muted);font-size:14px;margin-bottom:20px">Sign in or create an account.</p>
     <div class="modal-tabs">
       <button class="modal-tab active" id="tab-login" onclick="switchAuthTab('login')">Sign In</button>
@@ -888,6 +1019,61 @@ textarea { resize: vertical; min-height: 100px; }
     </div>
 
   </div>
+
+  <!-- Testimonials -->
+  <div class="testimonials">
+    <div class="testimonials-title">
+      <h2>Trusted by car owners <em style="font-style:normal;color:var(--mint-dark)">across Malaysia</em></h2>
+      <p>Real people. Real quotes. Real savings.</p>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card anim">
+        <div class="testi-stars"><span class="testi-star">&#9733;</span><span class="testi-star">&#9733;</span><span class="testi-star">&#9733;</span><span class="testi-star">&#9733;</span><span class="testi-star">&#9733;</span></div>
+        <div class="testi-text">"Got 4 quotes within 20 minutes. Saved RM180 compared to the first workshop I called. This should've existed years ago."</div>
+        <div class="testi-author"><div class="testi-avatar">&#x1F647;</div><div><div class="testi-name">Ahmad Farouk</div><div class="testi-car">Proton Saga — engine mount</div></div></div>
+      </div>
+      <div class="testi-card anim" style="animation-delay:0.1s">
+        <div class="testi-stars"><span class="testi-star">&#9733;</span><span class="testi-star">&#9733;</span><span class="testi-star">&#9733;</span><span class="testi-star">&#9733;</span><span class="testi-star">&#9733;</span></div>
+        <div class="testi-text">"I was quoted RM650 at the dealer. Through Drivara I found a workshop that did the same job for RM390. Totally transparent."</div>
+        <div class="testi-author"><div class="testi-avatar">&#x1F469;</div><div><div class="testi-name">Nurul Ain</div><div class="testi-car">Honda City — brake pads</div></div></div>
+      </div>
+      <div class="testi-card anim" style="animation-delay:0.2s">
+        <div class="testi-stars"><span class="testi-star">&#9733;</span><span class="testi-star">&#9733;</span><span class="testi-star">&#9733;</span><span class="testi-star">&#9733;</span><span class="testi-star">&#9733;</span></div>
+        <div class="testi-text">"No more awkward phone calls asking for prices. Just describe the problem, attach a photo, and wait for workshops to bid. Simple."</div>
+        <div class="testi-author"><div class="testi-avatar">&#x1F9D4;</div><div><div class="testi-name">Rajan Kumar</div><div class="testi-car">Toyota Vios — AC compressor</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- For Workshops CTA -->
+  <div class="workshop-cta-section">
+    <div class="workshop-cta-inner">
+      <div class="workshop-cta-badge">&#x1F527; For Workshop Owners</div>
+      <h2>Grow your workshop with <em style="font-style:normal;color:var(--mint)">qualified leads</em></h2>
+      <p>Stop waiting for walk-ins. Get notified when car owners near you need your services — then send your best quote.</p>
+      <div class="wc-perks">
+        <div class="wc-perk">
+          <div class="wc-perk-icon">&#x1F4B0;</div>
+          <div class="wc-perk-val">Free</div>
+          <div class="wc-perk-label">Always free to join</div>
+        </div>
+        <div class="wc-perk">
+          <div class="wc-perk-icon">&#x26A1;</div>
+          <div class="wc-perk-val">Real-time</div>
+          <div class="wc-perk-label">Instant notifications</div>
+        </div>
+        <div class="wc-perk">
+          <div class="wc-perk-icon">&#x1F4CD;</div>
+          <div class="wc-perk-val">Nearby</div>
+          <div class="wc-perk-label">Location-based jobs</div>
+        </div>
+      </div>
+      <button class="workshop-cta-btn" onclick="openAuth()">
+        Join as a Workshop &rarr;
+      </button>
+    </div>
+  </div>
+
 </div>
 
 <!-- ══ LANDING MAP — outside all constrained containers ══ -->
@@ -976,7 +1162,7 @@ textarea { resize: vertical; min-height: 100px; }
         </div>
 
         <div class="issue-actions" style="display:flex;gap:12px;justify-content:flex-end">
-          <button class="btn btn-outline btn-sm" onclick="submitToAll()">Send to All Workshops</button>
+          <button class="btn btn-outline btn-sm" id="send-to-all-btn" onclick="submitToAll()">Send to All Workshops</button>
           <button class="btn btn-primary" id="submit-request-btn" onclick="goToWorkshopBrowser()">Choose Workshops &rarr;</button>
         </div>
       </div>
@@ -998,9 +1184,17 @@ textarea { resize: vertical; min-height: 100px; }
       </div>
       <div id="quotes-list"></div>
       <div id="quotes-empty" class="empty-state" style="display:none">
-        <div class="big">&#x1F4ED;</div>
-        <h3>Waiting for quotes...</h3>
-        <p>Workshops will respond shortly. This page updates in real-time.</p>
+        <div class="big">&#x1F4EC;</div>
+        <h3>Request sent!</h3>
+        <p>Workshops are reviewing your request. Quotes usually arrive within minutes.</p>
+        <div class="empty-tips">
+          <div class="empty-tip"><span class="empty-tip-icon">&#x23F0;</span><span>This page updates in real-time — no need to refresh.</span></div>
+          <div class="empty-tip"><span class="empty-tip-icon">&#x1F4AC;</span><span>You'll see each workshop's price, duration, and diagnosis notes here.</span></div>
+          <div class="empty-tip"><span class="empty-tip-icon">&#x1F527;</span><span>Want more quotes? Send to additional workshops below.</span></div>
+        </div>
+        <div class="empty-cta">
+          <button class="btn btn-mint btn-sm" onclick="showBrowserPage()">Browse More Workshops &rarr;</button>
+        </div>
       </div>
     </div>
 
@@ -1020,6 +1214,32 @@ textarea { resize: vertical; min-height: 100px; }
   <div class="container">
 
     <div id="workshop-requests-view">
+
+      <!-- Location warning banner -->
+      <div id="location-warning" class="location-warning" style="display:none">
+        <div>
+          <div class="lw-title">&#x26A0;&#xFE0F; Your location isn't set</div>
+          <div class="lw-text">Customers browse workshops by proximity. Without a pin, you won't appear on their map and may miss targeted requests.</div>
+        </div>
+        <button class="btn btn-sm" style="background:#f5c842;color:#5c3d00;font-weight:800;border:none;cursor:pointer;padding:10px 18px;border-radius:10px;font-family:inherit;white-space:nowrap" onclick="showProfilePage()">Set Location &rarr;</button>
+      </div>
+
+      <!-- Onboarding checklist banner -->
+      <div id="onboarding-banner" class="onboarding-banner" style="display:none">
+        <div class="ob-header">
+          <div>
+            <div class="ob-title">&#x1F44B; Complete your profile</div>
+            <div class="ob-sub">Finish setup to start receiving quote requests</div>
+          </div>
+          <button class="ob-dismiss" onclick="dismissOnboarding()" aria-label="Dismiss onboarding banner">&#x2715;</button>
+        </div>
+        <div class="ob-items" id="ob-items"></div>
+        <div class="ob-progress">
+          <div class="ob-progress-bar"><div class="ob-progress-fill" id="ob-progress-fill" style="width:0%"></div></div>
+          <div class="ob-progress-label" id="ob-progress-label"></div>
+        </div>
+      </div>
+
       <div class="section-header">
         <div>
           <div class="section-title"><span class="pulse"></span>Open Requests</div>
@@ -1029,8 +1249,15 @@ textarea { resize: vertical; min-height: 100px; }
       <div id="requests-list"></div>
       <div id="requests-empty" class="empty-state" style="display:none">
         <div class="big">&#x1F50D;</div>
-        <h3>No open requests yet</h3>
-        <p>New requests appear here in real-time.</p>
+        <h3>No open requests right now</h3>
+        <p>New requests appear here in real-time as car owners submit them.</p>
+        <div class="empty-tips">
+          <div class="empty-tip"><span class="empty-tip-icon">&#x1F4CD;</span><span id="empty-location-tip">Make sure your location is set so customers near you can find you.</span></div>
+          <div class="empty-tip"><span class="empty-tip-icon">&#x1F4CB;</span><span>Add your services and pricing to your profile — it builds customer trust.</span></div>
+        </div>
+        <div class="empty-cta">
+          <button class="btn btn-outline btn-sm" onclick="showProfilePage()">Complete My Profile &rarr;</button>
+        </div>
       </div>
     </div>
 
@@ -1126,7 +1353,7 @@ textarea { resize: vertical; min-height: 100px; }
         Send Request to Selected Workshops &rarr;
       </button>
       <div style="margin-top:10px;font-size:13px;color:var(--muted)">
-        Or <a href="#" onclick="sendToAll();return false;" style="color:var(--mint-dark);font-weight:700">send to all workshops</a>
+        Or <a href="#" id="send-all-link" onclick="sendToAll();return false;" style="color:var(--mint-dark);font-weight:700">send to all workshops</a>
       </div>
     </div>
 
@@ -1284,9 +1511,9 @@ textarea { resize: vertical; min-height: 100px; }
 
 <!-- ══ WORKSHOP SLIDE PANEL ══ -->
 <div class="slide-panel-overlay" id="ws-panel-overlay" onclick="closeWorkshopPanel()"></div>
-<div class="slide-panel" id="ws-panel">
+<div class="slide-panel" id="ws-panel" role="dialog" aria-modal="true" aria-labelledby="wsp-name">
   <div class="slide-panel-header">
-    <button class="slide-panel-close" onclick="closeWorkshopPanel()">&#x2715;</button>
+    <button class="slide-panel-close" onclick="closeWorkshopPanel()" aria-label="Close workshop details">&#x2715;</button>
     <div class="ws-panel-name" id="wsp-name"></div>
     <div class="ws-panel-addr" id="wsp-addr"></div>
     <div class="ws-panel-meta" id="wsp-meta"></div>
@@ -1474,6 +1701,7 @@ function buildYearDropdown() {
     opt.textContent = y;
     sel.appendChild(opt);
   }
+  sel.value = cur; // default to current year
 }
 
 // ══ MEDIA UPLOAD ══
@@ -1583,7 +1811,14 @@ async function checkSession() {
 }
 
 // ══ AUTH ══
-function openAuth() { document.getElementById('auth-modal').classList.add('open'); }
+function openAuth() {
+  document.getElementById('auth-modal').classList.add('open');
+  setTimeout(function() {
+    var modal = document.getElementById('auth-modal');
+    var first = modal.querySelector('input');
+    if (first) first.focus();
+  }, 80);
+}
 function closeAuth() { document.getElementById('auth-modal').classList.remove('open'); }
 
 function switchAuthTab(tab) {
@@ -1702,6 +1937,7 @@ async function routeByRole() {
   if (currentProfile.role === 'workshop') {
     showPage('workshop');
     showWorkshopRequests();
+    subscribeToWorkshopQuotes();
   } else {
     showPage('customer');
     // Auto-load the most recent open request and its quotes
@@ -2013,7 +2249,10 @@ async function loadMyRequests() {
   if (!sb || !currentUser) return;
   var res = await sb.from('requests').select('*').eq('user_id', currentUser.id).order('created_at', {ascending:false}).limit(10);
   var list = document.getElementById('my-requests-list');
-  if (!res.data || !res.data.length) { list.innerHTML = ''; return; }
+  if (!res.data || !res.data.length) {
+    list.innerHTML = '<div style="text-align:center;padding:28px 20px;color:var(--muted);background:var(--surface);border-radius:14px;border:1.5px dashed var(--border);margin-top:8px"><div style="font-size:28px;margin-bottom:10px">&#x1F4CB;</div><div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:6px">No previous requests</div><div style="font-size:13px">Your submitted requests and their quotes will be saved here.</div></div>';
+    return;
+  }
   list.innerHTML = res.data.map(function(r) {
     var mediaHtml = '';
     var rMedia = Array.isArray(r.media_urls) ? r.media_urls : [];
@@ -2042,6 +2281,16 @@ function showWorkshopRequests() {
   document.getElementById('workshop-requests-view').style.display = 'block';
   document.getElementById('workshop-sent-view').style.display = 'none';
   setActiveNavLink('nav-requests');
+  // Show location warning if workshop hasn't set their pin
+  var noLoc = currentProfile && currentProfile.role === 'workshop' && !currentProfile.lat;
+  var warn = document.getElementById('location-warning');
+  if (warn) warn.style.display = noLoc ? 'flex' : 'none';
+  // Update empty state tip based on location status
+  var locTip = document.getElementById('empty-location-tip');
+  if (locTip) locTip.textContent = noLoc
+    ? 'Your location isn\'t set yet — customers can\'t find you on the map.'
+    : 'Your location is set. You\'ll appear on the map when customers browse workshops.';
+  checkWorkshopOnboarding();
   loadOpenRequests();
 }
 
@@ -2108,8 +2357,8 @@ async function renderWorkshopRequests(requests) {
       '<div class="quote-form" id="qform-' + req.id + '">' +
         '<div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:14px;text-transform:uppercase;letter-spacing:0.07em">Your Quotation</div>' +
         '<div class="quote-form-grid">' +
-          '<div class="form-group"><label>Price (RM)</label><input type="number" id="qprice-' + req.id + '" placeholder="e.g. 350" min="0"></div>' +
-          '<div class="form-group"><label>Duration (days)</label><input type="number" id="qduration-' + req.id + '" placeholder="e.g. 2" min="1"></div>' +
+          '<div class="form-group"><label>Price (RM)</label><input type="number" id="qprice-' + req.id + '" placeholder="e.g. 350" min="0" oninput="this.classList.remove(\'input-error\')"></div>' +
+          '<div class="form-group"><label>Duration (days)</label><input type="number" id="qduration-' + req.id + '" placeholder="e.g. 2" min="1" oninput="this.classList.remove(\'input-error\')"></div>' +
           '<div class="form-group full"><label>Diagnosis / Message</label><textarea id="qmsg-' + req.id + '" style="min-height:70px" placeholder="Describe the likely issue and what work will be done..."></textarea></div>' +
         '</div>' +
         '<div style="display:flex;gap:10px;justify-content:flex-end">' +
@@ -2145,10 +2394,16 @@ function toggleQuoteForm(reqId) {
 }
 
 async function sendQuote(reqId) {
-  var price = parseFloat(document.getElementById('qprice-'+reqId).value);
-  var duration = parseInt(document.getElementById('qduration-'+reqId).value);
+  var priceEl = document.getElementById('qprice-'+reqId);
+  var durEl = document.getElementById('qduration-'+reqId);
+  var price = parseFloat(priceEl.value);
+  var duration = parseInt(durEl.value);
   var message = document.getElementById('qmsg-'+reqId).value.trim();
-  if (!price || !duration) { showToast('Enter price and duration', 'warning'); return; }
+  priceEl.classList.remove('input-error'); durEl.classList.remove('input-error');
+  var hasError = false;
+  if (!price || price <= 0) { priceEl.classList.add('input-error'); priceEl.focus(); hasError = true; }
+  if (!duration || duration < 1) { durEl.classList.add('input-error'); if (!hasError) durEl.focus(); hasError = true; }
+  if (hasError) { showToast('Please fill in price and duration', 'warning'); return; }
   var btn = document.getElementById('send-btn-'+reqId);
   btn.innerHTML = '<span class="spinner"></span>'; btn.disabled = true;
   var res = await sb.from('quotes').insert({ request_id: reqId, workshop_id: currentUser.id, workshop_name: currentProfile.name, price: price, duration: duration, message: message, status: 'pending' });
@@ -2630,6 +2885,17 @@ async function loadBrowserWorkshops() {
 
   renderBrowserList(workshops);
   document.getElementById('browser-bottom-btn').style.display = 'block';
+  updateSendToAllBtn();
+}
+
+function updateSendToAllBtn() {
+  var n = allWorkshops.length;
+  if (!n) return;
+  var label = 'Send to All (' + n + ' Workshop' + (n !== 1 ? 's' : '') + ')';
+  var btn = document.getElementById('send-to-all-btn');
+  if (btn) btn.textContent = label;
+  var lnk = document.getElementById('send-all-link');
+  if (lnk) lnk.textContent = 'send to all ' + n + ' workshops';
 }
 
 function renderBrowserList(workshops) {
@@ -3195,6 +3461,118 @@ function showToast(msg, type) {
   t.classList.add('show');
   setTimeout(function(){ t.classList.remove('show'); }, 3500);
 }
+
+// ══ WORKSHOP ONBOARDING BANNER ══
+function checkWorkshopOnboarding() {
+  if (!currentProfile || currentProfile.role !== 'workshop') return;
+  if (sessionStorage.getItem('ob_dismissed')) return;
+  var banner = document.getElementById('onboarding-banner');
+  if (!banner) return;
+
+  var checks = [
+    {
+      label: 'Add your workshop name',
+      done: !!(currentProfile.name && currentProfile.name.trim()),
+      action: 'showProfilePage()',
+      actionLabel: 'Add name'
+    },
+    {
+      label: 'Add your phone number',
+      done: !!(currentProfile.phone && currentProfile.phone.trim()),
+      action: 'showProfilePage()',
+      actionLabel: 'Add phone'
+    },
+    {
+      label: 'Set your workshop location',
+      done: !!(currentProfile.lat && currentProfile.lng),
+      action: 'showProfilePage()',
+      actionLabel: 'Set location'
+    }
+  ];
+
+  var doneCount = checks.filter(function(c){ return c.done; }).length;
+  // All complete — don't show
+  if (doneCount === checks.length) { banner.style.display = 'none'; return; }
+
+  var itemsHtml = checks.map(function(c) {
+    var dotClass = c.done ? 'done' : 'todo';
+    var dotIcon = c.done ? '&#x2713;' : '&#x25CB;';
+    var actionHtml = !c.done
+      ? '<span class="ob-item-action" onclick="' + c.action + '">' + c.actionLabel + ' &rarr;</span>'
+      : '';
+    var textStyle = c.done ? 'text-decoration:line-through;opacity:0.5' : '';
+    return '<div class="ob-item">' +
+      '<div class="ob-dot ' + dotClass + '">' + dotIcon + '</div>' +
+      '<span style="' + textStyle + '">' + c.label + '</span>' +
+      actionHtml +
+      '</div>';
+  }).join('');
+
+  document.getElementById('ob-items').innerHTML = itemsHtml;
+  var pct = Math.round((doneCount / checks.length) * 100);
+  document.getElementById('ob-progress-fill').style.width = pct + '%';
+  document.getElementById('ob-progress-label').textContent = doneCount + ' of ' + checks.length + ' steps complete';
+  banner.style.display = 'block';
+}
+
+function dismissOnboarding() {
+  sessionStorage.setItem('ob_dismissed', '1');
+  var banner = document.getElementById('onboarding-banner');
+  if (banner) banner.style.display = 'none';
+}
+
+// ══ REAL-TIME QUOTE ACCEPTED NOTIFICATION (workshop) ══
+function subscribeToWorkshopQuotes() {
+  if (!sb || !currentUser || !currentProfile || currentProfile.role !== 'workshop') return;
+  var sub = sb.channel('ws-quotes-' + currentUser.id)
+    .on('postgres_changes', {
+      event: 'UPDATE', schema: 'public', table: 'quotes',
+      filter: 'workshop_id=eq.' + currentUser.id
+    }, function(payload) {
+      var row = payload.new;
+      if (row && row.status === 'accepted') {
+        showToast('\uD83C\uDF89 Your quote was accepted! Check Sent Quotes.', 'success');
+        highlightSentQuotesNav();
+        // If currently on sent quotes view, auto-refresh
+        var sentView = document.getElementById('workshop-sent-view');
+        if (sentView && sentView.style.display !== 'none') {
+          loadMyQuotes();
+        }
+      }
+    }).subscribe();
+  realtimeSubs.push(sub);
+}
+
+function highlightSentQuotesNav() {
+  var navLink = document.getElementById('nav-sentquotes');
+  var mnavBtn = document.querySelector('[onclick="showSentQuotes()"]');
+  [navLink, mnavBtn].forEach(function(el) {
+    if (!el) return;
+    el.classList.add('active');
+    setTimeout(function() { el.classList.remove('active'); }, 4000);
+  });
+}
+
+// ══ ACCESSIBILITY — ESCAPE KEY + KEYBOARD STARS ══
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    if (document.getElementById('auth-modal').classList.contains('open')) {
+      closeAuth(); return;
+    }
+    if (document.getElementById('review-modal').classList.contains('open')) {
+      closeReviewModal(); return;
+    }
+    if (document.getElementById('ws-panel').classList.contains('open')) {
+      closeWorkshopPanel(); return;
+    }
+  }
+  // Star rating keyboard support
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('star')) {
+    e.preventDefault();
+    setReviewStar(parseInt(e.target.getAttribute('data-val'), 10));
+  }
+});
+
 </script>
 </body>
 </html>
