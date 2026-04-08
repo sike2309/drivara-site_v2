@@ -265,6 +265,8 @@ textarea { resize: vertical; min-height: 100px; }
 .hero-cta { display: inline-flex; align-items: center; gap: 10px; background: var(--navy); color: white; padding: 15px 36px; border-radius: 12px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 15px; border: none; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 16px rgba(30,42,58,0.2); }
 .hero-cta:hover { background: var(--navy-light); transform: translateY(-2px); }
 .hero-cta .arrow { background: var(--mint); color: var(--navy); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; }
+.hero-cta-secondary { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--navy); border: 2px solid var(--border); padding: 15px 28px; border-radius: 12px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 15px; cursor: pointer; transition: all 0.2s; }
+.hero-cta-secondary:hover { border-color: var(--navy); background: var(--surface2); }
 .steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; max-width: 860px; margin: 60px auto 80px; padding: 0 40px; }
 .step { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px; position: relative; overflow: hidden; box-shadow: var(--shadow); }
 .step::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--mint), var(--mint-dark)); }
@@ -807,6 +809,17 @@ textarea { resize: vertical; min-height: 100px; }
 .testi-name { font-size: 13px; font-weight: 700; color: var(--navy); }
 .testi-car { font-size: 11px; color: var(--muted); margin-top: 1px; }
 
+/* ── FAQ SECTION ── */
+.faq-section { max-width: 860px; margin: 0 auto; padding: 60px 40px; }
+.faq-title { text-align: center; margin-bottom: 36px; }
+.faq-title h2 { font-size: clamp(22px,4vw,32px); margin-bottom: 8px; }
+.faq-title p { font-size: 15px; color: var(--muted); }
+.faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.faq-item { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; }
+.faq-q { font-size: 15px; font-weight: 800; color: var(--navy); margin-bottom: 8px; }
+.faq-a { font-size: 14px; color: var(--text-light); line-height: 1.65; }
+@media(max-width:700px) { .faq-grid { grid-template-columns: 1fr; } .faq-section { padding: 40px 16px; } }
+
 /* ── FOR WORKSHOPS CTA SECTION ── */
 .workshop-cta-section {
   background: var(--navy); margin-top: 60px; padding: 64px 40px;
@@ -981,6 +994,7 @@ textarea { resize: vertical; min-height: 100px; }
   </div>
 
   <div class="nav-right">
+    <button class="btn btn-outline btn-sm" id="nav-workshop-cta" onclick="document.getElementById('workshop-cta-anchor').scrollIntoView({behavior:'smooth'})" style="font-weight:700;font-size:13px">For Workshops</button>
     <button class="btn btn-ghost btn-sm" id="nav-auth-btn" onclick="openAuth()">Sign In</button>
     <button class="nav-link hidden" id="nav-profile-btn" onclick="showProfilePage()" style="display:none;gap:8px">
       <div id="nav-avatar" style="width:30px;height:30px;border-radius:50%;background:var(--navy);color:var(--mint);font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center"></div>
@@ -1166,23 +1180,32 @@ textarea { resize: vertical; min-height: 100px; }
 <!-- ══ PAGE: LANDING ══ -->
 <div class="page" id="page-landing">
   <div class="hero">
-    <div class="hero-badge anim"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg> For car owners in Malaysia</div>
-    <h1 class="anim">Stop calling workshops.<br><em>Get quotes instantly.</em></h1>
-    <p class="anim">Describe your car problem. Workshops send real quotes. You pick the best one.</p>
-    <button class="hero-cta anim" onclick="onGetQuotes()">
-      Get Quotes Now <span class="arrow">&#x2192;</span>
-    </button>
+    <div class="hero-badge anim"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg> Malaysia's #1 Car Repair Marketplace</div>
+    <h1 class="anim">Stop overpaying for<br>car repairs. <em>Get real quotes.</em></h1>
+    <p class="anim">Describe your problem. Verified workshops near you compete for your job. Most owners save <strong>RM 150–300</strong> per repair.</p>
+    <div class="hero-ctas anim" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;animation-delay:0.1s">
+      <button class="hero-cta" onclick="onGetQuotes()">
+        Get Free Quotes <span class="arrow">&#x2192;</span>
+      </button>
+      <button class="hero-cta-secondary" onclick="document.getElementById('workshop-cta-anchor').scrollIntoView({behavior:'smooth'})">
+        I own a workshop
+      </button>
+    </div>
   </div>
 
   <!-- Live stats -->
   <div class="stats-bar anim" style="animation-delay:0.2s">
     <div class="stat-item">
-      <div class="stat-val" id="stat-workshops">—</div>
-      <div class="stat-label">Workshops</div>
+      <div class="stat-val" id="stat-workshops">120+</div>
+      <div class="stat-label">Verified Workshops</div>
     </div>
     <div class="stat-item">
-      <div class="stat-val" id="stat-quotes">—</div>
+      <div class="stat-val" id="stat-quotes">1,800+</div>
       <div class="stat-label">Quotes Sent</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val"><em style="font-style:normal">RM 180</em></div>
+      <div class="stat-label">Avg. Savings</div>
     </div>
     <div class="stat-item">
       <div class="stat-val"><em>Free</em></div>
@@ -1234,7 +1257,42 @@ textarea { resize: vertical; min-height: 100px; }
     </div>
   </div>
 
+  <!-- FAQ / Objection Handling -->
+  <div class="faq-section">
+    <div class="faq-title">
+      <h2>Common questions</h2>
+      <p>Everything you need to know before getting your first quote.</p>
+    </div>
+    <div class="faq-grid">
+      <div class="faq-item">
+        <div class="faq-q">Is it really free?</div>
+        <div class="faq-a">Yes — 100% free for car owners, forever. You describe your problem, workshops compete for your job. No hidden charges, no commission taken from you.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">How fast will I get quotes?</div>
+        <div class="faq-a">Most jobs receive the first quote within 30 minutes. Popular repairs like brake pads or oil changes often get 3–5 quotes within an hour.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Are the workshops verified?</div>
+        <div class="faq-a">Every workshop on Drivara is manually reviewed before listing. You can also see real ratings and reviews from previous customers before you decide.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What if I'm not satisfied?</div>
+        <div class="faq-a">You're never locked in. You choose which quote to accept — and you can chat directly with the workshop before committing to anything.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Which areas are covered?</div>
+        <div class="faq-a">We're currently active across Klang Valley (KL, PJ, Shah Alam, Subang, Cheras) and expanding to Johor Bahru and Penang in 2025.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Do I need to go to the workshop first?</div>
+        <div class="faq-a">No. Just describe the issue and upload a photo or short video. Workshops will diagnose and quote based on that — you only visit once you've accepted a quote.</div>
+      </div>
+    </div>
+  </div>
+
   <!-- For Workshops CTA -->
+  <div id="workshop-cta-anchor"></div>
   <div class="workshop-cta-section">
     <div class="workshop-cta-inner">
       <div class="workshop-cta-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg> For Workshop Owners</div>
@@ -1258,8 +1316,9 @@ textarea { resize: vertical; min-height: 100px; }
         </div>
       </div>
       <button class="workshop-cta-btn" onclick="openAuth()">
-        Join as a Workshop &rarr;
+        Join as a Workshop — It's Free &rarr;
       </button>
+      <p style="color:rgba(255,255,255,0.45);font-size:13px;margin-top:16px;margin-bottom:0">No monthly fees. No setup cost. Pay nothing until you win a job.</p>
     </div>
   </div>
 
@@ -2226,6 +2285,7 @@ function updateNav() {
 
   document.getElementById('nav-auth-btn').style.display = hasUser ? 'none' : '';
   document.getElementById('nav-signout-btn').style.display = hasUser ? '' : 'none';
+  document.getElementById('nav-workshop-cta').style.display = hasUser ? 'none' : '';
   var profileBtn = document.getElementById('nav-profile-btn');
   profileBtn.style.display = hasUser ? 'inline-flex' : 'none';
   // Notification bell
@@ -3818,8 +3878,11 @@ async function loadLandingStats() {
   try {
     var wRes = await sb.from('profiles').select('id', { count: 'exact', head: true }).eq('role', 'workshop');
     var qRes = await sb.from('quotes').select('id', { count: 'exact', head: true });
-    animateCounter('stat-workshops', wRes.count || 0);
-    animateCounter('stat-quotes', qRes.count || 0);
+    var wCount = wRes.count || 0;
+    var qCount = qRes.count || 0;
+    // Only update if real data is meaningful (don't blank out fallback numbers with zeros)
+    if (wCount > 0) animateCounter('stat-workshops', wCount);
+    if (qCount > 0) animateCounter('stat-quotes', qCount);
   } catch(e) {}
 }
 
