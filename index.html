@@ -2281,6 +2281,7 @@ function updateNav() {
   // Notification bell
   var notifWrap = document.getElementById('notif-wrap');
   if (notifWrap) notifWrap.style.display = hasUser ? 'block' : 'none';
+  if (hasUser) requestBrowserNotifPermission();
 
   if (currentProfile) {
     var initial = (currentProfile.name || 'U').charAt(0).toUpperCase();
@@ -2729,6 +2730,7 @@ async function loadOpenRequests() {
     .on('postgres_changes',{event:'INSERT',schema:'public',table:'requests'}, async function(){
       await loadOpenRequests();
       showToast('New service request!');
+      addNotif('message', 'New service request!', 'A car owner needs a quote. Check your requests.', function(){ showWorkshopRequests(); });
     }).subscribe();
   realtimeSubs.push(sub);
 }
@@ -4242,12 +4244,27 @@ function resubmitRequest(brand, model, year, issue) {
 }
 
 // ══ #9 NOTIFICATION INBOX ══
+// ══ BROWSER / OS NOTIFICATIONS ══
+function requestBrowserNotifPermission() {
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+}
+
+function pushBrowserNotif(title, body) {
+  if (!('Notification' in window)) return;
+  if (Notification.permission !== 'granted') return;
+  if (!document.hidden) return; // only fire when tab is in background
+  try { new Notification(title, { body: body, icon: 'https://pcncfrokihyhtaonfynq.supabase.co/storage/v1/object/public/request-media/drivara-icon.png' }); } catch(e) {}
+}
+
 function addNotif(type, title, sub, action) {
   var n = { id: Date.now() + Math.random(), type: type, title: title, sub: sub, action: action || null, time: new Date().toISOString(), read: false };
   notifList.unshift(n);
   if (notifList.length > 20) notifList = notifList.slice(0, 20);
   notifUnread++;
   renderNotifDropdown();
+  pushBrowserNotif(title, sub);
 }
 
 function renderNotifDropdown() {
