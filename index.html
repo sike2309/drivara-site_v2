@@ -1937,27 +1937,17 @@ window.addEventListener('load', function() {
   try { buildYearDropdown(); } catch(e) {}
   try { setupDragDrop(); } catch(e) {}
 
-  // Auto-fill saved credentials
-  var url = localStorage.getItem('sb_url');
-  var key = localStorage.getItem('sb_key');
+  // Hardcoded credentials — auto-connect on any browser
+  var url = 'https://pcncfrokihyhtaonfynq.supabase.co';
+  var key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjbmNmcm9raWh5aHRhb25meW5xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NTQxMzksImV4cCI6MjA5MDQzMDEzOX0.VuaD3SUrJw0-Ezrq51ocnEaDYsipVwK_-Z0FaKpfEGA';
 
-  var urlEl = document.getElementById('sb-url');
-  var keyEl = document.getElementById('sb-key');
-  if (urlEl && url) urlEl.value = url;
-  if (keyEl && key) keyEl.value = key;
-
-  if (url && key) {
-    try {
-      sb = window.supabase.createClient(url, key);
-      showPage('landing');
-      checkSession();
-      setTimeout(function(){ try { initLandingMap(); } catch(e){} }, 300);
-    } catch(e) {
-      console.error('Supabase init failed:', e);
-      showPage('config');
-    }
-  } else {
-    // No saved credentials — stay on config page but pre-fill if partially saved
+  try {
+    sb = window.supabase.createClient(url, key);
+    showPage('landing');
+    checkSession();
+    setTimeout(function(){ try { initLandingMap(); } catch(e){} }, 300);
+  } catch(e) {
+    console.error('Supabase init failed:', e);
     showPage('config');
   }
 });
