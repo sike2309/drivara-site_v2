@@ -2327,7 +2327,7 @@ async function routeByRole() {
     var res = await sb.from('requests')
       .select('*')
       .eq('user_id', currentUser.id)
-      .in('status', ['open', 'closed'])
+      .in('status', ['open', 'in_progress'])
       .order('created_at', { ascending: false })
       .limit(1)
       .single();
@@ -2422,7 +2422,7 @@ async function showMyQuotes() {
     var qr = await sb.from('quotes').select('*').eq('request_id', activeRequestId).order('price');
     renderQuotes(qr.data || []);
   } else {
-    var lr = await sb.from('requests').select('*').eq('user_id', currentUser.id).eq('status','open').order('created_at',{ascending:false}).limit(1).single();
+    var lr = await sb.from('requests').select('*').eq('user_id', currentUser.id).in('status',['open','in_progress']).order('created_at',{ascending:false}).limit(1).single();
     if (lr.data) {
       activeRequestId = lr.data.id;
       document.getElementById('request-form-panel').style.display = 'none';
@@ -2634,7 +2634,7 @@ function renderQuotes(quotes) {
 async function acceptQuote(quoteId, requestId) {
   await sb.from('quotes').update({ status: 'accepted' }).eq('id', quoteId);
   await sb.from('quotes').update({ status: 'rejected' }).eq('request_id', requestId).neq('id', quoteId);
-  await sb.from('requests').update({ status: 'closed' }).eq('id', requestId);
+  await sb.from('requests').update({ status: 'in_progress' }).eq('id', requestId);
   var res = await sb.from('quotes').select('*, profiles(name, phone)').eq('request_id', requestId).order('price');
   renderQuotes(res.data || []);
   showToast('Quote accepted! The workshop has been notified.');
@@ -2669,7 +2669,7 @@ async function loadMyRequests() {
           '<div class="car-model" style="display:flex;align-items:center;gap:5px">' + ICONS.car + ' ' + esc(r.car_brand) + ' ' + esc(r.car_model) + '</div>' +
           '<div class="issue-text">' + esc(r.issue.substring(0,100)) + (r.issue.length>100?'...':'') + '</div>' +
           mediaHtml +
-          '<span class="badge ' + (r.status==='open'?'badge-open':r.status==='completed'?'badge-completed':'badge-closed') + '" style="display:inline-flex;align-items:center;gap:3px">' + (r.status==='completed'?ICONS.award+' completed':r.status) + '</span>' +
+          '<span class="badge ' + (r.status==='open'?'badge-open':r.status==='completed'?'badge-completed':r.status==='in_progress'?'badge-accepted':'badge-closed') + '" style="display:inline-flex;align-items:center;gap:3px">' + (r.status==='completed'?ICONS.award+' completed':r.status==='in_progress'?'In Progress':r.status) + '</span>' +
           sendAgainBtn +
         '</div>' +
         '<div style="font-size:12px;color:var(--muted);white-space:nowrap">' + timeAgo(r.created_at) + '</div>' +
