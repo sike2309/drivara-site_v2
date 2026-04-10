@@ -2181,6 +2181,7 @@ async function checkSession() {
     currentUser = res.data.session.user;
     await loadProfile();
     updateNav();
+    routeByRole();
   }
 }
 
