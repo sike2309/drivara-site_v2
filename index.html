@@ -4259,6 +4259,16 @@ function pushBrowserNotif(title, body) {
   try { new Notification(title, { body: body, icon: 'https://pcncfrokihyhtaonfynq.supabase.co/storage/v1/object/public/request-media/drivara-icon.png' }); } catch(e) {}
 }
 
+function sendEmailNotif(type, title, body) {
+  if (!currentUser || !currentUser.email) return;
+  var key = localStorage.getItem('sb_key') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjbmNmcm9raWh5aHRhb25meW5xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NTQxMzksImV4cCI6MjA5MDQzMDEzOX0.VuaD3SUrJw0-Ezrq51ocnEaDYsipVwK_-Z0FaKpfEGA';
+  fetch('https://pcncfrokihyhtaonfynq.supabase.co/functions/v1/send-email-notification', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
+    body: JSON.stringify({ to: currentUser.email, type: type, title: title, body: body, appUrl: window.location.href })
+  }).catch(function() {});
+}
+
 function addNotif(type, title, sub, action) {
   var n = { id: Date.now() + Math.random(), type: type, title: title, sub: sub, action: action || null, time: new Date().toISOString(), read: false };
   notifList.unshift(n);
@@ -4266,6 +4276,7 @@ function addNotif(type, title, sub, action) {
   notifUnread++;
   renderNotifDropdown();
   pushBrowserNotif(title, sub);
+  sendEmailNotif(type, title, sub);
 }
 
 function renderNotifDropdown() {
