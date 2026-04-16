@@ -4261,10 +4261,9 @@ function pushBrowserNotif(title, body) {
 
 function sendEmailNotif(type, title, body) {
   if (!currentUser || !currentUser.email) return;
-  var key = localStorage.getItem('sb_key') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjbmNmcm9raWh5aHRhb25meW5xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NTQxMzksImV4cCI6MjA5MDQzMDEzOX0.VuaD3SUrJw0-Ezrq51ocnEaDYsipVwK_-Z0FaKpfEGA';
   fetch('https://pcncfrokihyhtaonfynq.supabase.co/functions/v1/send-email-notification', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ to: currentUser.email, type: type, title: title, body: body, appUrl: window.location.href })
   }).catch(function() {});
 }
