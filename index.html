@@ -1904,6 +1904,7 @@ var ICONS = {
 // ─────────────────────────────────────────────────────────────────
 
 var sb = null;
+var SUPABASE_ANON_KEY = '';
 var currentUser = null;
 var currentProfile = null;
 var activeRequestId = null;
@@ -1943,6 +1944,7 @@ window.addEventListener('load', function() {
 
   try {
     sb = window.supabase.createClient(url, key);
+    SUPABASE_ANON_KEY = key;
     showPage('landing');
     checkSession();
     setTimeout(function(){ try { initLandingMap(); } catch(e){} }, 300);
@@ -2160,6 +2162,7 @@ function initSupabase() {
   if (!url.includes('supabase.co')) { showToast('URL should end with .supabase.co', 'warning'); return; }
   try {
     sb = window.supabase.createClient(url, key);
+    SUPABASE_ANON_KEY = key;
     localStorage.setItem('sb_url', url);
     localStorage.setItem('sb_key', key);
     showToast('Connected to Supabase!');
@@ -2239,7 +2242,7 @@ async function handleAuth() {
       if (res2.error) throw res2.error;
       currentUser = res2.data.user;
       var phone = document.getElementById('auth-phone').value.trim();
-      await sb.from('profiles').insert({ id: currentUser.id, name: name, role: selectedRole, phone: phone });
+      await sb.from('profiles').insert({ id: currentUser.id, name: name, role: selectedRole, phone: phone, email: email });
       await loadProfile();
       updateNav();
       closeAuth();
@@ -2255,6 +2258,11 @@ async function loadProfile() {
   if (!currentUser || !sb) return;
   var res = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
   currentProfile = res.data;
+  // Backfill email into profiles for existing accounts
+  if (currentUser.email && currentProfile && !currentProfile.email) {
+    await sb.from('profiles').update({ email: currentUser.email }).eq('id', currentUser.id);
+    currentProfile.email = currentUser.email;
+  }
 }
 
 async function signOut() {
@@ -2497,6 +2505,16 @@ async function submitRequest(targetWorkshopIds) {
   renderQuotes([]);
   loadMyRequests();
   setActiveNavLink('nav-myquotes');
+  // Email targeted workshops (if specific workshops were chosen)
+  if (targetWorkshopIds && targetWorkshopIds.length) {
+    try {
+      var wsEmRes = await sb.from('profiles').select('email').in('id', targetWorkshopIds);
+      var car = insertData.car_brand + ' ' + insertData.car_model;
+      (wsEmRes.data || []).forEach(function(ws) {
+        if (ws.email) sendEmailNotif('request', 'New service request!', (currentProfile ? currentProfile.name : 'A car owner') + ' needs a quote for their ' + car.trim() + '. Check your requests.', ws.email);
+      });
+    } catch(e) {}
+  }
 }
 
 async function viewRequest(requestId, summary) {
@@ -2639,6 +2657,17 @@ async function acceptQuote(quoteId, requestId) {
   var res = await sb.from('quotes').select('*, profiles(name, phone)').eq('request_id', requestId).order('price');
   renderQuotes(res.data || []);
   showToast('Quote accepted! The workshop has been notified.');
+  // Email the workshop
+  try {
+    var qRes = await sb.from('quotes').select('workshop_id, price, workshop_name').eq('id', quoteId).single();
+    if (qRes.data) {
+      var wsEmailRes = await sb.from('profiles').select('email').eq('id', qRes.data.workshop_id).single();
+      if (wsEmailRes.data && wsEmailRes.data.email) {
+        var custName = currentProfile ? (currentProfile.name || currentUser.email) : currentUser.email;
+        sendEmailNotif('accepted', 'Your quote was accepted!', custName + ' accepted your quote of RM ' + qRes.data.price + '. Check your Sent Quotes for their contact details.', wsEmailRes.data.email);
+      }
+    }
+  } catch(e) {}
   // Review fires only after customerConfirmComplete, not here
 }
 
@@ -2815,6 +2844,17 @@ async function sendQuote(reqId) {
   var res = await sb.from('quotes').insert({ request_id: reqId, workshop_id: currentUser.id, workshop_name: currentProfile.name, price: price, duration: duration, message: message, status: 'pending' });
   if (res.error) { showToast('Failed: ' + res.error.message, 'error'); btn.innerHTML='Send Quote &rarr;'; btn.disabled=false; return; }
   showToast('Quote sent — RM ' + price + ' for ' + duration + ' day(s)!');
+  // Email the car owner
+  try {
+    var reqRes = await sb.from('requests').select('user_id, car_brand, car_model').eq('id', reqId).single();
+    if (reqRes.data) {
+      var ownerRes = await sb.from('profiles').select('email').eq('id', reqRes.data.user_id).single();
+      if (ownerRes.data && ownerRes.data.email) {
+        var car = (reqRes.data.car_brand || '') + ' ' + (reqRes.data.car_model || '');
+        sendEmailNotif('message', 'New quote received!', currentProfile.name + ' sent you a quote of RM ' + price + ' for your ' + car.trim() + '.', ownerRes.data.email);
+      }
+    }
+  } catch(e) {}
   loadOpenRequests();
 }
 
@@ -4259,12 +4299,17 @@ function pushBrowserNotif(title, body) {
   try { new Notification(title, { body: body, icon: 'https://pcncfrokihyhtaonfynq.supabase.co/storage/v1/object/public/request-media/drivara-icon.png' }); } catch(e) {}
 }
 
-function sendEmailNotif(type, title, body) {
-  if (!currentUser || !currentUser.email) return;
+function sendEmailNotif(type, title, body, toEmail) {
+  var recipient = toEmail || (currentUser && currentUser.email);
+  if (!recipient) return;
   fetch('https://pcncfrokihyhtaonfynq.supabase.co/functions/v1/send-email-notification', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ to: currentUser.email, type: type, title: title, body: body, appUrl: window.location.href })
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+      'apikey': SUPABASE_ANON_KEY
+    },
+    body: JSON.stringify({ to: recipient, type: type, title: title, body: body, appUrl: window.location.href })
   }).catch(function() {});
 }
 
@@ -4602,6 +4647,23 @@ async function sendChatMessage() {
     div.innerHTML = '<div>' + esc(content) + '</div><div class="chat-msg-time">Just now</div>';
     container.appendChild(div);
     container.scrollTop = container.scrollHeight;
+    // Email the other party
+    try {
+      var qr = await sb.from('quotes').select('workshop_id, requests(user_id)').eq('id', activeChatQuoteId).single();
+      if (qr.data) {
+        var otherId = currentUser.id === qr.data.workshop_id
+          ? (qr.data.requests && qr.data.requests.user_id)
+          : qr.data.workshop_id;
+        if (otherId) {
+          var epRes = await sb.from('profiles').select('email, name').eq('id', otherId).single();
+          if (epRes.data && epRes.data.email) {
+            var senderName = currentProfile ? currentProfile.name : 'Someone';
+            var preview = content.length > 80 ? content.substring(0, 80) + '…' : content;
+            sendEmailNotif('message', 'New message from ' + senderName, preview, epRes.data.email);
+          }
+        }
+      }
+    } catch(e) {}
   } catch(e) {
     showToast('Failed to send message.', 'error');
     input.value = content;
