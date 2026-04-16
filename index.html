@@ -2271,6 +2271,7 @@ async function signOut() {
   realtimeSubs.forEach(function(s) { if (sb) sb.removeChannel(s); });
   realtimeSubs = [];
   if (_msgNotifSub && sb) { sb.removeChannel(_msgNotifSub); _msgNotifSub = null; }
+  if (_wsQuotesSub && sb) { sb.removeChannel(_wsQuotesSub); _wsQuotesSub = null; }
   notifList = []; notifUnread = 0;
   updateNav();
   showPage('landing');
@@ -4199,13 +4200,18 @@ function dismissOnboarding() {
 // ══ REAL-TIME QUOTE ACCEPTED NOTIFICATION (workshop) ══
 function subscribeToWorkshopQuotes() {
   if (!sb || !currentUser || !currentProfile || currentProfile.role !== 'workshop') return;
-  var sub = sb.channel('ws-quotes-' + currentUser.id)
+  // Use a dedicated sub variable so navigation (which clears realtimeSubs) never kills this.
+  if (_wsQuotesSub) { sb.removeChannel(_wsQuotesSub); _wsQuotesSub = null; }
+  var wsId = currentUser.id;
+  _wsQuotesSub = sb.channel('ws-quotes-' + wsId)
     .on('postgres_changes', {
-      event: 'UPDATE', schema: 'public', table: 'quotes',
-      filter: 'workshop_id=eq.' + currentUser.id
+      event: 'UPDATE', schema: 'public', table: 'quotes'
+      // No column filter — column filters on UPDATE require REPLICA IDENTITY FULL.
+      // We filter by workshop_id in the callback instead.
     }, function(payload) {
       var row = payload.new;
-      if (row && row.status === 'accepted') {
+      if (!row || row.workshop_id !== wsId) return;
+      if (row.status === 'accepted') {
         showToast('Your quote was accepted! Check Sent Quotes.', 'success');
         addNotif('accepted', 'Quote accepted!', 'Your quote of RM ' + (row.price || '?') + ' was accepted.', function(){ showSentQuotes(); });
         highlightSentQuotesNav();
@@ -4216,7 +4222,6 @@ function subscribeToWorkshopQuotes() {
         }
       }
     }).subscribe();
-  realtimeSubs.push(sub);
 }
 
 function highlightSentQuotesNav() {
@@ -4454,9 +4459,10 @@ async function seedWorkshopNotifs() {
 var _origSubscribeToQuotes = null;
 function patchNotifIntoQuoteSubscription(requestId) {
   var sub = sb.channel('notif-quotes-' + requestId)
-    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'quotes', filter: 'request_id=eq.' + requestId }, function(payload) {
+    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'quotes' }, function(payload) {
       var row = payload.new;
-      if (row && row.status === 'accepted') {
+      if (!row || row.request_id !== requestId) return;
+      if (row.status === 'accepted') {
         addNotif('accepted', 'Quote accepted!', esc(row.workshop_name || 'A workshop') + ' accepted your request — RM ' + row.price, function(){ showMyQuotes(); });
       }
     }).subscribe();
@@ -4693,6 +4699,7 @@ function subscribeToChat(quoteId) {
 
 // Persistent background subscription — notifies on ANY incoming message for this user's quotes
 var _msgNotifSub = null;
+var _wsQuotesSub = null;
 function subscribeToMessageNotifs() {
   if (!sb || !currentUser) return;
   if (_msgNotifSub) { sb.removeChannel(_msgNotifSub); _msgNotifSub = null; }
